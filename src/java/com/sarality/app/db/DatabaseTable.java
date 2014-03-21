@@ -2,6 +2,7 @@ package com.sarality.app.db;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import android.content.Context;
 import android.database.SQLException;
@@ -29,7 +30,7 @@ public class DatabaseTable<T> {
   // but first need to see how we update the table to change an existing column size.
 
   // The columns of the database table.
-  private final List<Column> columnList;
+  private final List<DatabaseColumn> columnList;
   // Metadata of the table, used mostly as a cache of properties of the table like whether
   // it has a composite primary key etc.
   private final TableMetadata metadata;
@@ -38,10 +39,11 @@ public class DatabaseTable<T> {
   private final DatabaseTableManager dbManager;
   // Reference of the underlying database instance that is used to query and update the data.
   private SQLiteDatabase database;
+  private AtomicInteger dbOpenCounter = new AtomicInteger();
 
   protected DatabaseTable(Context context, String dbName, String tableName, int tableVersion,
-      TableSchemaUpdater schemaUpdter, List<? extends Column> columnList) {
-    this.columnList = new ArrayList<Column>();
+      TableSchemaUpdater schemaUpdter, List<? extends DatabaseColumn> columnList) {
+    this.columnList = new ArrayList<DatabaseColumn>();
     this.columnList.addAll(columnList);
     this.dbName = dbName;
     this.tableName = tableName;
@@ -50,9 +52,9 @@ public class DatabaseTable<T> {
     this.dbManager = new DatabaseTableManager(context, this, null, schemaUpdter);    
   }
 
-  protected static List<Column> getAllColumns(Column[] columns) {
-    List<Column> columnList = new ArrayList<Column>();
-    for (Column column : columns) {
+  protected static List<DatabaseColumn> getAllColumns(DatabaseColumn[] columns) {
+    List<DatabaseColumn> columnList = new ArrayList<DatabaseColumn>();
+    for (DatabaseColumn column : columns) {
       columnList.add(column);
     }
     return columnList;
@@ -70,7 +72,7 @@ public class DatabaseTable<T> {
     return tableVersion;
   }
 
-  public final List<Column> getColumns() {
+  public final List<DatabaseColumn> getColumns() {
     return columnList;
   }
 
@@ -85,7 +87,7 @@ public class DatabaseTable<T> {
    * 
    * @return Ordered list if Columns that form the primary key for the table.
    */
-  protected List<Column> getPrimaryKeyColumnOrder() {
+  protected List<DatabaseColumn> getPrimaryKeyColumnOrder() {
     return null;
   }
 
@@ -94,17 +96,20 @@ public class DatabaseTable<T> {
    * 
    * @throws SQLException if there is an error opening the database for writing.
    */
-  public final void open() throws SQLException {
-    // This will automatically create or update the table as needed
-    this.database = dbManager.getWritableDatabase();
+  public synchronized final void open() throws SQLException {
+    if (dbOpenCounter.incrementAndGet() == 1) {
+      // This will automatically create or update the table as needed
+      this.database = dbManager.getWritableDatabase();
+    }
   }
 
   /**
    * Close the underlying database instance
    */
-  public final void close() {
-    database = null;
-    dbManager.close();
+  public synchronized final void close() {
+    if (dbOpenCounter.decrementAndGet() == 0) {
+      this.database.close();
+    }
   }
 
   /**

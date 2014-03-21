@@ -2,7 +2,7 @@ package com.sarality.app.db.sqlgen;
 
 import java.util.List;
 
-import com.sarality.app.db.Column;
+import com.sarality.app.db.DatabaseColumn;
 import com.sarality.app.db.DatabaseTable;
 import com.sarality.app.db.TableMetadata;
 
@@ -13,8 +13,8 @@ import com.sarality.app.db.TableMetadata;
  */
 public class CreateTableSQLGenerator implements SQLGenerator<DatabaseTable<?>> {
 
-  private final SQLGenerator<Column> columnSQLGenerator = new CreateTableColumnSQLGenerator();
-  private final SQLGenerator<List<Column>> primaryKeySQLGenerator = new CompositePrimaryKeySQLGenerator();
+  private final SQLGenerator<DatabaseColumn> columnSQLGenerator = new CreateTableColumnSQLGenerator();
+  private final SQLGenerator<List<DatabaseColumn>> primaryKeySQLGenerator = new CompositePrimaryKeySQLGenerator();
 
   @Override
   public void appendSQL(StringBuilder builder, DatabaseTable<?> table, TableMetadata metadata) {
@@ -23,10 +23,10 @@ public class CreateTableSQLGenerator implements SQLGenerator<DatabaseTable<?>> {
 
     boolean hasCompositePrimaryKey = metadata.hasCompositePrimaryKey();
     // Add SQL for each column
-    List<Column> columnList = table.getColumns();
+    List<DatabaseColumn> columnList = table.getColumns();
     int lastIndex = columnList.size() - 1;
     for (int columnIndex = 0; columnIndex <= lastIndex; columnIndex++) {
-      Column column = columnList.get(columnIndex);
+      DatabaseColumn column = columnList.get(columnIndex);
       // Indent by 2 spaces for formatting
       builder.append("  ");
       columnSQLGenerator.appendSQL(builder, column, metadata);

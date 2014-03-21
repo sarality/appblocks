@@ -2,7 +2,7 @@ package com.sarality.app.db.sqlgen;
 
 import java.util.List;
 
-import com.sarality.app.db.Column;
+import com.sarality.app.db.DatabaseColumn;
 import com.sarality.app.db.TableMetadata;
 
 /**
@@ -14,14 +14,14 @@ import com.sarality.app.db.TableMetadata;
  * 
  * @author abhideep@ (Abhideep Singh)
  */
-public class CompositePrimaryKeySQLGenerator implements SQLGenerator<List<Column>> {
+public class CompositePrimaryKeySQLGenerator implements SQLGenerator<List<DatabaseColumn>> {
 
   @Override
-  public void appendSQL(StringBuilder builder, List<Column> columns, TableMetadata table) {
+  public void appendSQL(StringBuilder builder, List<DatabaseColumn> columns, TableMetadata table) {
     boolean processedFirstColumn = false;
     builder.append("PRIMARY KEY (");
     // TODO(abhideep): Reorder columns based on Primary Key Column Order
-    for (Column primaryKeyColumn : columns) {
+    for (DatabaseColumn primaryKeyColumn : columns) {
       if (processedFirstColumn) {
         builder.append(", ");
       }

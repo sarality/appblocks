@@ -9,10 +9,10 @@ import java.util.List;
  * @author abhideep@ (Abhideep Singh)
  */
 public class Query {
-  private final List<Column> whereColumnList = new ArrayList<Column>();
+  private final List<DatabaseColumn> whereColumnList = new ArrayList<DatabaseColumn>();
   private final List<String> whereColumnValueList = new ArrayList<String>();
 
-  public Query withWhereColumn(Column column, String value) {
+  public Query withWhereColumn(DatabaseColumn column, String value) {
     whereColumnList.add(column);
     whereColumnValueList.add(value);
     return this;
