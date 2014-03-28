@@ -9,12 +9,30 @@ import java.util.List;
  * @author abhideep@ (Abhideep Singh)
  */
 public class Query {
-  private final List<DatabaseColumn> whereColumnList = new ArrayList<DatabaseColumn>();
+  private final List<Column> whereColumnList = new ArrayList<Column>();
   private final List<String> whereColumnValueList = new ArrayList<String>();
 
-  public Query withWhereColumn(DatabaseColumn column, String value) {
+  private final List<Column> columns;
+
+  public Query(List<Column> columns) {
+    this.columns = columns;
+  }
+
+  public Query(Column... columns) {
+    this(Table.getAllColumns(columns));
+  }
+
+  public Query(Table<?> table) {
+    this(table.getColumns());
+  }
+
+  public Query withFilter(Column column, String value) {
     whereColumnList.add(column);
     whereColumnValueList.add(value);
     return this;
+  }
+
+  public List<Column> getColumns() {
+    return columns;
   }
 }

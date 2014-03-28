@@ -1,4 +1,4 @@
-package com.sarality.app.datasource;
+package com.sarality.app.view.datasource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,10 +32,9 @@ public class StaticDataSource<T> implements DataSource<T> {
   public void loadData() {
     // Do nothing
   }
-  
+
   @Override
   public List<T> getData() {
-    // TODO(abhideep): See if we need to clone this
     return dataset;
   }
 }

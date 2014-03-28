@@ -16,22 +16,22 @@ import android.util.Log;
  * 
  * @author abhideep@ (Abhideep Singh)
  */
-public class DefaultSchemaUpdater implements TableSchemaUpdater {
+public class DefaultTableSchemaUpdater implements TableSchemaUpdater {
   private static final String TAG = "DefaultTableSchemaUpdater";
 
   private final boolean dropTable;
 
-  public DefaultSchemaUpdater() {
+  public DefaultTableSchemaUpdater() {
     this(true);
   }
 
-  DefaultSchemaUpdater(boolean dropTable) {
+  DefaultTableSchemaUpdater(boolean dropTable) {
     this.dropTable = dropTable;
   }
 
   @Override
-  public void updateSchema(SQLiteDatabase db, DatabaseTable<?> table) {
-    TableMetadata metadata = table.getMetadata();
+  public void updateSchema(SQLiteDatabase db, Table<?> table) {
+    TableInfo metadata = table.getTableInfo();
 
     // First Validate the Schema
     try {

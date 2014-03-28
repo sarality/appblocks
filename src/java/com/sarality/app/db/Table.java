@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.sarality.app.db.extractor.CursorDataExtractor;
+
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -19,7 +22,7 @@ import android.database.sqlite.SQLiteDatabase;
  *
  * @param <T> Data associated with each row of the table
  */
-public class DatabaseTable<T> {
+public abstract class Table<T> {
   // Name of the database e.g. users.db.
   private final String dbName;
   // Name of table in this database e.g. users.
@@ -30,31 +33,31 @@ public class DatabaseTable<T> {
   // but first need to see how we update the table to change an existing column size.
 
   // The columns of the database table.
-  private final List<DatabaseColumn> columnList;
+  private final List<Column> columnList;
   // Metadata of the table, used mostly as a cache of properties of the table like whether
   // it has a composite primary key etc.
-  private final TableMetadata metadata;
+  private final TableInfo tableInfo;
 
   // Utility class used to access the underlying database as well as manage the schema of the table.
-  private final DatabaseTableManager dbManager;
+  private final TableConnectionProvider dbProvider;
   // Reference of the underlying database instance that is used to query and update the data.
   private SQLiteDatabase database;
   private AtomicInteger dbOpenCounter = new AtomicInteger();
 
-  protected DatabaseTable(Context context, String dbName, String tableName, int tableVersion,
-      TableSchemaUpdater schemaUpdter, List<? extends DatabaseColumn> columnList) {
-    this.columnList = new ArrayList<DatabaseColumn>();
+  protected Table(Context context, String dbName, String tableName, int tableVersion,
+      TableSchemaUpdater schemaUpdter, List<? extends Column> columnList) {
+    this.columnList = new ArrayList<Column>();
     this.columnList.addAll(columnList);
     this.dbName = dbName;
     this.tableName = tableName;
     this.tableVersion = tableVersion;
-    this.metadata = new TableMetadata(this.columnList);
-    this.dbManager = new DatabaseTableManager(context, this, null, schemaUpdter);    
+    this.tableInfo = new TableInfo(this.columnList);
+    this.dbProvider = new TableConnectionProvider(context, this, null, schemaUpdter);    
   }
 
-  protected static List<DatabaseColumn> getAllColumns(DatabaseColumn[] columns) {
-    List<DatabaseColumn> columnList = new ArrayList<DatabaseColumn>();
-    for (DatabaseColumn column : columns) {
+  protected static List<Column> getAllColumns(Column[] columns) {
+    List<Column> columnList = new ArrayList<Column>();
+    for (Column column : columns) {
       columnList.add(column);
     }
     return columnList;
@@ -72,12 +75,12 @@ public class DatabaseTable<T> {
     return tableVersion;
   }
 
-  public final List<DatabaseColumn> getColumns() {
+  public final List<Column> getColumns() {
     return columnList;
   }
 
-  public final TableMetadata getMetadata() {
-    return metadata;
+  public final TableInfo getTableInfo() {
+    return tableInfo;
   }
 
   /**
@@ -87,7 +90,7 @@ public class DatabaseTable<T> {
    * 
    * @return Ordered list if Columns that form the primary key for the table.
    */
-  protected List<DatabaseColumn> getPrimaryKeyColumnOrder() {
+  protected List<Column> getPrimaryKeyColumnOrder() {
     return null;
   }
 
@@ -99,7 +102,7 @@ public class DatabaseTable<T> {
   public synchronized final void open() throws SQLException {
     if (dbOpenCounter.incrementAndGet() == 1) {
       // This will automatically create or update the table as needed
-      this.database = dbManager.getWritableDatabase();
+      this.database = dbProvider.getWritableDatabase();
     }
   }
 
@@ -113,14 +116,25 @@ public class DatabaseTable<T> {
   }
 
   /**
+   * @return
+   */
+  protected abstract CursorDataExtractor<T> getCursorDataExtractor();
+
+  /**
+   * @return
+   */
+  protected abstract ContentValuesPopulator<T> getContentValuesPopulator();
+
+  /**
    * Create a row in the database table.
    * 
    * @param data The data for the row that needs to be created.
    * @return The data for the row that was created with the appropriate id also populated.
    */
-  public T create(T data) {
-    // TODO(abhideep): Needs implementation
-    return null;
+  public long create(T data) {
+    ContentValues contentValues = new ContentValues();
+    getContentValuesPopulator().populate(contentValues, data);
+    return database.insert(tableName, null, contentValues);
   }
 
   /**
