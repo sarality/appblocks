@@ -6,26 +6,28 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
- * Manages the schema of the DatabaseTable as well as the opening and closing of database instance.
+ * Provides a connection to the underlying database for a Table.
+ * <p>
+ * Manages the opening and closing of database instance as well as the schema of the database table.
  * <p>
  * Extends the SQLiteOpenHelper which is called automatically when the version of the database table
- * changes.
+ * changes. This then updates the schema of the database.
  *
  * @author abhideep@ (Abhideep Singh)
  */
-class DatabaseTableManager extends SQLiteOpenHelper {
+class TableConnectionProvider extends SQLiteOpenHelper {
 
-  private final DatabaseTable<?> table;
+  private final Table<?> table;
   private final TableSchemaUpdater schemaUpdater;
 
-  DatabaseTableManager(Context context, DatabaseTable<?> table, CursorFactory factory,
+  TableConnectionProvider(Context context, Table<?> table, CursorFactory factory,
       TableSchemaUpdater schemaUpdater) {
     super(context, table.getDbName(), factory, table.getTableVersion());
     this.table = table;
     if (schemaUpdater != null) {
       this.schemaUpdater = schemaUpdater;
     } else {
-      this.schemaUpdater = new DefaultSchemaUpdater();
+      this.schemaUpdater = new DefaultTableSchemaUpdater();
     }
   }
 
@@ -34,7 +36,7 @@ class DatabaseTableManager extends SQLiteOpenHelper {
    */
   @Override
   public void onCreate(SQLiteDatabase db) {
-    new DefaultSchemaUpdater(false).updateSchema(db, table);
+    new DefaultTableSchemaUpdater(false).updateSchema(db, table);
   }
 
   /**

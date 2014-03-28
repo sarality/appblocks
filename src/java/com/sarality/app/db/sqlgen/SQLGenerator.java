@@ -1,6 +1,6 @@
 package com.sarality.app.db.sqlgen;
 
-import com.sarality.app.db.TableMetadata;
+import com.sarality.app.db.TableInfo;
 
 /**
  * Interface for all classes that create SQL for creation and update of SQLite database schema
@@ -18,5 +18,5 @@ public interface SQLGenerator<T> {
    * @param data The data of the table, column or index that the SQL is being generated for
    * @param table The table for which the SQL is being generated
    */
-  public void appendSQL(StringBuilder builder, T data, TableMetadata table);
+  public void appendSQL(StringBuilder builder, T data, TableInfo table);
 }

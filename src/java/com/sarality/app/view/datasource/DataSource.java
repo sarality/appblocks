@@ -1,4 +1,4 @@
-package com.sarality.app.datasource;
+package com.sarality.app.view.datasource;
 
 import java.util.List;
 

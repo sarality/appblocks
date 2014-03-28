@@ -15,5 +15,5 @@ public interface TableSchemaUpdater {
    * @param db The database to be updated
    * @param table The table that needs to be updated with its current schema
    */
-  public void updateSchema(SQLiteDatabase db, DatabaseTable<?> table);
+  public void updateSchema(SQLiteDatabase db, Table<?> table);
 }

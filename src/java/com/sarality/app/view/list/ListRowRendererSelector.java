@@ -1,4 +1,4 @@
-package com.sarality.app.list;
+package com.sarality.app.view.list;
 
 /**
  * 

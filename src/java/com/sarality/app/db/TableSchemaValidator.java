@@ -18,15 +18,15 @@ public class TableSchemaValidator {
    * @return true is the schema is valid, false otherwise
    * @throws ValidationException when there is a problem with the schema
    */
-  public boolean validate(DatabaseTable<?> table) throws ValidationException {
-    TableMetadata metadata = table.getMetadata();
+  public boolean validate(Table<?> table) throws ValidationException {
+    TableInfo metadata = table.getTableInfo();
     boolean hasCompositePrimaryKey = metadata.hasCompositePrimaryKey();
-    for(DatabaseColumn column : table.getColumns()) {
-      Set<DatabaseColumn.Property> properties = column.getProperties();
-      boolean isPrimaryKeyColumn = properties.contains(DatabaseColumn.Property.PRIMARY_KEY);
+    for(Column column : table.getColumns()) {
+      Set<Column.Property> properties = column.getProperties();
+      boolean isPrimaryKeyColumn = properties.contains(Column.Property.PRIMARY_KEY);
 
-      DatabaseColumn.DataType dataType = column.getDataType();
-      DatabaseColumn.DataTypeFormat dataTypeFormat = column.getFormat();
+      Column.DataType dataType = column.getDataType();
+      Column.DataTypeFormat dataTypeFormat = column.getFormat();
 
       if (dataTypeFormat != null && !dataType.isSupportedFormat(dataTypeFormat)) {
         throw new ValidationException("Column with name " + column.getName() 
@@ -40,7 +40,7 @@ public class TableSchemaValidator {
             + " All Primary Key Columns must be marked as required.");
       }
 
-      boolean isAutoIncrement = properties.contains(DatabaseColumn.Property.AUTO_INCREMENT);
+      boolean isAutoIncrement = properties.contains(Column.Property.AUTO_INCREMENT);
 
       if (isAutoIncrement && !isPrimaryKeyColumn) {
         throw new ValidationException("Column with name " + column.getName()
@@ -55,7 +55,7 @@ public class TableSchemaValidator {
       }
 
       if (isAutoIncrement && isPrimaryKeyColumn && !hasCompositePrimaryKey
-          && column.getDataType() != DatabaseColumn.DataType.INTEGER) {
+          && column.getDataType() != Column.DataType.INTEGER) {
         throw new ValidationException("Column with name " + column.getName() 
             + " is marked as AUTO INCREMENT which is only allowed for INTEGER columns."
             + " However the data type of the column is " + column.getDataType());

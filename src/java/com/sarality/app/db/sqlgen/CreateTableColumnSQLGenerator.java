@@ -2,25 +2,25 @@ package com.sarality.app.db.sqlgen;
 
 import java.util.Set;
 
-import com.sarality.app.db.DatabaseColumn;
-import com.sarality.app.db.DatabaseColumn.DataType;
-import com.sarality.app.db.TableMetadata;
+import com.sarality.app.db.Column;
+import com.sarality.app.db.Column.DataType;
+import com.sarality.app.db.TableInfo;
 
 /**
  * Generates the SQL to create an entry for a column, while generating the SQL to create a table.
  * 
  * @author abhideep@ (Abhideep Singh)
  */
-public class CreateTableColumnSQLGenerator implements SQLGenerator<DatabaseColumn> {
+public class CreateTableColumnSQLGenerator implements SQLGenerator<Column> {
 
   @Override
-  public void appendSQL(StringBuilder builder, DatabaseColumn column, TableMetadata tableMetadata) {
+  public void appendSQL(StringBuilder builder, Column column, TableInfo tableMetadata) {
     boolean hasCompositePrimaryKey = tableMetadata.hasCompositePrimaryKey();
-    DatabaseColumn.DataTypeFormat format = column.getFormat();
-    DatabaseColumn.DataType dataType = column.getDataType();
+    Column.DataTypeFormat format = column.getFormat();
+    Column.DataType dataType = column.getDataType();
     builder.append(column.getName()).append(" ").append(dataType.getUnderlyingDataType(format));
-    Set<DatabaseColumn.Property> propertySet = column.getProperties();
-    boolean isPrimaryKeyColumn = propertySet.contains(DatabaseColumn.Property.PRIMARY_KEY);
+    Set<Column.Property> propertySet = column.getProperties();
+    boolean isPrimaryKeyColumn = propertySet.contains(Column.Property.PRIMARY_KEY);
 
     if (isPrimaryKeyColumn) {
       if (hasCompositePrimaryKey) {
@@ -39,7 +39,7 @@ public class CreateTableColumnSQLGenerator implements SQLGenerator<DatabaseColum
     
     // If the Primary Key column is marked with Auto Increment, make sure it is also an integer
     // and the table doesn't use a composite primary key
-    if (propertySet.contains(DatabaseColumn.Property.AUTO_INCREMENT)) {
+    if (propertySet.contains(Column.Property.AUTO_INCREMENT)) {
       if (!hasCompositePrimaryKey && column.getDataType() == DataType.INTEGER) {
         builder.append(" AUTOINCREMENT");
       }

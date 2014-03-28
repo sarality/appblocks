@@ -3,15 +3,15 @@ package com.sarality.app.db;
 import java.util.LinkedHashSet;
 import java.util.Set;
 /**
- * Interface for all Columns of a {@link DatabaseTable}.
+ * Interface for all Columns of a {@link Table}.
  * <p>
  * It is recommended that columns of a DatabaseTable be defined as an Enum that implements this
- * interace.
+ * interface.
  * 
  * @author abhideep@ (Abhideep Singh)
  *
  */
-public interface DatabaseColumn {
+public interface Column {
 
   /**
    * @return the SQL Name for the Column

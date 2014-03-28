@@ -1,9 +1,9 @@
-package com.sarality.app.list;
+package com.sarality.app.view.list;
 
 import android.app.Activity;
 import android.widget.ListView;
 
-import com.sarality.app.datasource.DataSource;
+import com.sarality.app.view.datasource.DataSource;
 
 public class ListComponent<T> {
   private final Activity activity;
