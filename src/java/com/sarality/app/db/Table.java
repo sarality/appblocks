@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.sarality.app.db.extractor.CursorDataExtractor;
+import com.sarality.app.db.populator.ContentValuesPopulator;
 
 import android.content.ContentValues;
 import android.content.Context;
