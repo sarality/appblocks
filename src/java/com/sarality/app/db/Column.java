@@ -44,14 +44,18 @@ public interface Column {
   public Set<Property> getProperties();
 
   public enum DataTypeFormat {
-    YYYYMMDDHHSS(DataType.INTEGER),
+    // Store date as integer in format YYYYMMDDhhmmss
+    DATE_AS_INT(DataType.INTEGER),
+    // Store date as epoch i.e. milliseconds since January 1, 1970
     EPOCH(DataType.INTEGER);
-    
+
     private DataType underlyingDataType;
+
     private DataTypeFormat(DataType underlyingDataType) {
       this.underlyingDataType = underlyingDataType;
     }
-    DataType getUnderlyingDataType() {
+
+    public DataType getUnderlyingDataType() {
       return underlyingDataType;
     }
   }
@@ -64,7 +68,7 @@ public interface Column {
   public enum DataType {
     INTEGER(),
     TEXT(),
-    DATETIME(DataTypeFormat.YYYYMMDDHHSS, DataTypeFormat.EPOCH);
+    DATETIME(DataTypeFormat.DATE_AS_INT, DataTypeFormat.EPOCH);
     
     private Set<DataTypeFormat> supportedFormatSet = new LinkedHashSet<DataTypeFormat>();
 
