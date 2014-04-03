@@ -3,8 +3,8 @@ package com.sarality.app.view.datasource;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sarality.app.db.Table;
-import com.sarality.app.db.Query;
+import com.sarality.app.datastore.Query;
+import com.sarality.app.datastore.db.Table;
 
 public class TableDataSource<T> implements DataSource<T> {
   private final Table<T> table;
