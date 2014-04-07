@@ -1,32 +1,21 @@
-package com.sarality.app.datastore.db;
+package com.sarality.app.datastore;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import com.sarality.app.datastore.Column;
-
-/**
- * Specification / Definition for a {@link Column}.
- * <p>
- * Class is used by subclasses of {@link Datastore} to define the columns in the store.
- * 
- * @author abhideep@ (Abhideep Singh)
- */
 public class ColumnSpec {
 
-  // Default value for column data type size
-  public static final int DEFAULT_SIZE = -1;
-
-  // Indicates if the column is required or can it be null
-  private final boolean isRequired;
   // The data type for the column
   private final Column.DataType dataType;
   // Data types like date can be saved in multiple formats like EPoch or as integers.
-  // The format defines the format that the data type is stored in the datastore
+  // The format defines the format that the data type is stored in the DataStore
   private final boolean hasFormat;
   private final Column.DataTypeFormat format;
-  
-  // Defined if a size is specified for the column. If not the default size is used
+
+  // Indicates if the column is required or can it be null
+  private final boolean isRequired;
+
+    // Defined if a size is specified for the column. If not the default size is used
   private final boolean hasSize;
   private final int size;
 
@@ -41,18 +30,18 @@ public class ColumnSpec {
     this.format = format;
     this.hasFormat = (format != null);
     this.size = size;
-    this.hasSize = (size != DEFAULT_SIZE);
+    this.hasSize = (size != Column.DEFAULT_SIZE);
     this.propertySet.addAll(propertySet);
   }
 
   public ColumnSpec(Column.DataType dataType, boolean isRequired,
       Column.Property... properties) {
-    this(dataType, isRequired, null, DEFAULT_SIZE, convertToSet(properties));
+    this(dataType, isRequired, null, Column.DEFAULT_SIZE, convertToSet(properties));
   }
 
   public ColumnSpec(Column.DataType dataType, Column.DataTypeFormat format,
       boolean isRequired, Column.Property... properties) {
-    this(dataType, isRequired, format, DEFAULT_SIZE, convertToSet(properties));
+    this(dataType, isRequired, format, Column.DEFAULT_SIZE, convertToSet(properties));
   }
 
   public ColumnSpec(Column.DataType dataType, int size, boolean isRequired,
@@ -65,7 +54,6 @@ public class ColumnSpec {
     this(dataType, isRequired, format, size, convertToSet(properties));
   }
 
-  
   /**
    * @return The data type for the column
    */
@@ -90,6 +78,13 @@ public class ColumnSpec {
   }
 
   /**
+   * @return {@code true} if the column is required and is not nullable, {@code false} otherwise.
+   */
+  public final boolean isRequired() {
+    return isRequired;
+  }  
+
+  /**
    * @return {@code true} if a size is specified for the column, {@code false} if the default size
    * for the data type should be used for the column.
    */
@@ -98,17 +93,10 @@ public class ColumnSpec {
   }
 
   /**
-   * @return integer size for the column. {@link ColumnSpec#DEFAULT_SIZE} if the default size should be used.
+   * @return integer size for the column. {@link TableColumnSpec#DEFAULT_SIZE} if the default size should be used.
    */
   public final int getSize() {
     return size;
-  }
-
-  /**
-   * @return {@code true} if the column is required and is not nullable, {@code false} otherwise.
-   */
-  public final boolean isRequired() {
-    return isRequired;
   }
 
   /**

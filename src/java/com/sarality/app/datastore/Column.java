@@ -16,13 +16,16 @@ import com.sarality.app.datastore.db.Table;
  */
 public interface Column {
 
+  // Default value for column data type size
+  public static final int DEFAULT_SIZE = -1;
+  
   /**
-   * @return the SQL Name for the Column
+   * @return the Name for the Column
    */
   public String getName();
 
   /**
-   * @return SQL data type associated with the column
+   * @return data type associated with the column
    */
   public DataType getDataType();
 
@@ -32,7 +35,7 @@ public interface Column {
   public DataTypeFormat getFormat();
 
   /**
-   * @return The size of the data type to be used in the db. A -1 represents the default size.
+   * @return The size of the data type to be used in the db. A {@link Column#DEFAULT_SIZE} represents the default size.
    */
   public int getSize();
 
@@ -46,6 +49,11 @@ public interface Column {
    */
   public Set<Property> getProperties();
 
+  /**
+   * Enum for the formats supported by the various data types.
+   *
+   * @author abhideep@ (Abhideep Singh)
+   */
   public enum DataTypeFormat {
     // Store date as integer in format YYYYMMDDhhmmss
     DATE_AS_INT(DataType.INTEGER),
@@ -92,14 +100,27 @@ public interface Column {
       return format.getUnderlyingDataType();
     }
   }
-  
+
   /**
-   * Properties associated with the database columns
+   * A property associated with the column.
+   * <p>
+   * This is a generic mechanism available to classes that extend Column to 
+   * define properties that might be needed only by the sub classes or
+   * classes that deal only with the sub class.
    * 
    * @author abhideep@ (Abhideep Singh)
    */
-  public enum Property {
-    AUTO_INCREMENT,
-    PRIMARY_KEY,
+  public interface Property {
+
+    /**
+     * @return String name for the property.
+     */
+    public String getName();
+    
+    /**
+     * @param property Property to compare against
+     * @return {@code true} is the properties are teh same, {@code false} otherwise.
+     */
+    public boolean equals(Property property);
   }
 }

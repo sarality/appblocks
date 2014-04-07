@@ -1,12 +1,11 @@
 package com.sarality.app.datastore;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import com.sarality.app.datastore.db.Table;
-
 /**
- * Query to fetch data from a database table.
+ * Query to fetch data from a DataStore.
  * 
  * @author abhideep@ (Abhideep Singh)
  */
@@ -21,11 +20,16 @@ public class Query {
   }
 
   public Query(Column... columns) {
-    this(ColumnUtils.getAllColumns(columns));
+    this(Arrays.asList(columns));
   }
 
-  public Query(Table<?> table) {
-    this(table.getColumns());
+  /**
+   * Constructor for a Query that fetches all Columns from the DataStore.
+   * 
+   * @param table
+   */
+  public Query(DataStore<?> store) {
+    this(store.getColumns());
   }
 
   public Query withFilter(Column column, String value) {
