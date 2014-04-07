@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sarality.app.datastore.Column;
-import com.sarality.app.datastore.Column.Property;
 
 /**
  * Information about a Database table.
@@ -52,7 +51,7 @@ public class TableInfo {
   private static List<Column> getPrimaryKeyColumns(List<Column> columnList) {
     List<Column> primaryKeyColumns = new ArrayList<Column>();
     for (Column column : columnList) {
-      if (column.getProperties().contains(Property.PRIMARY_KEY)) {
+      if (column.getProperties().contains(TableColumn.Property.PRIMARY_KEY)) {
         primaryKeyColumns.add(column);
       }
     }
