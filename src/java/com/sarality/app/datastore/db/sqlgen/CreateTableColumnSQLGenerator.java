@@ -4,6 +4,7 @@ import java.util.Set;
 
 import com.sarality.app.datastore.Column;
 import com.sarality.app.datastore.Column.DataType;
+import com.sarality.app.datastore.db.TableColumn;
 import com.sarality.app.datastore.db.TableInfo;
 
 /**
@@ -20,7 +21,7 @@ public class CreateTableColumnSQLGenerator implements SQLGenerator<Column> {
     Column.DataType dataType = column.getDataType();
     builder.append(column.getName()).append(" ").append(dataType.getUnderlyingDataType(format));
     Set<Column.Property> propertySet = column.getProperties();
-    boolean isPrimaryKeyColumn = propertySet.contains(Column.Property.PRIMARY_KEY);
+    boolean isPrimaryKeyColumn = propertySet.contains(TableColumn.Property.PRIMARY_KEY);
 
     if (isPrimaryKeyColumn) {
       if (hasCompositePrimaryKey) {
@@ -36,10 +37,10 @@ public class CreateTableColumnSQLGenerator implements SQLGenerator<Column> {
     if (!isPrimaryKeyColumn && column.isRequired()) {
         builder.append(" NOT NULL");        
     }
-    
+
     // If the Primary Key column is marked with Auto Increment, make sure it is also an integer
     // and the table doesn't use a composite primary key
-    if (propertySet.contains(Column.Property.AUTO_INCREMENT)) {
+    if (propertySet.contains(TableColumn.Property.AUTO_INCREMENT)) {
       if (!hasCompositePrimaryKey && column.getDataType() == DataType.INTEGER) {
         builder.append(" AUTOINCREMENT");
       }

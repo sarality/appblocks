@@ -11,6 +11,8 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.sarality.app.data.DataObject;
+import com.sarality.app.datastore.AbstractWritableDataStore;
 import com.sarality.app.datastore.Column;
 import com.sarality.app.datastore.Query;
 import com.sarality.app.datastore.extractor.CursorDataExtractor;
@@ -27,7 +29,7 @@ import com.sarality.app.datastore.populator.ContentValuesPopulator;
  *
  * @param <T> Data associated with each row of the table
  */
-public abstract class Table<T> {
+public abstract class Table<T extends DataObject<T>> extends AbstractWritableDataStore<T, Long> {
   
   // Name of the database e.g. users.db.
   private final String dbName;
@@ -38,14 +40,9 @@ public abstract class Table<T> {
   // TODO(abhideep): See if it makes sense to move version to column itself
   // but first need to see how we update the table to change an existing column size.
 
-  // The columns of the database table.
-  private final List<Column> columnList;
   // Metadata of the table, used mostly as a cache of properties of the table like whether
   // it has a composite primary key etc.
   private final TableInfo tableInfo;
-  
-  private final CursorDataExtractor<T> extractor;
-  private final ContentValuesPopulator<T> populator;
 
   // Utility class used to access the underlying database as well as manage the schema of the table.
   private final TableConnectionProvider dbProvider;
@@ -54,21 +51,17 @@ public abstract class Table<T> {
   private AtomicInteger dbOpenCounter = new AtomicInteger();
 
   protected Table(Context context, String dbName, String tableName, int tableVersion,
-          List<? extends Column> columnList, CursorDataExtractor<T> extractor, ContentValuesPopulator<T> populator,
+          List<Column> columnList, CursorDataExtractor<T> extractor, ContentValuesPopulator<T> populator,
           TableSchemaUpdater schemaUpdter) {
+    super(columnList, extractor, populator);
     this.dbName = dbName;
     this.tableName = tableName;
     this.tableVersion = tableVersion;
-    this.columnList = new ArrayList<Column>();
-    this.columnList.addAll(columnList);
-    
-    this.extractor = extractor;
-    this.populator = populator;
 
-    this.tableInfo = new TableInfo(this.columnList);    
+    this.tableInfo = new TableInfo(columnList);
     this.dbProvider = new TableConnectionProvider(context, this, null, schemaUpdter); 
   }
-
+  
   public final String getDbName() {
     return dbName;
   }
@@ -79,10 +72,6 @@ public abstract class Table<T> {
   
   public final int getTableVersion() {
     return tableVersion;
-  }
-
-  public final List<Column> getColumns() {
-    return columnList;
   }
 
   public final TableInfo getTableInfo() {
@@ -127,38 +116,26 @@ public abstract class Table<T> {
     }
   }
 
-  /**
-   * @return
-   */
-  public final CursorDataExtractor<T> getCursorDataExtractor() {
-    return extractor;
-  }
-
-  /**
-   * @return
-   */
-  public final ContentValuesPopulator<T> getContentValuesPopulator() {
-    return populator;
-  }
-
   protected void assertDatabaseOpen() {
     if (database == null) {
       throw new IllegalStateException("Cannot perform operation since the database was either not opened or has already been closed.");
     }
   }
-
+  
   /**
    * Create a row in the database table.
    * 
    * @param data The data for the row that needs to be created.
    * @return The data for the row that was created with the appropriate id also populated.
    */
-  public long create(T data) {
+  public Long create(T data) {
     Log.d(getLoggerTag(), "Adding new row to table " + tableName + " for data object " + data);
     assertDatabaseOpen();
     ContentValues contentValues = new ContentValues();
     getContentValuesPopulator().populate(contentValues, data);
     Log.d(getLoggerTag(), "Adding new row to table " + tableName + " with content values " + contentValues);
+
+    // TODO(abhideep): Call a method that converts a rowd Id to a Long
     return database.insert(tableName, null, contentValues);
   }
 

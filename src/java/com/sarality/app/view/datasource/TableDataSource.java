@@ -3,10 +3,11 @@ package com.sarality.app.view.datasource;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sarality.app.data.DataObject;
 import com.sarality.app.datastore.Query;
 import com.sarality.app.datastore.db.Table;
 
-public class TableDataSource<T> implements DataSource<T> {
+public class TableDataSource<T extends DataObject<T>> implements DataSource<T> {
   private final Table<T> table;
   private final Query query;
   private final List<T> dataList = new ArrayList<T>();

@@ -24,7 +24,7 @@ public class TableSchemaValidator {
     boolean hasCompositePrimaryKey = metadata.hasCompositePrimaryKey();
     for(Column column : table.getColumns()) {
       Set<Column.Property> properties = column.getProperties();
-      boolean isPrimaryKeyColumn = properties.contains(Column.Property.PRIMARY_KEY);
+      boolean isPrimaryKeyColumn = properties.contains(TableColumn.Property.PRIMARY_KEY);
 
       Column.DataType dataType = column.getDataType();
       Column.DataTypeFormat dataTypeFormat = column.getFormat();
@@ -41,7 +41,7 @@ public class TableSchemaValidator {
             + " All Primary Key Columns must be marked as required.");
       }
 
-      boolean isAutoIncrement = properties.contains(Column.Property.AUTO_INCREMENT);
+      boolean isAutoIncrement = properties.contains(TableColumn.Property.AUTO_INCREMENT);
 
       if (isAutoIncrement && !isPrimaryKeyColumn) {
         throw new ValidationException("Column with name " + column.getName()
