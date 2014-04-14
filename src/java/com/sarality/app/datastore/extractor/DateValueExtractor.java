@@ -11,6 +11,11 @@ import android.util.Log;
 
 import com.sarality.app.datastore.Column;
 
+/**
+ * Extract a date value from the cursor column.
+ * 
+ * @author abhideep@ (Abhideep Singh)
+ */
 public class DateValueExtractor implements ColumnValueExtractor<Date> {
   
   private static final String TAG = "DateValueExtractor";
