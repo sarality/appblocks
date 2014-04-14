@@ -4,6 +4,13 @@ import android.database.Cursor;
 
 import com.sarality.app.datastore.Column;
 
+/**
+ * Extract an enum value from the cursor column.
+ * 
+ * @author abhideep@ (Abhideep Singh)
+ *
+ * @param <T> The type of Enum to be extracted.
+ */
 public class EnumValueExtractor<T extends Enum<T>> implements ColumnValueExtractor<T> {
 
   @Override
