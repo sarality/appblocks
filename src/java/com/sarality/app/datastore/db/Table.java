@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import android.app.Application;
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -50,22 +50,22 @@ public abstract class Table<T extends DataObject<T>> extends AbstractWritableDat
   private SQLiteDatabase database;
   private AtomicInteger dbOpenCounter = new AtomicInteger();
 
-  protected Table(Context context, String dbName, String tableName, int tableVersion,
+  protected Table(Application application, String dbName, String tableName, int tableVersion,
           List<Column> columnList, CursorDataExtractor<T> extractor, ContentValuesPopulator<T> populator,
           TableSchemaUpdater schemaUpdter) {
-    super(columnList, extractor, populator);
+    super(application.getApplicationContext(), columnList, extractor, populator);
     this.dbName = dbName;
     this.tableName = tableName;
     this.tableVersion = tableVersion;
 
     this.tableInfo = new TableInfo(columnList);
-    this.dbProvider = new TableConnectionProvider(context, this, null, schemaUpdter); 
+    this.dbProvider = new TableConnectionProvider(application.getApplicationContext(), this, null, schemaUpdter); 
   }
-  
+
   public final String getDbName() {
     return dbName;
   }
-  
+
   public final String getTableName() {
     return tableName;
   }
@@ -155,7 +155,6 @@ public abstract class Table<T extends DataObject<T>> extends AbstractWritableDat
    * @return List of data that was returned for the query
    */
   public List<T> query(Query query) {
-    // TODO(abhideep): Needs implementation
     Cursor cursor = database.query(tableName, new String[] {}, null, null, null, null, null);
     CursorDataExtractor<T> extractor = getCursorDataExtractor();
     List<T> dataList = new ArrayList<T>();

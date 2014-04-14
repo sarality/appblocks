@@ -3,6 +3,8 @@ package com.sarality.app.datastore;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.Context;
+
 import com.sarality.app.data.DataObject;
 import com.sarality.app.datastore.extractor.CursorDataExtractor;
 
@@ -18,6 +20,9 @@ import com.sarality.app.datastore.extractor.CursorDataExtractor;
  */
 public abstract class AbstractDataStore<T extends DataObject<T>> implements DataStore<T> {
 
+  // The application context for the data store. 
+  private final Context applicationContext;
+
   // The columns of the database table.
   private final List<Column> columnList;
 
@@ -26,14 +31,16 @@ public abstract class AbstractDataStore<T extends DataObject<T>> implements Data
 
   /**
    * Constructor
-   * 
+   *
+   * @param context The context passed to the data store to look up its application context.
    * @param columnList List of Column defined for the DataStore.
    * @param extractor Class that extracts the DataObject from the Cursor
    */
-  public AbstractDataStore(List<Column> columnList, CursorDataExtractor<T> extractor) {
+  public AbstractDataStore(Context context, List<Column> columnList, CursorDataExtractor<T> extractor) {
+    this.applicationContext = context.getApplicationContext();
     this.columnList = new ArrayList<Column>();
     this.columnList.addAll(columnList);
-    
+
     this.extractor = extractor;
   }
 
@@ -41,6 +48,11 @@ public abstract class AbstractDataStore<T extends DataObject<T>> implements Data
    * @return The String TAG to be used to logging messages.
    */
   public abstract String getLoggerTag();
+
+  @Override
+  public final Context getApplicationContext() {
+    return applicationContext;
+  }
 
   @Override
   public final List<Column> getColumns() {
