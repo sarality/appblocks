@@ -15,9 +15,4 @@ public class StringValueExtractor implements ColumnValueExtractor<String> {
   public String extract(Cursor cursor, Column column) {
     return cursor.getString(cursor.getColumnIndex(column.getName()));
   }
-
-  @Override
-  public String extract(Cursor cursor, Column column, Class<String> returnType) {
-    return extract(cursor, column);
-  }
 }

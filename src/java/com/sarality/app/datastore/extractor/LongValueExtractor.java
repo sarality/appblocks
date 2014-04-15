@@ -15,9 +15,4 @@ public class LongValueExtractor implements ColumnValueExtractor<Long> {
   public Long extract(Cursor cursor, Column column) {
     return cursor.getLong(cursor.getColumnIndex(column.getName()));
   }
-
-  @Override
-  public Long extract(Cursor cursor, Column column, Class<Long> returnType) {
-    return extract(cursor, column);
-  }
 }
