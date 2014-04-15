@@ -24,11 +24,6 @@ public class DateValueExtractor implements ColumnValueExtractor<Date> {
       Locale.getDefault());
 
   @Override
-  public Date extract(Cursor cursor, Column column, Class<Date> returnType) {
-    return extract(cursor, column);
-  }
-
-  @Override
   public Date extract(Cursor cursor, Column column) {
     Column.DataTypeFormat format = column.getFormat();
     if (format == null) {
@@ -43,7 +38,7 @@ public class DateValueExtractor implements ColumnValueExtractor<Date> {
         return null;
       }
     } else if (format == Column.DataTypeFormat.EPOCH) {
-      int dateValue = cursor.getInt(cursor.getColumnIndex(column.getName()));
+      long dateValue = cursor.getLong(cursor.getColumnIndex(column.getName()));
       return new Date(dateValue);
     } else if (format == Column.DataTypeFormat.DATE_AS_INT) {
       long dateValue = cursor.getLong(cursor.getColumnIndex(column.getName()));
