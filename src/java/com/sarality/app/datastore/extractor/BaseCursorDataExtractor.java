@@ -20,6 +20,7 @@ public abstract class BaseCursorDataExtractor<T extends DataObject<T>> implement
   protected final LongValueExtractor longExtractor = new LongValueExtractor();
   protected final StringValueExtractor stringExtractor = new StringValueExtractor();
   protected final DateValueExtractor dateExtractor = new DateValueExtractor();
+  protected final BooleanValueExtractor booleanExtractor = new BooleanValueExtractor();
 
   /**
    * Indicates whether the given Column is returned by the cursor.
