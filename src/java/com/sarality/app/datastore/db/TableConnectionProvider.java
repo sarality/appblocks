@@ -46,4 +46,13 @@ class TableConnectionProvider extends SQLiteOpenHelper {
   public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     schemaUpdater.updateSchema(db, table);
   }
+
+  /**
+   * Downgrade the database table with the old schema for the table.
+   */
+  @Override
+  public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    schemaUpdater.updateSchema(db, table);
+  }
+
 }

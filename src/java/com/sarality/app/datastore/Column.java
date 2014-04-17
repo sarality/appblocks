@@ -57,6 +57,10 @@ public interface Column {
   public enum DataTypeFormat {
     // Store date as integer in format YYYYMMDDhhmmss
     DATE_AS_INT(DataType.INTEGER),
+    // Store mapped value for enum
+    ENUM_AS_INT(DataType.INTEGER),
+    // Store mapped value for enum
+    ENUM_AS_TXT(DataType.TEXT),
     // Store date as epoch i.e. milliseconds since January 1, 1970
     EPOCH(DataType.INTEGER);
 
@@ -77,13 +81,21 @@ public interface Column {
    * @author abhideep@ (Abhideep Singh)
    */
   public enum DataType {
-    INTEGER(),
-    TEXT(),
-    DATETIME(DataTypeFormat.DATE_AS_INT, DataTypeFormat.EPOCH);
-    
-    private Set<DataTypeFormat> supportedFormatSet = new LinkedHashSet<DataTypeFormat>();
+    INTEGER(null),
+    TEXT(null),
+    BOOLEAN(DataType.INTEGER),
+    DATETIME(null, DataTypeFormat.DATE_AS_INT, DataTypeFormat.EPOCH),
+    ENUM(DataType.TEXT, DataTypeFormat.ENUM_AS_INT, DataTypeFormat.ENUM_AS_TXT);
 
-    private DataType(DataTypeFormat... supportedFormats) {
+    private Set<DataTypeFormat> supportedFormatSet = new LinkedHashSet<DataTypeFormat>();
+    private DataType underlyingDataType;
+
+    private DataType(DataType underlyingDataType, DataTypeFormat... supportedFormats) {
+      if (underlyingDataType == null) {
+        this.underlyingDataType = this;
+      } else {
+        this.underlyingDataType = underlyingDataType;
+      }
       for (DataTypeFormat format : supportedFormats) {
         supportedFormatSet.add(format);
       }
@@ -95,7 +107,7 @@ public interface Column {
 
     public DataType getUnderlyingDataType(DataTypeFormat format) {
       if (format == null) {
-        return this;
+        return underlyingDataType;
       }
       return format.getUnderlyingDataType();
     }
