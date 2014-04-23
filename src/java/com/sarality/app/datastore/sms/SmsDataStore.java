@@ -1,13 +1,11 @@
 package com.sarality.app.datastore.sms;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.util.Log;
 
 import com.sarality.app.datastore.AbstractContentResolverDataStore;
 import com.sarality.app.datastore.ColumnSpec;
@@ -84,16 +82,6 @@ public class SmsDataStore extends AbstractContentResolverDataStore<SmsMessage> {
   @Override
   public String getLoggerTag() {
     return TAG;
-  }
-
-
-  @Override
-  public List<SmsMessage> query(Query query) {
-    List<SmsMessage> messageList =  super.query(query);
-    for (SmsMessage message : messageList) {
-      Log.w(TAG, "Loaded message " + message);
-    }
-    return messageList;
   }
 
   public static class SmsMessageExtractor extends BaseCursorDataExtractor<SmsMessage> {
