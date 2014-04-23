@@ -107,8 +107,8 @@ public class SmsMessage implements DataObject<SmsMessage> {
   }
 
   public static enum MessageType implements MappedEnum<Integer> {
-    SENT(1),
-    RECEIVED(2),
+    RECEIVED(1),
+    SENT(2),
     DRAFT(3);
 
     private int mappedValue;
