@@ -7,7 +7,6 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.util.Log;
 
 import com.sarality.app.data.DataObject;
 import com.sarality.app.datastore.extractor.CursorDataExtractor;
@@ -32,10 +31,6 @@ public abstract class AbstractContentResolverDataStore<T extends DataObject<T>>
     List<T> dataList = new ArrayList<T>();
 
     cursor.moveToFirst();
-    for (String columnName : cursor.getColumnNames()) {
-      Log.w(getLoggerTag(), "Column Name " + columnName);      
-    }
-
     while (!cursor.isAfterLast()) {
       T data = extractor.extract(cursor, query);
       dataList.add(data);
