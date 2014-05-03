@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.util.Log;
 
 import com.sarality.app.datastore.Column;
+import com.sarality.app.datastore.ColumnFormat;
 
 /**
  * Extract a date value from the cursor column.
@@ -25,7 +26,7 @@ public class DateValueExtractor implements ColumnValueExtractor<Date> {
 
   @Override
   public Date extract(Cursor cursor, Column column) {
-    Column.DataTypeFormat format = column.getFormat();
+    ColumnFormat format = column.getConfig().getSpec().getFormat();
     if (format == null) {
       String dateStr = cursor.getString(cursor.getColumnIndex(column.getName()));
       if (dateStr != null) {
@@ -37,10 +38,10 @@ public class DateValueExtractor implements ColumnValueExtractor<Date> {
         // Return null by default
         return null;
       }
-    } else if (format == Column.DataTypeFormat.EPOCH) {
+    } else if (format == ColumnFormat.EPOCH) {
       long dateValue = cursor.getLong(cursor.getColumnIndex(column.getName()));
       return new Date(dateValue);
-    } else if (format == Column.DataTypeFormat.DATE_AS_INT) {
+    } else if (format == ColumnFormat.DATE_AS_INT) {
       long dateValue = cursor.getLong(cursor.getColumnIndex(column.getName()));
       int year = Long.valueOf(dateValue / 10000000000L).intValue();
 

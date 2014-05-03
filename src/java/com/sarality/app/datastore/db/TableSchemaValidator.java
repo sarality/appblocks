@@ -3,6 +3,10 @@ package com.sarality.app.datastore.db;
 import java.util.Set;
 
 import com.sarality.app.datastore.Column;
+import com.sarality.app.datastore.ColumnDataType;
+import com.sarality.app.datastore.ColumnFormat;
+import com.sarality.app.datastore.ColumnProperty;
+import com.sarality.app.datastore.ColumnSpec;
 import com.sarality.app.error.ValidationException;
 
 /**
@@ -23,11 +27,12 @@ public class TableSchemaValidator {
     TableInfo metadata = table.getTableInfo();
     boolean hasCompositePrimaryKey = metadata.hasCompositePrimaryKey();
     for(Column column : table.getColumns()) {
-      Set<Column.Property> properties = column.getProperties();
-      boolean isPrimaryKeyColumn = properties.contains(TableColumn.Property.PRIMARY_KEY);
+      ColumnSpec spec = column.getConfig().getSpec();
+      Set<ColumnProperty> properties = spec.getProperties();
+      boolean isPrimaryKeyColumn = properties.contains(TableColumnProperty.PRIMARY_KEY);
 
-      Column.DataType dataType = column.getDataType();
-      Column.DataTypeFormat dataTypeFormat = column.getFormat();
+      ColumnDataType dataType = spec.getDataType();
+      ColumnFormat dataTypeFormat = spec.getFormat();
 
       if (dataTypeFormat != null && !dataType.isSupportedFormat(dataTypeFormat)) {
         throw new ValidationException("Column with name " + column.getName() 
@@ -35,13 +40,13 @@ public class TableSchemaValidator {
             + " which does not support Data Type " + dataTypeFormat);        
       }
 
-      if (isPrimaryKeyColumn && !column.isRequired()) {
+      if (isPrimaryKeyColumn && !spec.isRequired()) {
         throw new ValidationException("Column with name " + column.getName() 
             + " is part of the Primary key but not marked as Required."
             + " All Primary Key Columns must be marked as required.");
       }
 
-      boolean isAutoIncrement = properties.contains(TableColumn.Property.AUTO_INCREMENT);
+      boolean isAutoIncrement = properties.contains(TableColumnProperty.AUTO_INCREMENT);
 
       if (isAutoIncrement && !isPrimaryKeyColumn) {
         throw new ValidationException("Column with name " + column.getName()
@@ -56,10 +61,10 @@ public class TableSchemaValidator {
       }
 
       if (isAutoIncrement && isPrimaryKeyColumn && !hasCompositePrimaryKey
-          && column.getDataType() != Column.DataType.INTEGER) {
+          && dataType != ColumnDataType.INTEGER) {
         throw new ValidationException("Column with name " + column.getName() 
             + " is marked as AUTO INCREMENT which is only allowed for INTEGER columns."
-            + " However the data type of the column is " + column.getDataType());
+            + " However the data type of the column is " + dataType);
       }
     }
     return true;
