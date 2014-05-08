@@ -6,6 +6,7 @@ import java.util.Map;
 import android.database.Cursor;
 
 import com.sarality.app.datastore.Column;
+import com.sarality.app.datastore.ColumnDataType;
 import com.sarality.app.datastore.MappedEnum;
 
 public class MappedEnumValueExtractor<V, T extends MappedEnum<V>> implements ColumnValueExtractor<T> {
@@ -25,10 +26,11 @@ public class MappedEnumValueExtractor<V, T extends MappedEnum<V>> implements Col
 
   @Override
   public T extract(Cursor cursor, Column column) {
-    if (column.getDataType() == Column.DataType.INTEGER) {
+    ColumnDataType dataType = column.getConfig().getSpec().getDataType();
+    if (dataType == ColumnDataType.INTEGER) {
       int intValue = cursor.getInt(cursor.getColumnIndex(column.getName()));
       return enumMap.get(intValue);      
-    } else if (column.getDataType() == Column.DataType.TEXT) {
+    } else if (dataType == ColumnDataType.TEXT) {
       String stringValue = cursor.getString(cursor.getColumnIndex(column.getName()));
       return enumMap.get(stringValue);      
     }

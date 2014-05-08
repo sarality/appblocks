@@ -4,27 +4,26 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class ColumnSpec {
-
+  
   // The data type for the column
-  private final Column.DataType dataType;
+  private final ColumnDataType dataType;
   // Data types like date can be saved in multiple formats like EPoch or as integers.
   // The format defines the format that the data type is stored in the DataStore
   private final boolean hasFormat;
-  private final Column.DataTypeFormat format;
+  private final ColumnFormat format;
 
   // Indicates if the column is required or can it be null
   private final boolean isRequired;
 
-    // Defined if a size is specified for the column. If not the default size is used
+  // Defined if a size is specified for the column. If not the default size is used
   private final boolean hasSize;
   private final int size;
 
   // Set of properties associated with the column
-  private final Set<Column.Property> propertySet = new HashSet<Column.Property>();
+  private final Set<ColumnProperty> propertySet = new HashSet<ColumnProperty>();
 
-  private ColumnSpec(Column.DataType dataType, boolean isRequired, 
-      Column.DataTypeFormat format, int size,
-      Set<Column.Property> propertySet) {
+  public ColumnSpec(ColumnDataType dataType, boolean isRequired, 
+          ColumnFormat format, int size, Set<ColumnProperty> propertySet) {
     this.isRequired = isRequired;
     this.dataType = dataType;
     this.format = format;
@@ -34,30 +33,30 @@ public class ColumnSpec {
     this.propertySet.addAll(propertySet);
   }
 
-  public ColumnSpec(Column.DataType dataType, boolean isRequired,
-      Column.Property... properties) {
+  public ColumnSpec(ColumnDataType dataType, boolean isRequired,
+          ColumnProperty... properties) {
     this(dataType, isRequired, null, Column.DEFAULT_SIZE, convertToSet(properties));
   }
 
-  public ColumnSpec(Column.DataType dataType, Column.DataTypeFormat format,
-      boolean isRequired, Column.Property... properties) {
+  public ColumnSpec(ColumnDataType dataType, ColumnFormat format,
+      boolean isRequired, ColumnProperty... properties) {
     this(dataType, isRequired, format, Column.DEFAULT_SIZE, convertToSet(properties));
   }
 
-  public ColumnSpec(Column.DataType dataType, int size, boolean isRequired,
-      Column.Property... properties) {
+  public ColumnSpec(ColumnDataType dataType, int size, boolean isRequired,
+          ColumnProperty... properties) {
     this(dataType, isRequired, null, size, convertToSet(properties));
   }
   
-  public ColumnSpec(Column.DataType dataType, Column.DataTypeFormat format, 
-      int size, boolean isRequired, Column.Property... properties) {
+  public ColumnSpec(ColumnDataType dataType, ColumnFormat format, 
+      int size, boolean isRequired, ColumnProperty... properties) {
     this(dataType, isRequired, format, size, convertToSet(properties));
   }
 
   /**
    * @return The data type for the column
    */
-  public final Column.DataType getDataType() {
+  public final ColumnDataType getDataType() {
     return dataType;
   }
   
@@ -73,7 +72,7 @@ public class ColumnSpec {
    * @return Special format, if any, that is used to store the data in the column. Returns null if
    * the default format is used.
    */
-  public final Column.DataTypeFormat getFormat() {
+  public final ColumnFormat getFormat() {
     return format;
   }
 
@@ -102,14 +101,14 @@ public class ColumnSpec {
   /**
    * @return Set of properties for the column
    */
-  public final Set<Column.Property> getProperties() {
+  public final Set<ColumnProperty> getProperties() {
     return propertySet;
   }    
   
-  private static Set<Column.Property> convertToSet(Column.Property[] properties) {
-    Set<Column.Property> propertySet = new HashSet<Column.Property>();
+  private static Set<ColumnProperty> convertToSet(ColumnProperty[] properties) {
+    Set<ColumnProperty> propertySet = new HashSet<ColumnProperty>();
     if (properties != null) {
-      for (Column.Property property : properties) {
+      for (ColumnProperty property : properties) {
         propertySet.add(property);
       }
     }
