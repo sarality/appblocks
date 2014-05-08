@@ -3,12 +3,14 @@ package com.sarality.app.data;
 public interface FieldData<T> {
 
   public enum Type {
-    STRING,
-    LONG,
-    INT,
+    BOOLEAN,
     DATE,
+    DOUBLE,
     ENUM,
-    COMPLEX, 
+    INT,
+    LONG,
+    STRING,
+    COMPLEX,  
   }
 
   public Field getField();
@@ -20,6 +22,8 @@ public interface FieldData<T> {
   public T getValue();
 
   public void setValue(T value);
-  
-  public void parseFrom(String stringValue);
+
+  public void castFrom(Object value);
+
+  public void parseFrom(String stringValue);  
 }

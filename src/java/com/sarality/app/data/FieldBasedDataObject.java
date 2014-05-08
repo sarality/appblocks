@@ -17,7 +17,9 @@ public interface FieldBasedDataObject<T> extends DataObject<T> {
 
   public interface Builder<T> extends DataObject.Builder<T> {
 
-    public void setFieldValue(Field field, String value);
+    public void setFieldValue(Field field, Object value);
+
+    public void parseFieldValue(Field field, String value);
 
     @Override
     public T build();

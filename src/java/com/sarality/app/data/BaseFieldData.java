@@ -6,10 +6,13 @@ public abstract class BaseFieldData<T> implements FieldData<T> {
   private boolean hasValue = false;
   private final Field field;
   private final FieldData.Type fieldType;
-  
-  public BaseFieldData(Field field, FieldData.Type fieldType) {
+
+  public BaseFieldData(Field field, FieldData.Type fieldType, BaseFieldBasedDataObject<?> data) {
     this.field = field;
     this.fieldType = fieldType;
+    if (data != null) {
+      data.registerField(this);
+    }
   }
 
   @Override
