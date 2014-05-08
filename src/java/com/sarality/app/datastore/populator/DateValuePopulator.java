@@ -7,6 +7,7 @@ import java.util.Locale;
 import android.content.ContentValues;
 
 import com.sarality.app.datastore.Column;
+import com.sarality.app.datastore.ColumnFormat;
 
 /**
  * Populates a ContentValues instance with data for a Date Column.
@@ -23,12 +24,12 @@ public class DateValuePopulator implements ValuePopulator<Date> {
     if (!valueExistsPreCondition) {
       return;
     }
-    Column.DataTypeFormat format = column.getFormat();
+    ColumnFormat format = column.getConfig().getSpec().getFormat();
     if (format == null) {
       contentValues.put(column.getName(), defaultFormatter.format(value));
-    } else if (format == Column.DataTypeFormat.EPOCH) {
+    } else if (format == ColumnFormat.EPOCH) {
       contentValues.put(column.getName(), value.getTime());
-    } else if (format == Column.DataTypeFormat.DATE_AS_INT) {
+    } else if (format == ColumnFormat.DATE_AS_INT) {
       String dateString = dateAsIntegerFormatter.format(value);
       contentValues.put(column.getName(), Integer.valueOf(dateString));
     }

@@ -51,7 +51,7 @@ public class TableInfo {
   private static List<Column> getPrimaryKeyColumns(List<Column> columnList) {
     List<Column> primaryKeyColumns = new ArrayList<Column>();
     for (Column column : columnList) {
-      if (column.getProperties().contains(TableColumn.Property.PRIMARY_KEY)) {
+      if (column.getConfig().getSpec().getProperties().contains(TableColumnProperty.PRIMARY_KEY)) {
         primaryKeyColumns.add(column);
       }
     }

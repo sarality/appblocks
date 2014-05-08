@@ -1,5 +1,7 @@
 package com.sarality.app.datastore.extractor;
 
+import java.util.Date;
+
 import com.sarality.app.data.DataObject;
 import com.sarality.app.datastore.Column;
 import com.sarality.app.datastore.Query;
@@ -17,11 +19,6 @@ import android.database.Cursor;
  */
 public abstract class BaseCursorDataExtractor<T extends DataObject<T>> implements CursorDataExtractor<T> {
 
-  protected final LongValueExtractor longExtractor = new LongValueExtractor();
-  protected final StringValueExtractor stringExtractor = new StringValueExtractor();
-  protected final DateValueExtractor dateExtractor = new DateValueExtractor();
-  protected final BooleanValueExtractor booleanExtractor = new BooleanValueExtractor();
-
   /**
    * Indicates whether the given Column is returned by the cursor.
    * 
@@ -32,5 +29,35 @@ public abstract class BaseCursorDataExtractor<T extends DataObject<T>> implement
    */
   public final boolean hasColumn(Cursor cursor, Query query, Column column) {
     return cursor.getColumnIndex(column.getName()) > -1;
-  }  
+  }
+  
+  public Long getLong(Cursor cursor, Query query, Column column) {
+    ColumnValueExtractor<?> extractor = column.getConfig().getExtractor();
+    Long value = (Long) extractor.extract(cursor, column);
+    return value;
+  }
+
+  public String getString(Cursor cursor, Query query, Column column) {
+    ColumnValueExtractor<?> extractor = column.getConfig().getExtractor();
+    String value = (String) extractor.extract(cursor, column);
+    return value;
+  }
+
+  public Integer getInteger(Cursor cursor, Query query, Column column) {
+    ColumnValueExtractor<?> extractor = column.getConfig().getExtractor();
+    Integer value = (Integer) extractor.extract(cursor, column);
+    return value;
+  }
+
+  public Date getDate(Cursor cursor, Query query, Column column) {
+    ColumnValueExtractor<?> extractor = column.getConfig().getExtractor();
+    Date value = (Date) extractor.extract(cursor, column);
+    return value;
+  }
+
+  public Boolean getBoolean(Cursor cursor, Query query, Column column) {
+    ColumnValueExtractor<?> extractor = column.getConfig().getExtractor();
+    Boolean value = (Boolean) extractor.extract(cursor, column);
+    return value;
+  }
 }
