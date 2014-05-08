@@ -3,9 +3,13 @@ package com.sarality.app.datastore.sms;
 import java.util.Date;
 
 import com.sarality.app.data.BaseFieldBasedDataObject;
+import com.sarality.app.data.BooleanFieldData;
 import com.sarality.app.data.DataObject;
+import com.sarality.app.data.DateFieldData;
+import com.sarality.app.data.EnumFieldData;
 import com.sarality.app.data.FieldBasedDataObject;
 import com.sarality.app.data.LongFieldData;
+import com.sarality.app.data.StringFieldData;
 import com.sarality.app.datastore.MappedEnum;
 
 /**
@@ -16,32 +20,37 @@ import com.sarality.app.datastore.MappedEnum;
 public class SmsMessage extends BaseFieldBasedDataObject<SmsMessage> implements DataObject<SmsMessage> {
 
   // Id of the SMS message
-  private final LongFieldData messageId = new LongFieldData(SmsMessageField.MESSAGE_ID);
+  private final LongFieldData messageId = new LongFieldData(SmsMessageField.MESSAGE_ID, this);
   // Conversation Id
-  private Long threadId;
+  private final LongFieldData threadId = new LongFieldData(SmsMessageField.THREAD_ID, this);
   
   // The address of the person/entity who this message is being 
   // exchanged with.
-  private String address;
+  private final StringFieldData address = new StringFieldData(SmsMessageField.ADDRESS, this);
   // Text of the SMS message
-  private String body;
+  private final StringFieldData body = new StringFieldData(SmsMessageField.BODY, this);
 
   // The folder the message is in (Sent, Inbox, Draft)
-  private MessageType messageType;
+  private final EnumFieldData<MessageType> messageType = new EnumFieldData<MessageType>(SmsMessageField.MESSAGE_TYPE,
+          MessageType.class, this);
   // Indicates whether the message has been read
-  private boolean isRead;
+  private final BooleanFieldData isRead = new BooleanFieldData(SmsMessageField.IS_READ, this);
 
   // Date and time the message was sent
-  private Date sentDate;
+  private final DateFieldData sentDate = new DateFieldData(SmsMessageField.SENT_DATE, this);
   // Date and time the message was received
-  private Date receivedDate;
+  private final DateFieldData receivedDate = new DateFieldData(SmsMessageField.RECEIVED_DATE, this);
 
   // The Contact Id of the sender, if the sender is a contact.
-  private String recipient;
-  
+  private final StringFieldData recipient = new StringFieldData(SmsMessageField.RECIPIENT, this);
+
+  // Generated only via the Builder
   private SmsMessage() {
-    register(messageId);
-    // Generated only via the Builder
+    super();
+  }
+
+  public void registerAllFields() {
+//    registerFields(messageId, threadId, address, body , messageType, isRead, sentDate, receivedDate, recipient);    
   }
 
   public final Long getMessageId() {
@@ -49,45 +58,45 @@ public class SmsMessage extends BaseFieldBasedDataObject<SmsMessage> implements 
   }
 
   public final String getBody() {
-    return body;
+    return body.getValue();
   }
   
   public final Date getSentDate() {
-    return sentDate;
+    return sentDate.getValue();
   }
   
   public final Date getReceivedDate() {
-    return receivedDate;
+    return receivedDate.getValue();
   }
 
   public String getAddress() {
-    return address;
+    return address.getValue();
   }
   
   public String getRecipient() {
-    return recipient;
+    return recipient.getValue();
   }
 
   public boolean isRead() {
-    return isRead;
+    return isRead.getValue();
   }
  
   public MessageType getMessageType() {
-    return messageType;
+    return messageType.getValue();
   }
   
   @Override
   public Builder getBuilder() {
     return new Builder()
         .setMessageId(messageId.getValue())
-        .setThreadId(threadId)
-        .setBody(body)
-        .setAddress(address)
-        .setRecipient(recipient)
-        .setSentDate(sentDate)
-        .setReceivedDate(receivedDate)
-        .setRead(isRead)
-        .setMessageType(messageType);
+        .setThreadId(threadId.getValue())
+        .setBody(body.getValue())
+        .setAddress(address.getValue())
+        .setRecipient(recipient.getValue())
+        .setSentDate(sentDate.getValue())
+        .setReceivedDate(receivedDate.getValue())
+        .setRead(isRead.getValue())
+        .setMessageType(messageType.getValue());
   }
 
   @Override
@@ -99,14 +108,14 @@ public class SmsMessage extends BaseFieldBasedDataObject<SmsMessage> implements 
   public String toString() {
     return new StringBuilder()
       .append("Message Id : ").append(messageId.getValue()).append(",\n")
-      .append("Thread Id : ").append(threadId).append(",\n")
-      .append("Address : ").append(address).append(",\n")
-      .append("Recipient : ").append(recipient).append(",\n")
-      .append("Body : ").append(body).append(",\n")
-      .append("Sent : ").append(sentDate).append(",\n")
-      .append("Received : ").append(receivedDate).append(",\n")
-      .append("Read : ").append(isRead).append(",\n")
-      .append("Folder : ").append(messageType).append("\n")
+      .append("Thread Id : ").append(threadId.getValue()).append(",\n")
+      .append("Address : ").append(address.getValue()).append(",\n")
+      .append("Recipient : ").append(recipient.getValue()).append(",\n")
+      .append("Body : ").append(body.getValue()).append(",\n")
+      .append("Sent : ").append(sentDate.getValue()).append(",\n")
+      .append("Received : ").append(receivedDate.getValue()).append(",\n")
+      .append("Read : ").append(isRead.getValue()).append(",\n")
+      .append("Folder : ").append(messageType.getValue()).append("\n")
       .toString();
   }
 
@@ -129,11 +138,10 @@ public class SmsMessage extends BaseFieldBasedDataObject<SmsMessage> implements 
 
   public static class Builder extends BaseFieldBasedDataObject.Builder<SmsMessage> 
       implements FieldBasedDataObject.Builder<SmsMessage>, DataObject.Builder<SmsMessage> {
-    private SmsMessage data = new SmsMessage();
 
     @Override
     public SmsMessage newDataObject() {
-      return data;
+      return new SmsMessage();
     }
     
     public Builder setMessageId(Long messageId) {
@@ -142,42 +150,42 @@ public class SmsMessage extends BaseFieldBasedDataObject<SmsMessage> implements 
     }
 
     public Builder setThreadId(Long threadId) {
-      data.threadId = threadId;
+      data.threadId.setValue(threadId);
       return this;
     }
 
     public Builder setBody(String body) {
-      data.body = body;
+      data.body.setValue(body);
       return this;
     }
 
     public Builder setAddress(String address) {
-      data.address = address;
+      data.address.setValue(address);
       return this;
     }    
 
     public Builder setRecipient(String recipient) {
-      data.recipient = recipient;
+      data.recipient.setValue(recipient);
       return this;
     }    
 
     public Builder setSentDate(Date sentDate) {
-      data.sentDate = sentDate;
+      data.sentDate.setValue(sentDate);
       return this;
     }    
 
     public Builder setReceivedDate(Date receivedDate) {
-      data.receivedDate = receivedDate;
+      data.receivedDate.setValue(receivedDate);
       return this;
     }
 
     public Builder setRead(boolean isRead) {
-      data.isRead = isRead;
+      data.isRead.setValue(isRead);
       return this;
     }
 
     public Builder setMessageType(MessageType messageType) {
-      data.messageType = messageType;
+      data.messageType.setValue(messageType);
       return this;
     }
   }
