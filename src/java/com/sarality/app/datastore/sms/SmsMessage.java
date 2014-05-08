@@ -2,18 +2,21 @@ package com.sarality.app.datastore.sms;
 
 import java.util.Date;
 
+import com.sarality.app.data.BaseFieldBasedDataObject;
 import com.sarality.app.data.DataObject;
+import com.sarality.app.data.FieldBasedDataObject;
+import com.sarality.app.data.LongFieldData;
 import com.sarality.app.datastore.MappedEnum;
 
 /**
  * Class that represents an SMS message.
- * 
+ *
  * @author abhideep@ (Abhideep Singh)
  */
-public class SmsMessage implements DataObject<SmsMessage> {
+public class SmsMessage extends BaseFieldBasedDataObject<SmsMessage> implements DataObject<SmsMessage> {
 
   // Id of the SMS message
-  private Long messageId;
+  private final LongFieldData messageId = new LongFieldData(SmsMessageField.MESSAGE_ID);
   // Conversation Id
   private Long threadId;
   
@@ -37,11 +40,12 @@ public class SmsMessage implements DataObject<SmsMessage> {
   private String recipient;
   
   private SmsMessage() {
+    register(messageId);
     // Generated only via the Builder
   }
 
   public final Long getMessageId() {
-    return messageId;
+    return messageId.getValue();
   }
 
   public final String getBody() {
@@ -75,7 +79,7 @@ public class SmsMessage implements DataObject<SmsMessage> {
   @Override
   public Builder getBuilder() {
     return new Builder()
-        .setMessageId(messageId)
+        .setMessageId(messageId.getValue())
         .setThreadId(threadId)
         .setBody(body)
         .setAddress(address)
@@ -94,8 +98,8 @@ public class SmsMessage implements DataObject<SmsMessage> {
   @Override
   public String toString() {
     return new StringBuilder()
-      .append("Message Id : ").append(messageId).append(",\n")
-      .append("Thread Id : ").append(messageId).append(",\n")
+      .append("Message Id : ").append(messageId.getValue()).append(",\n")
+      .append("Thread Id : ").append(threadId).append(",\n")
       .append("Address : ").append(address).append(",\n")
       .append("Recipient : ").append(recipient).append(",\n")
       .append("Body : ").append(body).append(",\n")
@@ -123,16 +127,17 @@ public class SmsMessage implements DataObject<SmsMessage> {
     }
   }
 
-  public static class Builder implements DataObject.Builder<SmsMessage> {
+  public static class Builder extends BaseFieldBasedDataObject.Builder<SmsMessage> 
+      implements FieldBasedDataObject.Builder<SmsMessage>, DataObject.Builder<SmsMessage> {
     private SmsMessage data = new SmsMessage();
-    
+
     @Override
-    public SmsMessage build() {
+    public SmsMessage newDataObject() {
       return data;
     }
     
     public Builder setMessageId(Long messageId) {
-      data.messageId = messageId;
+      data.messageId.setValue(messageId);
       return this;
     }
 
@@ -169,11 +174,11 @@ public class SmsMessage implements DataObject<SmsMessage> {
     public Builder setRead(boolean isRead) {
       data.isRead = isRead;
       return this;
-    }    
+    }
 
     public Builder setMessageType(MessageType messageType) {
       data.messageType = messageType;
       return this;
-    }    
+    }
   }
 }

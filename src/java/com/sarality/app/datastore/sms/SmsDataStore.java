@@ -1,17 +1,25 @@
 package com.sarality.app.datastore.sms;
 
 import java.util.Arrays;
-import java.util.Set;
+import java.util.Date;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 
 import com.sarality.app.datastore.AbstractContentResolverDataStore;
+import com.sarality.app.datastore.ColumnConfig;
+import com.sarality.app.datastore.ColumnDataType;
+import com.sarality.app.datastore.ColumnFormat;
 import com.sarality.app.datastore.ColumnSpec;
 import com.sarality.app.datastore.Query;
 import com.sarality.app.datastore.extractor.BaseCursorDataExtractor;
+import com.sarality.app.datastore.extractor.BooleanValueExtractor;
+import com.sarality.app.datastore.extractor.ColumnValueExtractor;
+import com.sarality.app.datastore.extractor.DateValueExtractor;
+import com.sarality.app.datastore.extractor.LongValueExtractor;
 import com.sarality.app.datastore.extractor.MappedEnumValueExtractor;
+import com.sarality.app.datastore.extractor.StringValueExtractor;
 
 public class SmsDataStore extends AbstractContentResolverDataStore<SmsMessage> {
 
@@ -26,21 +34,22 @@ public class SmsDataStore extends AbstractContentResolverDataStore<SmsMessage> {
   }
 
   public enum Column implements com.sarality.app.datastore.Column {
-    _ID(new ColumnSpec(Column.DataType.INTEGER, false)),
-    THREAD_ID(new ColumnSpec(Column.DataType.INTEGER, false)),
-    ADDRESS(new ColumnSpec(Column.DataType.TEXT, false)),
-    PERSON(new ColumnSpec(Column.DataType.TEXT, false)),
-    BODY(new ColumnSpec(Column.DataType.TEXT, false)),
-    DATE(new ColumnSpec(Column.DataType.DATETIME, Column.DataTypeFormat.EPOCH, false)),
-    DATE_SENT(new ColumnSpec(Column.DataType.DATETIME, Column.DataTypeFormat.EPOCH, false)),
-    READ(new ColumnSpec(Column.DataType.BOOLEAN, false)),
-    STATUS(new ColumnSpec(Column.DataType.TEXT, false)),
-    TYPE(new ColumnSpec(Column.DataType.INTEGER, false));
+    _ID(new ColumnConfig<Long>(new ColumnSpec(ColumnDataType.INTEGER, false, null, null), new LongValueExtractor())),
+    THREAD_ID(new ColumnConfig<Long>(new ColumnSpec(ColumnDataType.INTEGER, false), new LongValueExtractor())),
+    ADDRESS(new ColumnConfig<String>(new ColumnSpec(ColumnDataType.TEXT, false), new StringValueExtractor())),
+    PERSON(new ColumnConfig<String>(new ColumnSpec(ColumnDataType.TEXT, false), new StringValueExtractor())),
+    BODY(new ColumnConfig<String>(new ColumnSpec(ColumnDataType.TEXT, false), new StringValueExtractor())),
+    DATE(new ColumnConfig<Date>(new ColumnSpec(ColumnDataType.DATETIME, ColumnFormat.EPOCH, false), new DateValueExtractor())),
+    DATE_SENT(new ColumnConfig<Date>(new ColumnSpec(ColumnDataType.DATETIME, ColumnFormat.EPOCH, false), new DateValueExtractor())),
+    READ(new ColumnConfig<Boolean>(new ColumnSpec(ColumnDataType.BOOLEAN, false), new BooleanValueExtractor())),
+    STATUS(new ColumnConfig<String>(new ColumnSpec(ColumnDataType.TEXT, false), new StringValueExtractor())),
+    TYPE(new ColumnConfig<SmsMessage.MessageType>(new ColumnSpec(ColumnDataType.INTEGER, false),
+            new MappedEnumValueExtractor<Integer, SmsMessage.MessageType>(SmsMessage.MessageType.values())));
 
-    private ColumnSpec spec;
+    private ColumnConfig<?> config;
 
-    private Column(ColumnSpec spec) {
-      this.spec = spec;
+    private Column(ColumnConfig<?> config) {
+      this.config = config;
     }
     
     @Override
@@ -49,28 +58,8 @@ public class SmsDataStore extends AbstractContentResolverDataStore<SmsMessage> {
     }
 
     @Override
-    public DataType getDataType() {
-      return spec.getDataType();
-    }
-
-    @Override
-    public DataTypeFormat getFormat() {
-      return spec.getFormat();
-    }
-
-    @Override
-    public int getSize() {
-      return spec.getSize();
-    }
-
-    @Override
-    public boolean isRequired() {
-      return spec.isRequired();
-    }
-
-    @Override
-    public Set<Property> getProperties() {
-      return spec.getProperties();
+    public ColumnConfig<?> getConfig() {
+      return config;
     }
   }
 
@@ -85,35 +74,41 @@ public class SmsDataStore extends AbstractContentResolverDataStore<SmsMessage> {
   }
 
   public static class SmsMessageExtractor extends BaseCursorDataExtractor<SmsMessage> {
-    private MappedEnumValueExtractor<Integer, SmsMessage.MessageType> messageTypeExtractor = 
-            new MappedEnumValueExtractor<Integer, SmsMessage.MessageType>(SmsMessage.MessageType.values());
 
+    public SmsMessage.MessageType getMessageType(Cursor cursor, Query query, Column column) {
+      ColumnValueExtractor<?> extractor = column.getConfig().getExtractor();
+      SmsMessage.MessageType value = (SmsMessage.MessageType) extractor.extract(cursor, column);
+      return value;
+    }
+    
     @Override
     public SmsMessage extract(Cursor cursor, Query query) {
       SmsMessage.Builder builder = new SmsMessage.Builder();
+      // TODO(abhideep): Use builder.setValue instead of explicit calls to methods
+
       if (hasColumn(cursor, query, Column._ID)) {
-        builder.setMessageId(longExtractor.extract(cursor, Column._ID));
+        builder.setMessageId(getLong(cursor, query, Column._ID));
       }
       if (hasColumn(cursor, query, Column.THREAD_ID)) {
-        builder.setThreadId(longExtractor.extract(cursor, Column.THREAD_ID));
+        builder.setThreadId(getLong(cursor, query, Column.THREAD_ID));
       }
       if (hasColumn(cursor, query, Column.BODY)) {
-        builder.setBody(stringExtractor.extract(cursor, Column.BODY));
+        builder.setBody(getString(cursor, query, Column.BODY));
       }
       if (hasColumn(cursor, query, Column.ADDRESS)) {
-        builder.setAddress(stringExtractor.extract(cursor, Column.ADDRESS));
+        builder.setAddress(getString(cursor, query, Column.ADDRESS));
       }
       if (hasColumn(cursor, query, Column.DATE)) {
-        builder.setReceivedDate(dateExtractor.extract(cursor, Column.DATE));
+        builder.setReceivedDate(getDate(cursor, query, Column.DATE));
       }
       if (hasColumn(cursor, query, Column.DATE_SENT)) {
-        builder.setSentDate(dateExtractor.extract(cursor, Column.DATE_SENT));
+        builder.setSentDate(getDate(cursor, query, Column.DATE_SENT));
       }
       if (hasColumn(cursor, query, Column.READ)) {
-        builder.setRead(booleanExtractor.extract(cursor, Column.READ));
+        builder.setRead(getBoolean(cursor, query, Column.READ));
       }
       if (hasColumn(cursor, query, Column.TYPE)) {
-        builder.setMessageType(messageTypeExtractor.extract(cursor, Column.TYPE));
+        builder.setMessageType(getMessageType(cursor, query, Column.TYPE));
       }
       return builder.build();
     }    
