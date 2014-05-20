@@ -7,8 +7,12 @@ public interface FieldBasedDataObject<T> extends DataObject<T> {
 
   public Set<Field> getFields();
 
+  public boolean hasValue(Field field);
+
   public Object getValue(Field field);
 
+  public FieldData<?> getFieldData(Field field);
+  
   @Override
   public Builder<T> getBuilder();
 

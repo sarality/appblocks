@@ -11,7 +11,7 @@ public class DateFieldData extends BaseFieldData<Date> implements FieldData<Date
       Locale.getDefault());
   
   public DateFieldData(Field field, BaseFieldBasedDataObject<?> data) {
-    super(field, FieldData.Type.LONG, data);
+    super(field, FieldData.Type.DATE, data);
   }
 
   @Override

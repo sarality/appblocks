@@ -28,5 +28,5 @@ public interface ValuePopulator<T> {
    */
   public void populate(ContentValues contentValues, Column column, T value,
       boolean valueExistsPreCondition);
-
+  
 }
