@@ -5,6 +5,7 @@ import java.util.Set;
 
 
 public enum ColumnDataType {
+  DOUBLE(null),
   INTEGER(null),
   TEXT(null),
   BOOLEAN(ColumnDataType.INTEGER),

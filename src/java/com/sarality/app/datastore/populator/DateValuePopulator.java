@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import android.content.ContentValues;
 
+import com.sarality.app.data.FieldData;
 import com.sarality.app.datastore.Column;
 import com.sarality.app.datastore.ColumnFormat;
 
@@ -14,7 +15,7 @@ import com.sarality.app.datastore.ColumnFormat;
  * 
  * @author abhideep@ (Abhideep Singh)
  */
-public class DateValuePopulator implements ValuePopulator<Date> {
+public class DateValuePopulator implements ValuePopulator<Date>, FieldDataValuePopulator {
   SimpleDateFormat defaultFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
   SimpleDateFormat dateAsIntegerFormatter = new SimpleDateFormat("yyyyMMddHHmmss", Locale.US);
 
@@ -32,6 +33,17 @@ public class DateValuePopulator implements ValuePopulator<Date> {
     } else if (format == ColumnFormat.DATE_AS_INT) {
       String dateString = dateAsIntegerFormatter.format(value);
       contentValues.put(column.getName(), Integer.valueOf(dateString));
+    }
+  }
+
+  @Override
+  public void populate(ContentValues values, Column column, FieldData<?> data) {
+    FieldData.Type dataType = data.getType();
+    if (dataType == FieldData.Type.DATE) {
+      populate(values, column, (Date) data.getValue(), data.hasValue());
+    } else {
+      throw new IllegalArgumentException(" Cannot convert data for type " + dataType 
+          + " to DATE while adding value for column " + column.getName());
     }
   }
 }

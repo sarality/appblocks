@@ -16,8 +16,9 @@ public abstract class BaseFieldBasedDataObject<T> implements FieldBasedDataObjec
   public Set<Field> getFields() {
     return fieldDataMap.keySet();
   }
-  
-  protected FieldData<?> getFieldData(Field field) {
+
+  @Override
+  public FieldData<?> getFieldData(Field field) {
     return fieldDataMap.get(field);
   }
 
@@ -39,7 +40,12 @@ public abstract class BaseFieldBasedDataObject<T> implements FieldBasedDataObjec
     }
     return null;
   }
-
+  
+  @Override
+  public boolean hasValue(Field field) {
+    FieldData<?> fieldData = getFieldData(field);
+    return fieldData != null && fieldData.hasValue();
+  }
   
   public static abstract class Builder<T extends BaseFieldBasedDataObject<T>> implements FieldBasedDataObject.Builder<T> {
     protected final T data = newDataObject();
