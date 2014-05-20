@@ -7,15 +7,15 @@ import java.util.Map;
 import android.database.Cursor;
 
 import com.sarality.app.data.FieldBasedDataObject;
-import com.sarality.app.datastore.FieldColumnMapping;
+import com.sarality.app.datastore.FieldColumnConfig;
 import com.sarality.app.datastore.Query;
 
 public abstract class GenericCursorDataExtractor<T extends FieldBasedDataObject<T>> implements CursorDataExtractor<T> {
-  private Map<String, FieldColumnMapping> columnMappingMap = new HashMap<String, FieldColumnMapping>();
+  private Map<String, FieldColumnConfig> columnNameConfigMap = new HashMap<String, FieldColumnConfig>();
 
-  public GenericCursorDataExtractor(List<FieldColumnMapping> mappingList) {
-    for (FieldColumnMapping mapping : mappingList) {
-      columnMappingMap.put(mapping.getColumn().getName(), mapping);
+  public GenericCursorDataExtractor(List<FieldColumnConfig> mappingList) {
+    for (FieldColumnConfig mapping : mappingList) {
+      columnNameConfigMap.put(mapping.getColumn().getName(), mapping);
     }
   }
 
@@ -28,9 +28,9 @@ public abstract class GenericCursorDataExtractor<T extends FieldBasedDataObject<
     int numColumns = cursor.getColumnCount();
     for (int i = 0; i < numColumns; i++) {
       String columnName = cursor.getColumnName(i);
-      FieldColumnMapping mapping = columnMappingMap.get(columnName);
-      Object value = mapping.getExtractor().extract(cursor, mapping.getColumn());
-      builder.setFieldValue(mapping.getField(), value);
+      FieldColumnConfig config = columnNameConfigMap.get(columnName);
+      Object value = config.getExtractor().extract(cursor, config.getColumn());
+      builder.setFieldValue(config.getField(), value);
     }
     return builder.build();
   }
