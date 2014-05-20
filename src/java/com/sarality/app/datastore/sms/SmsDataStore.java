@@ -1,7 +1,6 @@
 package com.sarality.app.datastore.sms;
 
 import java.util.Arrays;
-import java.util.Date;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -13,13 +12,9 @@ import com.sarality.app.datastore.ColumnDataType;
 import com.sarality.app.datastore.ColumnFormat;
 import com.sarality.app.datastore.ColumnSpec;
 import com.sarality.app.datastore.Query;
-import com.sarality.app.datastore.extractor.BaseCursorDataExtractor;
-import com.sarality.app.datastore.extractor.BooleanValueExtractor;
-import com.sarality.app.datastore.extractor.ColumnValueExtractor;
-import com.sarality.app.datastore.extractor.DateValueExtractor;
-import com.sarality.app.datastore.extractor.LongValueExtractor;
-import com.sarality.app.datastore.extractor.MappedEnumValueExtractor;
-import com.sarality.app.datastore.extractor.StringValueExtractor;
+import com.sarality.app.datastore.extractor.CursorDataExtractor;
+import com.sarality.app.datastore.extractor.Extractors;
+import com.sarality.app.datastore.sms.SmsMessage.MessageType;
 
 public class SmsDataStore extends AbstractContentResolverDataStore<SmsMessage> {
 
@@ -34,24 +29,23 @@ public class SmsDataStore extends AbstractContentResolverDataStore<SmsMessage> {
   }
 
   public enum Column implements com.sarality.app.datastore.Column {
-    _ID(new ColumnConfig<Long>(new ColumnSpec(ColumnDataType.INTEGER, false, null, null), new LongValueExtractor())),
-    THREAD_ID(new ColumnConfig<Long>(new ColumnSpec(ColumnDataType.INTEGER, false), new LongValueExtractor())),
-    ADDRESS(new ColumnConfig<String>(new ColumnSpec(ColumnDataType.TEXT, false), new StringValueExtractor())),
-    PERSON(new ColumnConfig<String>(new ColumnSpec(ColumnDataType.TEXT, false), new StringValueExtractor())),
-    BODY(new ColumnConfig<String>(new ColumnSpec(ColumnDataType.TEXT, false), new StringValueExtractor())),
-    DATE(new ColumnConfig<Date>(new ColumnSpec(ColumnDataType.DATETIME, ColumnFormat.EPOCH, false), new DateValueExtractor())),
-    DATE_SENT(new ColumnConfig<Date>(new ColumnSpec(ColumnDataType.DATETIME, ColumnFormat.EPOCH, false), new DateValueExtractor())),
-    READ(new ColumnConfig<Boolean>(new ColumnSpec(ColumnDataType.BOOLEAN, false), new BooleanValueExtractor())),
-    STATUS(new ColumnConfig<String>(new ColumnSpec(ColumnDataType.TEXT, false), new StringValueExtractor())),
-    TYPE(new ColumnConfig<SmsMessage.MessageType>(new ColumnSpec(ColumnDataType.INTEGER, false),
-            new MappedEnumValueExtractor<Integer, SmsMessage.MessageType>(SmsMessage.MessageType.values())));
+    _ID(new ColumnSpec(ColumnDataType.INTEGER, false, null, null)),
+    THREAD_ID(new ColumnSpec(ColumnDataType.INTEGER, false)),
+    ADDRESS(new ColumnSpec(ColumnDataType.TEXT, false)),
+    PERSON(new ColumnSpec(ColumnDataType.TEXT, false)),
+    BODY(new ColumnSpec(ColumnDataType.TEXT, false)),
+    DATE(new ColumnSpec(ColumnDataType.DATETIME, ColumnFormat.EPOCH, false)),
+    DATE_SENT(new ColumnSpec(ColumnDataType.DATETIME, ColumnFormat.EPOCH, false)),
+    READ(new ColumnSpec(ColumnDataType.BOOLEAN, false)),
+    STATUS(new ColumnSpec(ColumnDataType.TEXT, false)),
+    TYPE(new ColumnSpec(ColumnDataType.INTEGER, false));
 
     private ColumnConfig<?> config;
 
-    private Column(ColumnConfig<?> config) {
-      this.config = config;
+    private Column(ColumnSpec spec) {
+      this.config = new ColumnConfig(spec, null);
     }
-    
+
     @Override
     public String getName() {
       return name();
@@ -73,42 +67,40 @@ public class SmsDataStore extends AbstractContentResolverDataStore<SmsMessage> {
     return TAG;
   }
 
-  public static class SmsMessageExtractor extends BaseCursorDataExtractor<SmsMessage> {
+  
+  public static class SmsMessageExtractor implements CursorDataExtractor<SmsMessage> {
 
-    public SmsMessage.MessageType getMessageType(Cursor cursor, Query query, Column column) {
-      ColumnValueExtractor<?> extractor = column.getConfig().getExtractor();
-      SmsMessage.MessageType value = (SmsMessage.MessageType) extractor.extract(cursor, column);
-      return value;
-    }
-    
+    private Extractors extractors = new Extractors().withExtractorForMappedEnum(MessageType.values());
+
     @Override
     public SmsMessage extract(Cursor cursor, Query query) {
       SmsMessage.Builder builder = new SmsMessage.Builder();
       // TODO(abhideep): Use builder.setValue instead of explicit calls to methods
 
-      if (hasColumn(cursor, query, Column._ID)) {
-        builder.setMessageId(getLong(cursor, query, Column._ID));
+      if (extractors.hasColumn(cursor, Column._ID)) {
+        builder.setMessageId(extractors.getLong(cursor, Column._ID));
       }
-      if (hasColumn(cursor, query, Column.THREAD_ID)) {
-        builder.setThreadId(getLong(cursor, query, Column.THREAD_ID));
+      if (extractors.hasColumn(cursor, Column.THREAD_ID)) {
+        builder.setThreadId(extractors.getLong(cursor, Column.THREAD_ID));
       }
-      if (hasColumn(cursor, query, Column.BODY)) {
-        builder.setBody(getString(cursor, query, Column.BODY));
+      if (extractors.hasColumn(cursor, Column.BODY)) {
+        builder.setBody(extractors.getString(cursor, Column.BODY));
       }
-      if (hasColumn(cursor, query, Column.ADDRESS)) {
-        builder.setAddress(getString(cursor, query, Column.ADDRESS));
+      if (extractors.hasColumn(cursor, Column.ADDRESS)) {
+        builder.setAddress(extractors.getString(cursor, Column.ADDRESS));
       }
-      if (hasColumn(cursor, query, Column.DATE)) {
-        builder.setReceivedDate(getDate(cursor, query, Column.DATE));
+      if (extractors.hasColumn(cursor, Column.DATE)) {
+        builder.setReceivedDate(extractors.getDate(cursor, Column.DATE));
       }
-      if (hasColumn(cursor, query, Column.DATE_SENT)) {
-        builder.setSentDate(getDate(cursor, query, Column.DATE_SENT));
+      if (extractors.hasColumn(cursor, Column.DATE_SENT)) {
+        builder.setSentDate(extractors.getDate(cursor, Column.DATE_SENT));
       }
-      if (hasColumn(cursor, query, Column.READ)) {
-        builder.setRead(getBoolean(cursor, query, Column.READ));
+      if (extractors.hasColumn(cursor, Column.READ)) {
+        builder.setRead(extractors.getBoolean(cursor, Column.READ));
       }
-      if (hasColumn(cursor, query, Column.TYPE)) {
-        builder.setMessageType(getMessageType(cursor, query, Column.TYPE));
+      if (extractors.hasColumn(cursor, Column.TYPE)) {
+        builder.setMessageType(Extractors.<MessageType>getEnumValue(
+                cursor, Column.TYPE, extractors.getExtractor(MessageType.class)));
       }
       return builder.build();
     }    
