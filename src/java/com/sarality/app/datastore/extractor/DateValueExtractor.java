@@ -26,7 +26,7 @@ public class DateValueExtractor implements ColumnValueExtractor<Date> {
 
   @Override
   public Date extract(Cursor cursor, Column column) {
-    ColumnFormat format = column.getConfig().getSpec().getFormat();
+    ColumnFormat format = column.getSpec().getFormat();
     if (format == null) {
       String dateStr = cursor.getString(cursor.getColumnIndex(column.getName()));
       if (dateStr != null) {

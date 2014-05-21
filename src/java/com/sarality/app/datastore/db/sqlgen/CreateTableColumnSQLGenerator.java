@@ -20,7 +20,7 @@ public class CreateTableColumnSQLGenerator implements SQLGenerator<Column> {
   @Override
   public void appendSQL(StringBuilder builder, Column column, TableInfo tableMetadata) {
     boolean hasCompositePrimaryKey = tableMetadata.hasCompositePrimaryKey();
-    ColumnSpec spec = column.getConfig().getSpec();
+    ColumnSpec spec = column.getSpec();
     ColumnFormat format = spec.getFormat();
     ColumnDataType dataType = spec.getDataType();
     builder.append(column.getName()).append(" ").append(dataType.getUnderlyingDataType(format));

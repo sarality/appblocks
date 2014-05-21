@@ -26,7 +26,7 @@ public class MappedEnumValueExtractor<V, T extends MappedEnum<V>> implements Col
 
   @Override
   public T extract(Cursor cursor, Column column) {
-    ColumnDataType dataType = column.getConfig().getSpec().getDataType();
+    ColumnDataType dataType = column.getSpec().getDataType();
     if (dataType == ColumnDataType.INTEGER) {
       int intValue = cursor.getInt(cursor.getColumnIndex(column.getName()));
       return enumMap.get(intValue);      
