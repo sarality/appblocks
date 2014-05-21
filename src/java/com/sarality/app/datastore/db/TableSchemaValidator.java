@@ -27,7 +27,7 @@ public class TableSchemaValidator {
     TableInfo metadata = table.getTableInfo();
     boolean hasCompositePrimaryKey = metadata.hasCompositePrimaryKey();
     for(Column column : table.getColumns()) {
-      ColumnSpec spec = column.getConfig().getSpec();
+      ColumnSpec spec = column.getSpec();
       Set<ColumnProperty> properties = spec.getProperties();
       boolean isPrimaryKeyColumn = properties.contains(TableColumnProperty.PRIMARY_KEY);
 

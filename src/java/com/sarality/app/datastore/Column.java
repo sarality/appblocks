@@ -22,8 +22,8 @@ public interface Column {
   public String getName();
 
   /**
-   * @return Configuration defined for the column
+   * @return Specification for the column
    */
-  public ColumnConfig<?> getConfig();
+  public ColumnSpec getSpec();
 
 }

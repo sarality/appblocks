@@ -25,7 +25,7 @@ public class DateValuePopulator implements ValuePopulator<Date>, FieldDataValueP
     if (!valueExistsPreCondition) {
       return;
     }
-    ColumnFormat format = column.getConfig().getSpec().getFormat();
+    ColumnFormat format = column.getSpec().getFormat();
     if (format == null) {
       contentValues.put(column.getName(), defaultFormatter.format(value));
     } else if (format == ColumnFormat.EPOCH) {

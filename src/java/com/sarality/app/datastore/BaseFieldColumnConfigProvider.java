@@ -3,7 +3,6 @@ package com.sarality.app.datastore;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dothat.app.bills.BillsTable.Column;
 import com.sarality.app.data.Field;
 import com.sarality.app.datastore.extractor.ColumnValueExtractor;
 import com.sarality.app.datastore.populator.FieldDataValuePopulator;
@@ -15,6 +14,7 @@ import com.sarality.app.datastore.populator.FieldDataValuePopulator;
  * @author abhideep@ (Abhideep Singh)
  */
 public class BaseFieldColumnConfigProvider {
+  
   // List of Configuration that define a mapping between a DataObject field and a Database Column
   private final List<FieldColumnConfig> configList = new ArrayList<FieldColumnConfig>();
 
@@ -28,7 +28,7 @@ public class BaseFieldColumnConfigProvider {
    * @param populator The class used to populate ContentValues when updating or creating a row in the database
    */
   protected void addEntry(Field field, Column column, ColumnValueExtractor<?> extractor, FieldDataValuePopulator populator) {
-    configList.add(new FieldColumnConfig(field, column, extractor, populator));        
+    configList.add(new FieldColumnConfig(field, column, extractor, populator));
   }
 
   /**
