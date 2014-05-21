@@ -3,23 +3,28 @@ package com.sarality.app.datastore.sms;
 import java.util.Arrays;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.net.Uri;
 
+import com.sarality.app.data.FieldBasedDataObject.Builder;
 import com.sarality.app.datastore.AbstractContentResolverDataStore;
-import com.sarality.app.datastore.ColumnConfig;
+import com.sarality.app.datastore.BaseFieldColumnConfigProvider;
 import com.sarality.app.datastore.ColumnDataType;
 import com.sarality.app.datastore.ColumnFormat;
 import com.sarality.app.datastore.ColumnSpec;
 import com.sarality.app.datastore.Query;
-import com.sarality.app.datastore.extractor.CursorDataExtractor;
-import com.sarality.app.datastore.extractor.Extractors;
+import com.sarality.app.datastore.extractor.BooleanValueExtractor;
+import com.sarality.app.datastore.extractor.DateValueExtractor;
+import com.sarality.app.datastore.extractor.GenericCursorDataExtractor;
+import com.sarality.app.datastore.extractor.LongValueExtractor;
+import com.sarality.app.datastore.extractor.MappedEnumValueExtractor;
+import com.sarality.app.datastore.extractor.StringValueExtractor;
 import com.sarality.app.datastore.sms.SmsMessage.MessageType;
 
 public class SmsDataStore extends AbstractContentResolverDataStore<SmsMessage> {
 
   private static final String TAG = "SmsDataStore";
 
+  private static final String DATASTORE_NAME = "SmsDataStore";
   private final Uri baseUri = Uri.parse("content://sms/");
 
   public SmsDataStore(Context context) {
@@ -40,10 +45,10 @@ public class SmsDataStore extends AbstractContentResolverDataStore<SmsMessage> {
     STATUS(new ColumnSpec(ColumnDataType.TEXT, false)),
     TYPE(new ColumnSpec(ColumnDataType.INTEGER, false));
 
-    private ColumnConfig<?> config;
+    private ColumnSpec spec;
 
     private Column(ColumnSpec spec) {
-      this.config = new ColumnConfig(spec, null);
+      this.spec = spec;
     }
 
     @Override
@@ -52,8 +57,8 @@ public class SmsDataStore extends AbstractContentResolverDataStore<SmsMessage> {
     }
 
     @Override
-    public ColumnConfig<?> getConfig() {
-      return config;
+    public ColumnSpec getSpec() {
+      return spec;
     }
   }
 
@@ -67,42 +72,43 @@ public class SmsDataStore extends AbstractContentResolverDataStore<SmsMessage> {
     return TAG;
   }
 
-  
-  public static class SmsMessageExtractor implements CursorDataExtractor<SmsMessage> {
+  /**
+   * Providing a list of configuration objects that define the relationship
+   * between SmsDataStore columns and fields in the SmsMessage data object.
+   * 
+   * @author abhideep@ (Abhideep Singh)
+   */
+  private static class FieldColumnConfigProvider extends BaseFieldColumnConfigProvider {
 
-    private Extractors extractors = new Extractors().withExtractorForMappedEnum(MessageType.values());
+    private FieldColumnConfigProvider() {
+      super();
+      addEntry(SmsMessageField.MESSAGE_ID, Column._ID, new LongValueExtractor(), null);
+      addEntry(SmsMessageField.THREAD_ID, Column.THREAD_ID, new LongValueExtractor(), null);
+      addEntry(SmsMessageField.ADDRESS, Column.ADDRESS, new StringValueExtractor(), null);
+      addEntry(SmsMessageField.BODY, Column.BODY, new StringValueExtractor(), null);
+      addEntry(SmsMessageField.RECEIVED_DATE, Column.DATE, new DateValueExtractor(), null);
+      addEntry(SmsMessageField.SENT_DATE, Column.DATE_SENT, new DateValueExtractor(), null);
+      addEntry(SmsMessageField.IS_READ, Column.READ, new BooleanValueExtractor(), null);
+      addEntry(SmsMessageField.MESSAGE_TYPE, Column.TYPE,
+          new MappedEnumValueExtractor<Integer, MessageType>(MessageType.values()), null);
+      // TODO(abhideep): Add config for Status and Person
+    }
+  }
+
+  public static class SmsMessageExtractor extends GenericCursorDataExtractor<SmsMessage> {
+
+    public SmsMessageExtractor() {
+      super(new FieldColumnConfigProvider().provide());
+    }
 
     @Override
-    public SmsMessage extract(Cursor cursor, Query query) {
-      SmsMessage.Builder builder = new SmsMessage.Builder();
-      // TODO(abhideep): Use builder.setValue instead of explicit calls to methods
+    protected Builder<SmsMessage> newBuilder() {
+      return new SmsMessage.Builder();
+    }
 
-      if (extractors.hasColumn(cursor, Column._ID)) {
-        builder.setMessageId(extractors.getLong(cursor, Column._ID));
-      }
-      if (extractors.hasColumn(cursor, Column.THREAD_ID)) {
-        builder.setThreadId(extractors.getLong(cursor, Column.THREAD_ID));
-      }
-      if (extractors.hasColumn(cursor, Column.BODY)) {
-        builder.setBody(extractors.getString(cursor, Column.BODY));
-      }
-      if (extractors.hasColumn(cursor, Column.ADDRESS)) {
-        builder.setAddress(extractors.getString(cursor, Column.ADDRESS));
-      }
-      if (extractors.hasColumn(cursor, Column.DATE)) {
-        builder.setReceivedDate(extractors.getDate(cursor, Column.DATE));
-      }
-      if (extractors.hasColumn(cursor, Column.DATE_SENT)) {
-        builder.setSentDate(extractors.getDate(cursor, Column.DATE_SENT));
-      }
-      if (extractors.hasColumn(cursor, Column.READ)) {
-        builder.setRead(extractors.getBoolean(cursor, Column.READ));
-      }
-      if (extractors.hasColumn(cursor, Column.TYPE)) {
-        builder.setMessageType(Extractors.<MessageType>getEnumValue(
-                cursor, Column.TYPE, extractors.getExtractor(MessageType.class)));
-      }
-      return builder.build();
+    @Override
+    protected String getDataStoreName() {
+      return SmsDataStore.DATASTORE_NAME;
     }    
   }
 }
