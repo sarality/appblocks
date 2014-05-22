@@ -22,6 +22,10 @@ public class LongFieldData extends BaseFieldData<Long> implements FieldData<Long
 
   @Override
   public void castFrom(Object value) {
+    if (value == null) {
+      setValue(null);
+      return;
+    }
     setValue((Long) value);    
   }
 

@@ -20,6 +20,10 @@ public class EnumFieldData<E extends Enum<E>> extends BaseFieldData<E> implement
 
   @Override
   public void castFrom(Object value) {
+    if (value == null) {
+      setValue(null);
+      return;
+    }
     @SuppressWarnings("unchecked")
     E enumValue = (E) value;
     setValue(enumValue);
