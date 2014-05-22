@@ -11,6 +11,10 @@ public class EnumFieldData<E extends Enum<E>> extends BaseFieldData<E> implement
   
   @Override
   public void parseFrom(String stringValue) {
+    if (stringValue == null) {
+      setValue(null);
+      return;
+    }
     setValue(Enum.valueOf(enumClass, stringValue));
   }
 
@@ -20,4 +24,12 @@ public class EnumFieldData<E extends Enum<E>> extends BaseFieldData<E> implement
     E enumValue = (E) value;
     setValue(enumValue);
   }
+
+  @Override
+  public String getStringValue() {
+    if (!hasValue()) {
+      return null;
+    }
+    return getValue().name();
+  }      
 }

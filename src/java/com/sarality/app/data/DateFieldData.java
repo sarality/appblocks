@@ -14,8 +14,17 @@ public class DateFieldData extends BaseFieldData<Date> implements FieldData<Date
     super(field, FieldData.Type.DATE, data);
   }
 
+  public DateFieldData(Field field, Date value, BaseFieldBasedDataObject<?> data) {
+    this(field, data);
+    setValue(value);
+  }
+
   @Override
   public void parseFrom(String stringValue) {
+    if (stringValue == null) {
+      setValue(null);
+      return;
+    }
     try {
       setValue(DATE_FORMAT.parse(stringValue));
     } catch (ParseException e) {
@@ -25,6 +34,18 @@ public class DateFieldData extends BaseFieldData<Date> implements FieldData<Date
 
   @Override
   public void castFrom(Object value) {
+    if (value == null) {
+      setValue(null);
+      return;
+    }
     setValue((Date) value);
+  }
+
+  @Override
+  public String getStringValue() {
+    if (!hasValue() || getValue() == null) {
+      return null;
+    }
+    return DATE_FORMAT.format(getValue());
   }
 }

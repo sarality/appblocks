@@ -1,12 +1,12 @@
 package com.sarality.app.data;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
 public abstract class BaseFieldBasedDataObject<T> implements FieldBasedDataObject<T> {
 
-  private final Map<Field, FieldData<?>> fieldDataMap = new HashMap<Field, FieldData<?>>();
+  private final Map<Field, FieldData<?>> fieldDataMap = new LinkedHashMap<Field, FieldData<?>>();
 
   public BaseFieldBasedDataObject() {
     super();
@@ -45,6 +45,26 @@ public abstract class BaseFieldBasedDataObject<T> implements FieldBasedDataObjec
   public boolean hasValue(Field field) {
     FieldData<?> fieldData = getFieldData(field);
     return fieldData != null && fieldData.hasValue();
+  }
+
+  @Override
+  public FieldBasedDataObject.Builder<T> getBuilder() {
+    FieldBasedDataObject.Builder<T> builder = newBuilder();
+    for (Field field : getFields()) {
+      if (hasValue(field)) {
+        builder.setFieldValue(field, getFieldData(field).getValue());
+      }
+    }
+    return builder;
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder builder = new StringBuilder();
+    for (Field field : getFields()) {
+      builder.append(getFieldData(field).toString()).append("\n");
+    }
+    return builder.toString();    
   }
   
   public static abstract class Builder<T extends BaseFieldBasedDataObject<T>> implements FieldBasedDataObject.Builder<T> {
