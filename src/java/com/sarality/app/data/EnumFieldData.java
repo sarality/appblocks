@@ -11,13 +11,29 @@ public class EnumFieldData<E extends Enum<E>> extends BaseFieldData<E> implement
   
   @Override
   public void parseFrom(String stringValue) {
+    if (stringValue == null) {
+      setValue(null);
+      return;
+    }
     setValue(Enum.valueOf(enumClass, stringValue));
   }
 
   @Override
   public void castFrom(Object value) {
+    if (value == null) {
+      setValue(null);
+      return;
+    }
     @SuppressWarnings("unchecked")
     E enumValue = (E) value;
     setValue(enumValue);
   }
+
+  @Override
+  public String getStringValue() {
+    if (!hasValue()) {
+      return null;
+    }
+    return getValue().name();
+  }      
 }

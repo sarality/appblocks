@@ -1,13 +1,13 @@
 package com.sarality.app.data;
 
-public abstract class BaseFieldData<T> implements FieldData<T> {
+abstract class BaseFieldData<T> implements FieldData<T> {
 
   private T value = null;
   private boolean hasValue = false;
   private final Field field;
   private final FieldData.Type fieldType;
 
-  public BaseFieldData(Field field, FieldData.Type fieldType, BaseFieldBasedDataObject<?> data) {
+  protected BaseFieldData(Field field, FieldData.Type fieldType, BaseFieldBasedDataObject<?> data) {
     this.field = field;
     this.fieldType = fieldType;
     if (data != null) {
@@ -32,6 +32,9 @@ public abstract class BaseFieldData<T> implements FieldData<T> {
 
   @Override
   public T getValue() {
+    if (!hasValue) {
+      return null;
+    }
     return value;
   }
 
@@ -39,5 +42,12 @@ public abstract class BaseFieldData<T> implements FieldData<T> {
   public void setValue(T value) {
     this.value = value;
     this.hasValue = true;
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder builder = new StringBuilder();
+    builder.append(field.getName()).append(" : ").append(getStringValue());
+    return builder.toString();
   }
 }
