@@ -29,7 +29,7 @@ import com.sarality.app.datastore.populator.ContentValuesPopulator;
  *
  * @param <T> Data associated with each row of the table
  */
-public abstract class Table<T extends DataObject<T>> extends AbstractWritableDataStore<T, Long> {
+public abstract class Table<T extends DataObject<T>> extends AbstractWritableDataStore<T, Long>{
   
   // Name of the database e.g. users.db.
   private final String dbName;
@@ -49,6 +49,8 @@ public abstract class Table<T extends DataObject<T>> extends AbstractWritableDat
   // Reference of the underlying database instance that is used to query and update the data.
   private SQLiteDatabase database;
   private AtomicInteger dbOpenCounter = new AtomicInteger();
+  
+  protected TableListenerRegistryConfig<T> listenerRegistry = null;
 
   protected Table(Application application, String dbName, String tableName, int tableVersion,
           List<Column> columnList, CursorDataExtractor<T> extractor, ContentValuesPopulator<T> populator,
@@ -59,7 +61,7 @@ public abstract class Table<T extends DataObject<T>> extends AbstractWritableDat
     this.tableVersion = tableVersion;
 
     this.tableInfo = new TableInfo(columnList);
-    this.dbProvider = new TableConnectionProvider(application.getApplicationContext(), this, null, schemaUpdter); 
+    this.dbProvider = new TableConnectionProvider(application.getApplicationContext(), this, null, schemaUpdter);
   }
 
   public final String getDbName() {
@@ -135,6 +137,9 @@ public abstract class Table<T extends DataObject<T>> extends AbstractWritableDat
     getContentValuesPopulator().populate(contentValues, data);
     Log.d(getLoggerTag(), "Adding new row to table " + tableName + " with content values " + contentValues);
 
+    if(listenerRegistry != null)
+    	listenerRegistry.listener(data, this);
+    
     // TODO(abhideep): Call a method that converts a rowd Id to a Long
     return database.insert(tableName, null, contentValues);
   }
@@ -170,4 +175,10 @@ public abstract class Table<T extends DataObject<T>> extends AbstractWritableDat
     cursor.close();
     return dataList;
   }
+  
+  public void setListener(TableListenerRegistryConfig<T> listenerConfig ){
+     this.listenerRegistry = listenerConfig;
+  }
+  
+
 }
