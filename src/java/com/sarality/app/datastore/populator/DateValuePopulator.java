@@ -32,7 +32,7 @@ public class DateValuePopulator implements ValuePopulator<Date>, FieldDataValueP
       contentValues.put(column.getName(), value.getTime());
     } else if (format == ColumnFormat.DATE_AS_INT) {
       String dateString = dateAsIntegerFormatter.format(value);
-      contentValues.put(column.getName(), Integer.valueOf(dateString));
+      contentValues.put(column.getName(), Long.valueOf(dateString));
     }
   }
 
