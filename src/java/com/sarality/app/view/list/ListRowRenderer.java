@@ -1,5 +1,9 @@
 package com.sarality.app.view.list;
 
+import java.util.List;
+
+import com.sarality.app.view.action.ViewAction;
+
 import android.view.View;
 
 /**
@@ -35,5 +39,5 @@ public interface ListRowRenderer<T> {
    * 
    * @param rowView
    */
-  public void setupActions(View rowView, ListRowViewCache rowViewCache, T value);
+  public void setupActions(View rowView, T value, List<ViewAction> actionList);
 }

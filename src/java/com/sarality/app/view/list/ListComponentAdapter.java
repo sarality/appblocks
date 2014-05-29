@@ -2,6 +2,8 @@ package com.sarality.app.view.list;
 
 import java.util.List;
 
+import com.sarality.app.view.action.ViewAction;
+
 import android.app.Activity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,12 +24,14 @@ class ListComponentAdapter<T> extends ArrayAdapter<T> {
   private final Activity context;
   private final ListRowRenderer<T> rowRenderer;
   private final List<T> rowValueList;
+  private final List<ViewAction> actionList;
 
-  ListComponentAdapter(Activity context, ListRowRenderer<T> rowRenderer, List<T> rowValueList) {
+  ListComponentAdapter(Activity context, ListRowRenderer<T> rowRenderer, List<T> rowValueList, List<ViewAction> actionList) {
     super(context, 0, rowValueList);
     this.context = context;
     this.rowRenderer = rowRenderer;
     this.rowValueList = rowValueList;
+    this.actionList = actionList;
   }
 
   @Override
@@ -45,7 +49,7 @@ class ListComponentAdapter<T> extends ArrayAdapter<T> {
       rowView.setTag(viewCache);
 
       // Setup actions on the new row
-      rowRenderer.setupActions(rowView, viewCache, rowValue);
+      rowRenderer.setupActions(rowView, rowValue, actionList);
     }
 
     ListRowViewCache viewCache = (ListRowViewCache) rowView.getTag();
