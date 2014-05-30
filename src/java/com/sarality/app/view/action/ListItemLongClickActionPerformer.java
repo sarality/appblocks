@@ -2,17 +2,36 @@ package com.sarality.app.view.action;
 
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ListView;
 
-public class ListItemLongClickActionPerformer implements AdapterView.OnItemLongClickListener {
-  private final ViewAction action;
-  
+/**
+ * Performs the Action when the view for an Item in a ListView is long clicked.
+ * 
+ * @author abhideep@ (Abhideep Singh)
+ */
+public class ListItemLongClickActionPerformer extends BaseActionPerformer implements AdapterView.OnItemLongClickListener {
+
+  /**
+   * Constructor.
+   * 
+   * @param action Action that needs to be performed on ListRow item long click.
+   */  
   public ListItemLongClickActionPerformer(ViewAction action) {
-    this.action = action;
+    super(action);
   }
 
   @Override
   public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long rowId) {
-    action.performAction(view, new ViewActionDetail(null), new ListViewRowDetail(parent, position, rowId));
+    getAction().performAction(view, new ViewActionTrigger(view, TriggerType.LONG_CLICK, null), 
+        new ListViewRowDetail(view, parent, position, rowId));
     return true;
+  }
+
+  @Override
+  public void setupListener(View view) {
+    if (isValidListenerView(view)) {
+      ListView listView = (ListView) view;
+      listView.setOnItemLongClickListener(this);
+    }
   }
 }

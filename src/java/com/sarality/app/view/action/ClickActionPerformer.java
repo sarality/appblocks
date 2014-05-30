@@ -1,26 +1,29 @@
 package com.sarality.app.view.action;
 
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 
-public class ClickActionPerformer implements OnClickListener {
-
-  private final String TAG = "ClickActionPerformer";
-
-  private final ViewAction action;
+/**
+ * Performs the Action when the given view is clicked.
+ * 
+ * @author abhideep@ (Abhideep Singh)
+ */
+public class ClickActionPerformer extends BaseActionPerformer implements OnClickListener {
 
   public ClickActionPerformer(ViewAction action) {
-    this.action = action;
+    super(action);
   }
 
   @Override
   public void onClick(View view) {
-    Log.d(TAG, "Processing Click event for view with Id " + view.getId() + " and view " + view);
-    action.performAction(view, new ViewActionDetail(null), new ViewDetail(null));
+    getAction().performAction(view, new ViewActionTrigger(view, TriggerType.CLICK, null),
+        new ViewDetail(view, null));
   }
-
+  
+  @Override
   public void setupListener(View view) {
-    view.setOnClickListener(this);
+    if (isValidListenerView(view)) {
+      view.setOnClickListener(this);
+    }
   }
 }

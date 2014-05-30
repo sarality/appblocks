@@ -2,15 +2,33 @@ package com.sarality.app.view.action;
 
 import android.view.View;
 
+/**
+ * Details about the view that triggered the event.
+ * 
+ * @author abhideep@ (Abhideep Singh)
+ */
 public class ViewDetail {
 
-  private View parent;
+  // View that triggered the event.
+  private View view;
+  // Parent of the view that triggered the event, if provided by Android.
+  private View parentView;
 
-  public ViewDetail(View parent) {
-    this.parent = parent;
+  /**
+   * Constructor.
+   * 
+   * @param view
+   * @param parentView
+   */
+  public ViewDetail(View view, View parentView) {
+    this.parentView = parentView;
   }
 
-  public View getParent() {
-    return parent;
+  public View getView() {
+    return view;
+  }
+
+  public View getParentView() {
+    return parentView;
   }
 }

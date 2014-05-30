@@ -3,16 +3,30 @@ package com.sarality.app.view.action;
 import android.util.Log;
 import android.view.View;
 
-public class LogEventAction extends BaseUserAction implements ViewAction {
+/**
+ * Action that simply logs the event.
+ * <p>
+ * Good for testing purposes.
+ * 
+ * @author abhideep@ (Abhideep Singh)
+ */
+public class LogEventAction extends BaseViewAction implements ViewAction {
 
+  // Tag to be used for Logging
   private static final String TAG = "LogEventAction";
   
-  public LogEventAction(int viewId, InputEvent event) {
-    super(viewId, event);
+  /**
+   * Constructor.
+   * 
+   * @param viewId Id of the View that triggers the action.
+   * @param triggerType Type of event that triggers the action.
+   */
+  public LogEventAction(int viewId, TriggerType triggerType) {
+    super(viewId, triggerType);
   }
 
   @Override
-  public boolean performAction(View view, ViewActionDetail actionDetail, ViewDetail viewDetail) {
+  public boolean performAction(View view, ViewActionTrigger actionDetail, ViewDetail viewDetail) {
     Log.d(TAG, "Performed Action for event on View with Id " + view.getId() + " and view " + view);
     return true;
   }

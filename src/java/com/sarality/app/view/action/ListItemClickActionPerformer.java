@@ -4,19 +4,33 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-public class ListItemClickActionPerformer implements AdapterView.OnItemClickListener {
-  private final ViewAction action;
+/**
+ * Performs the Action when the view for an Item in a ListView is clicked.
+ * 
+ * @author abhideep@ (Abhideep Singh)
+ */
+public class ListItemClickActionPerformer extends BaseActionPerformer implements AdapterView.OnItemClickListener {
   
+  /**
+   * Constructor.
+   * 
+   * @param action Action that needs to be performed on ListView item click.
+   */  
   public ListItemClickActionPerformer(ViewAction action) {
-    this.action = action;
+    super(action);
   }
 
   @Override
   public void onItemClick(AdapterView<?> parent, View view, int position, long rowId) {
-    action.performAction(view, new ViewActionDetail(null), new ListViewRowDetail(parent, position, rowId));
+    getAction().performAction(view, new ViewActionTrigger(view, TriggerType.CLICK, null),
+        new ListViewRowDetail(view, parent, position, rowId));
   }
 
-  public void setupListener(ListView view) {
-    view.setOnItemClickListener(this);
+  @Override
+  public void setupListener(View view) {
+    if (isValidListenerView(view)) {
+      ListView listView = (ListView) view;
+      listView.setOnItemClickListener(this);
+    }
   }
 }

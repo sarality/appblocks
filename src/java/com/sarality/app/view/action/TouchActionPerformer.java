@@ -1,33 +1,41 @@
 package com.sarality.app.view.action;
 
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 
-public class TouchActionPerformer implements OnTouchListener {
+/**
+ * Performs the Action when the given view is touched.
+ * 
+ * @author abhideep@ (Abhideep Singh)
+ */
+public class TouchActionPerformer extends BaseActionPerformer implements OnTouchListener {
 
-  private final String TAG = "ClickActionPerformer";
-
-  private final ViewAction action;
-
+  /**
+   * Constructor 
+   * 
+   * @param action ViewAction that needs to be performed on touch.
+   */
   public TouchActionPerformer(ViewAction action) {
-    this.action = action;
+    super(action);
   }
 
   @Override
   public boolean onTouch(View view, MotionEvent event) {
-    if (action.getEvent() == InputEvent.TOUCH_DOWN && event.getAction() != MotionEvent.ACTION_DOWN) {
+    if (getAction().getTriggerType() == TriggerType.TOUCH_DOWN && event.getAction() != MotionEvent.ACTION_DOWN) {
       return false;
     }
-    if (action.getEvent() == InputEvent.TOUCH_UP && event.getAction() != MotionEvent.ACTION_UP) {
+    if (getAction().getTriggerType() == TriggerType.TOUCH_UP && event.getAction() != MotionEvent.ACTION_UP) {
       return false;
     }
-    Log.d(TAG, "Processing Touch event for view with Id " + view.getId() + " and view " + view);
-    return action.performAction(view, new ViewActionDetail(event), new ViewDetail(null));
+    return getAction().performAction(view, new ViewActionTrigger(view, getAction().getTriggerType(), event),
+        new ViewDetail(view, null));
   }
 
+  @Override
   public void setupListener(View view) {
-    view.setOnTouchListener(this);
+    if (isValidListenerView(view)) {
+      view.setOnTouchListener(this);
+    }
   }
 }
