@@ -25,7 +25,7 @@ public class ListComponentAdapter<T> extends ArrayAdapter<T> {
   private final List<T> rowValueList;
 
   public ListComponentAdapter(Activity context, int item, List<T> rowValueList,
-                              ListRowRenderer<T> listItemRenderer) {
+      ListRowRenderer<T> listItemRenderer) {
     super(context, item);
     this.context = context;
     this.rowRenderer = listItemRenderer;
@@ -35,15 +35,13 @@ public class ListComponentAdapter<T> extends ArrayAdapter<T> {
   @Override
   public View getView(int position, View convertView, ViewGroup parent) {
     View rowView = convertView;
-    
     Log.d(TAG, "Number of items is " + rowValueList.size());
-    
     T rowValue = rowValueList.get(position);
     if (rowView == null) {
       // Inflate a new row into the list
       LayoutInflater inflater = context.getLayoutInflater();
       rowView = inflater.inflate(rowRenderer.getRowLayout(rowValue), null);
-            
+
       // Cache the various views for the row      
       ListRowViewCache viewCache = new ListRowViewCache();
       rowRenderer.populateViewCache(rowView, viewCache, rowValue);
@@ -52,18 +50,15 @@ public class ListComponentAdapter<T> extends ArrayAdapter<T> {
       // Setup actions on the new row
       rowRenderer.setupActions(rowView, viewCache, rowValue);
     }
-
     ListRowViewCache viewCache = (ListRowViewCache) rowView.getTag();
     //Log.i("ListComponentAdapter", "Row View Tag is " + viewCache);
     rowRenderer.render(rowView, viewCache, rowValue);
-
     return rowView;
   }
-  
+
   @Override
   public int getCount() {
-      Log.d(TAG, "Count is " + rowValueList.size());
-      return rowValueList.size();
+    Log.d(TAG, "Count is " + rowValueList.size());
+    return rowValueList.size();
   }
-
 }

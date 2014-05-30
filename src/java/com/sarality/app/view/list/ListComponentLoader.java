@@ -16,8 +16,6 @@ public class ListComponentLoader<T> extends AsyncTaskLoader<List<T>> {
   public ListComponentLoader(Context context, DataSource<T> datasource) {
     super(context);
     this.datasource = datasource;
-    
-    // TODO Auto-generated constructor stub
   }
 
   @Override
@@ -28,38 +26,4 @@ public class ListComponentLoader<T> extends AsyncTaskLoader<List<T>> {
     list.addAll(datasource.getData());
     return  list;
   }
-
-  /*
-    private static final String TAG = "ListComponentLoader";
-    ListComponent<T> list;
-    Activity context;
-    private final DataSource<T> datasource;
-    private final ListRowRenderer<T> rowRenderer;
-    private ListComponentAdapter<T> adapter;
-    
-    public ListComponentLoader(Activity context,  ListComponent<T> list, 
-        ListRowRenderer<T> rowRenderer, DataSource<T> datasource) {
-        super(context);
-        this.list = list;
-        this.context = context;
-        this.datasource = datasource;
-        this.rowRenderer = rowRenderer;
-
-
-   }
-
-    @Override
-    public ArrayAdapter<T> loadInBackground() {
-       Log.d(TAG, "Loading in background"); 
-       datasource.loadData();
-       adapter = new ListComponentAdapter<T>(context, rowRenderer, datasource.getData());
-       return adapter;
-    }
-    
-    @Override
-    public void onContentChanged(){
-      Log.d(TAG, "Loading on Content changed");
-      datasource.loadData();
-      adapter.setRowValueList(datasource.getData());
-    }*/
 }
