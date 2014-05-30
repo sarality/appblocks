@@ -6,10 +6,18 @@ import android.util.Log;
 import android.view.View;
 
 import com.sarality.app.view.action.ClickActionPerformer;
-import com.sarality.app.view.action.InputEvent;
+import com.sarality.app.view.action.LongClickActionPerformer;
 import com.sarality.app.view.action.TouchActionPerformer;
+import com.sarality.app.view.action.TriggerType;
 import com.sarality.app.view.action.ViewAction;
 
+/**
+ * Base implementation of {@link ListRowRenderer}.
+ * 
+ * @author abhideep@ (Abhideep Singh)
+ *
+ * @param <T> The Type of data object that is used to render the List row.
+ */
 public abstract class BaseListRowRenderer<T> implements ListRowRenderer<T> {
 
   private static final String TAG = "BaseListRowRenderer";
@@ -17,18 +25,25 @@ public abstract class BaseListRowRenderer<T> implements ListRowRenderer<T> {
   @Override
   public void setupActions(View rowView, T value, List<ViewAction> actionList) {
     for (ViewAction action : actionList) {
-      Log.d(TAG, "Setting up Listener for for Action " + action.getEvent() + " on view with Id " + action.getViewId() 
-          + " inside row with Id " + rowView.getId());
+      if (Log.isLoggable(TAG, Log.VERBOSE)) {
+        Log.v(TAG, "Setting up Listener for for " + action.getTriggerType() + " Event on view with Id " + action.getViewId() 
+            + " inside row with Id " + rowView.getId());
+      }
       View view = rowView.findViewById(action.getViewId());
       if (view == null) {
-        Log.e(TAG, "Invalid Configuration. No View with Id " + action.getViewId() + " found in row " + rowView.getId());
+        String message = "Invalid Configuration for " + action.getTriggerType() + " Event. No View with Id " + action.getViewId() 
+            + " found in row " + rowView.getId();
+        IllegalStateException exception = new IllegalStateException(message);
+        Log.e(TAG, message, exception);
+        throw exception;
       }
-      InputEvent input = action.getEvent();
-      if (input == InputEvent.CLICK) {
+
+      TriggerType input = action.getTriggerType();
+      if (input == TriggerType.CLICK) {
         new ClickActionPerformer(action).setupListener(view);
-      } else if (input == InputEvent.LONG_CLICK) {
-        new ClickActionPerformer(action).setupListener(view);
-      } else if (input == InputEvent.TOUCH) {
+      } else if (input == TriggerType.LONG_CLICK) {
+        new LongClickActionPerformer(action).setupListener(view);
+      } else if (input == TriggerType.TOUCH || input == TriggerType.TOUCH_DOWN || input == TriggerType.TOUCH_UP) {
         new TouchActionPerformer(action).setupListener(view);;
       }
     }

@@ -6,10 +6,23 @@ import android.view.View;
 
 import com.sarality.app.view.action.ViewAction;
 
+/**
+ * Renders a ListView where each of the row is rendered differently.
+ * 
+ * @author abhideep@ (Abhideep Singh)
+ *
+ * @param <T> Type of Object being rendered in the ListView.
+ */
 public class CompositeListRowRenderer<T> implements ListRowRenderer<T> {
 
+  // Used to select the type of Renderer for each row.
   private final ListRowRendererSelector<T> selector;
   
+  /**
+   * Constructor.
+   * 
+   * @param selector Class used to select which Renderer to use for each row.
+   */
   public CompositeListRowRenderer(ListRowRendererSelector<T> selector) {
     this.selector = selector;
   }
