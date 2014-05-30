@@ -1,44 +1,34 @@
 package com.sarality.app.view.list;
 
-import java.util.List;
 
-import android.app.Activity;
 import android.util.Log;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.sarality.app.view.datasource.DataSource;
 
 public class ListComponent<T> {
   private static final String TAG = "ListComponent";
   
-  private final Activity activity;
   private final ListView view;
-  private final DataSource<T> datasource;
-  private final ListRowRenderer<T> rowRenderer;
+  private final ListComponentLoader<T> mLoader;
   
-  public ListComponent(Activity activity, ListView view, ListRowRenderer<T> rowRenderer,
-      DataSource<T> datasource) {
-    this.activity = activity;
+  public ListComponent(ListView view, 
+      ListComponentLoader<T> mLoader) {
     this.view = view;
-    this.datasource = datasource;
-    this.rowRenderer = rowRenderer;
+    this.mLoader = mLoader;
   }
 
   public ListView getView() {
     return view;
   }
 
-  public DataSource<T> getDataSource() {
-    return datasource;
+  public void setAdapter(ArrayAdapter<T> adapter) {
+    Log.d(TAG, "setting adapter");
+    view.setAdapter(adapter);
   }
 
-  public void init() {
-    //TODO(abhideep): Add Async support here
-    datasource.loadData();
-
-    // TODO(abhideep): Treat static and dynamic data sources differently
-    List<T> dataList = datasource.getData();
-    Log.d(TAG, "List Component will display " + dataList.size() + " items");
-    view.setAdapter(new ListComponentAdapter<T>(activity, rowRenderer, datasource.getData()));
+  public void refresh(){
+    mLoader.onContentChanged();
   }
+  
 }

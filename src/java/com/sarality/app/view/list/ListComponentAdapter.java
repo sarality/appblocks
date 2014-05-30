@@ -18,21 +18,26 @@ import android.widget.ArrayAdapter;
  *
  * @param <T> The data/model for each row in the list
  */
-class ListComponentAdapter<T> extends ArrayAdapter<T> {
+public class ListComponentAdapter<T> extends ArrayAdapter<T> {
+  private static final String TAG = "ListComponentAdapter";
   private final Activity context;
   private final ListRowRenderer<T> rowRenderer;
   private final List<T> rowValueList;
 
-  ListComponentAdapter(Activity context, ListRowRenderer<T> rowRenderer, List<T> rowValueList) {
-    super(context, 0, rowValueList);
+  public ListComponentAdapter(Activity context, int item, List<T> rowValueList,
+                              ListRowRenderer<T> listItemRenderer) {
+    super(context, item);
     this.context = context;
-    this.rowRenderer = rowRenderer;
+    this.rowRenderer = listItemRenderer;
     this.rowValueList = rowValueList;
   }
 
   @Override
   public View getView(int position, View convertView, ViewGroup parent) {
     View rowView = convertView;
+    
+    Log.d(TAG, "Number of items is " + rowValueList.size());
+    
     T rowValue = rowValueList.get(position);
     if (rowView == null) {
       // Inflate a new row into the list
@@ -49,9 +54,16 @@ class ListComponentAdapter<T> extends ArrayAdapter<T> {
     }
 
     ListRowViewCache viewCache = (ListRowViewCache) rowView.getTag();
-    Log.i("ListComponentAdapter", "Row View Tag is " + viewCache);
+    //Log.i("ListComponentAdapter", "Row View Tag is " + viewCache);
     rowRenderer.render(rowView, viewCache, rowValue);
 
     return rowView;
   }
+  
+  @Override
+  public int getCount() {
+      Log.d(TAG, "Count is " + rowValueList.size());
+      return rowValueList.size();
+  }
+
 }
