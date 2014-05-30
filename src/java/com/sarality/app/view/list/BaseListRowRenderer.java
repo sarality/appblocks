@@ -37,7 +37,6 @@ public abstract class BaseListRowRenderer<T> implements ListRowRenderer<T> {
         Log.e(TAG, message, exception);
         throw exception;
       }
-
       TriggerType input = action.getTriggerType();
       if (input == TriggerType.CLICK) {
         new ClickActionPerformer(action).setupListener(view);

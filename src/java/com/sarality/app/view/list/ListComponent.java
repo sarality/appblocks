@@ -25,8 +25,6 @@ public class ListComponent<T> {
 
   // The view associated with the List to be rendered.
   private final ListView view;
-
-  // Renderer used to render each row in the list.
   private final ListRowRenderer<T> rowRenderer;
 
   // List of actions to be setup on the List.
