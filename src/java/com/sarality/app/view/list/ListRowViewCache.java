@@ -1,17 +1,33 @@
 package com.sarality.app.view.list;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.View;
 
+/**
+ * Cache of elements inside a ListView row.
+ * <p>
+ * Makes it more efficient to set data on the view rather than do a lookupById
+ * each time.
+ * 
+ * @author abhideep@ (Abhideep Singh)
+ */
 public class ListRowViewCache {
 
   private static final String TAG = "com.sarality.app.list.ListRowViewCache";
 
-  private final Map<Integer, View> viewCache = new HashMap<Integer, View>();
+  // Cache of ViewId and View
+  private final SparseArray<View> viewCache = new SparseArray<View>();
 
+  /**
+   * Returns the View for the given ViewId.
+   * <p>
+   * Returns the cached version or performs a lookup if no view is cached.
+   * 
+   * @param rowView The View for the row to lookup elements in.
+   * @param viewId Id of the view to lookup.
+   * @return The element with the given Id.
+   */
   public View getViewById(View rowView, int viewId) {
     View view = viewCache.get(viewId);
     if (view == null) {
@@ -20,14 +36,27 @@ public class ListRowViewCache {
           + "efficiency by 15%");
       return rowView.findViewById(viewId);
     } else {
-      Log.d(TAG, "Found Row Item View with Id " + viewId + " in Cache.");
+      if (Log.isLoggable(TAG, Log.DEBUG)) {
+        Log.d(TAG, "Found Row Item View with Id " + viewId + " in Cache.");
+      }
       return view;
     }
   }
 
+  /**
+   * Lookup view in the given row View and cache it.
+   * 
+   * @param rowView The View to lookup the view id.
+   * @param viewId The id of the view to lookup.
+   */
   public void cacheViewWithId(View rowView, int viewId) {
-    Log.d(TAG, "Caching Row Item View with Id " + viewId);
-    viewCache.put(viewId, rowView);
+    View view = rowView.findViewById(viewId);
+    if (view != null) {
+      if (Log.isLoggable(TAG, Log.DEBUG)) {
+        Log.d(TAG, "Caching Row Item View with Id " + viewId + " in row with Id " + rowView.getId());
+      }
+      viewCache.put(viewId, view);
+    }
   }
   
   @Override
