@@ -179,6 +179,13 @@ public abstract class Table<T extends DataObject<T>> extends AbstractWritableDat
   public void setListener(TableListenerRegistryConfig<T> listenerConfig ){
      this.listenerRegistry = listenerConfig;
   }
-  
 
+  public void update(T data, String whereClause) {
+    open();
+    ContentValues contentValues = new ContentValues();
+    getContentValuesPopulator().populate(contentValues, data);
+    database.update(tableName, contentValues, whereClause, null);
+    close();
+  }
+ 
 }

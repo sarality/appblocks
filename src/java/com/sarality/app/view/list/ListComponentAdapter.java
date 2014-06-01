@@ -20,13 +20,15 @@ import android.widget.ArrayAdapter;
  *
  * @param <T> The data/model for each row in the list
  */
-class ListComponentAdapter<T> extends ArrayAdapter<T> {
+public class ListComponentAdapter<T> extends ArrayAdapter<T> {
+  private static final String TAG = "ListComponentAdapter";
   private final Activity context;
   private final ListRowRenderer<T> rowRenderer;
   private final List<T> rowValueList;
   private final List<ViewAction> actionList;
 
-  ListComponentAdapter(Activity context, ListRowRenderer<T> rowRenderer, List<T> rowValueList, List<ViewAction> actionList) {
+  public ListComponentAdapter(Activity context, ListRowRenderer<T> rowRenderer, List<T> rowValueList, 
+      List<ViewAction> actionList) {
     super(context, 0, rowValueList);
     this.context = context;
     this.rowRenderer = rowRenderer;
@@ -37,12 +39,13 @@ class ListComponentAdapter<T> extends ArrayAdapter<T> {
   @Override
   public View getView(int position, View convertView, ViewGroup parent) {
     View rowView = convertView;
+    Log.d(TAG, "Number of items is " + rowValueList.size());
     T rowValue = rowValueList.get(position);
     if (rowView == null) {
       // Inflate a new row into the list
       LayoutInflater inflater = context.getLayoutInflater();
       rowView = inflater.inflate(rowRenderer.getRowLayout(rowValue), null);
-            
+
       // Cache the various views for the row      
       ListRowViewCache viewCache = new ListRowViewCache();
       rowRenderer.populateViewCache(rowView, viewCache, rowValue);
@@ -51,11 +54,15 @@ class ListComponentAdapter<T> extends ArrayAdapter<T> {
       // Setup actions on the new row
       rowRenderer.setupActions(rowView, rowValue, actionList);
     }
-
     ListRowViewCache viewCache = (ListRowViewCache) rowView.getTag();
-    Log.i("ListComponentAdapter", "Row View Tag is " + viewCache);
+    //Log.i("ListComponentAdapter", "Row View Tag is " + viewCache);
     rowRenderer.render(rowView, viewCache, rowValue);
-
     return rowView;
+  }
+
+  @Override
+  public int getCount() {
+    Log.d(TAG, "Count is " + rowValueList.size());
+    return rowValueList.size();
   }
 }
