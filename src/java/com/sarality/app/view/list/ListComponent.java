@@ -1,14 +1,13 @@
 package com.sarality.app.view.list;
 
+
 import java.util.List;
 
-import android.app.Activity;
 import android.util.Log;
 import android.widget.ListView;
 
 import com.sarality.app.common.collect.Lists;
 import com.sarality.app.view.action.ViewAction;
-import com.sarality.app.view.datasource.DataSource;
 
 /**
  * Component used to render a ListView and setup the associated actions for it.
@@ -20,29 +19,17 @@ import com.sarality.app.view.datasource.DataSource;
 public class ListComponent<T> {
   private static final String TAG = "ListComponent";
   
-  // Activity where this List is rendered.
-  private final Activity activity;
-
   // The view associated with the List to be rendered.
   private final ListView view;
-  private final ListRowRenderer<T> rowRenderer;
 
   // List of actions to be setup on the List.
   private List<ViewAction> actionList = Lists.of();
   
   // List of actions to be setup on each row in the List.
   private List<ViewAction> rowActionList = Lists.of();
-
-  // The source for the data used to render the List.
-  private DataSource<T> dataSource;
   
-  // Adapter used to render the List.
-  private ListComponentAdapter<T> adapter;
-  
-  public ListComponent(Activity activity, ListView view, ListRowRenderer<T> rowRenderer) {
-    this.activity = activity;
+  public ListComponent(ListView view) {
     this.view = view;
-    this.rowRenderer = rowRenderer;
   }
 
   /**
@@ -84,16 +71,9 @@ public class ListComponent<T> {
    * 
    * @param source
    */
-  public void init(DataSource<T> source) {
-    //TODO(abhideep): Add Async support here
-    dataSource = source;
-    dataSource.loadData();
-
-    List<T> dataList = dataSource.getData();
-    adapter = new ListComponentAdapter<T>(activity, rowRenderer, dataList, rowActionList);
-    Log.v(TAG, "List Component will display " + dataList.size() + " items");
-
-    // TODO(abhideep): Treat static and dynamic data sources differently
+  public void setAdapter(ListComponentAdapter<T> adapter) {
+    Log.d(TAG, "setting adapter");
     view.setAdapter(adapter);
   }
+  
 }
