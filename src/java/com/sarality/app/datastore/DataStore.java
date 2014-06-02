@@ -26,6 +26,11 @@ public interface DataStore<T extends DataObject<T>> {
   public Context getApplicationContext();
   
   /**
+   * @return String name for the data store.
+   */
+  public String getName();
+
+  /**
    * Open a DataStore for further operations
    */
   public void open();

@@ -33,8 +33,6 @@ public abstract class Table<T extends DataObject<T>> extends AbstractWritableDat
   
   // Name of the database e.g. users.db.
   private final String dbName;
-  // Name of table in this database e.g. users.
-  private final String tableName;  
   // The version of the database defined by the given set of columns
   private final int tableVersion;
   // TODO(abhideep): See if it makes sense to move version to column itself
@@ -55,11 +53,10 @@ public abstract class Table<T extends DataObject<T>> extends AbstractWritableDat
   protected Table(Application application, String dbName, String tableName, int tableVersion,
           List<Column> columnList, CursorDataExtractor<T> extractor, ContentValuesPopulator<T> populator,
           TableSchemaUpdater schemaUpdter) {
-    super(application.getApplicationContext(), columnList, extractor, populator);
+    super(application.getApplicationContext(), tableName, columnList, extractor, populator);
     this.dbName = dbName;
-    this.tableName = tableName;
-    this.tableVersion = tableVersion;
 
+    this.tableVersion = tableVersion;
     this.tableInfo = new TableInfo(columnList);
     this.dbProvider = new TableConnectionProvider(application.getApplicationContext(), this, null, schemaUpdter);
   }
@@ -69,9 +66,9 @@ public abstract class Table<T extends DataObject<T>> extends AbstractWritableDat
   }
 
   public final String getTableName() {
-    return tableName;
+    return getName();
   }
-  
+
   public final int getTableVersion() {
     return tableVersion;
   }
@@ -99,11 +96,11 @@ public abstract class Table<T extends DataObject<T>> extends AbstractWritableDat
    * @throws SQLException if there is an error opening the database for writing.
    */
   public synchronized final void open() throws SQLException {
-    Log.d(getLoggerTag(), "Opening database for Table " + tableName);
+    Log.d(getLoggerTag(), "Opening database for Table " + getName());
     if (dbOpenCounter.incrementAndGet() == 1) {
       // This will automatically create or update the table as needed
       this.database = dbProvider.getWritableDatabase();
-      Log.i(getLoggerTag(), "Opened database for Table " + tableName + " Open Counter " + dbOpenCounter.get());
+      Log.i(getLoggerTag(), "Opened database for Table " + getName() + " Open Counter " + dbOpenCounter.get());
     }
   }
 
@@ -111,10 +108,10 @@ public abstract class Table<T extends DataObject<T>> extends AbstractWritableDat
    * Close the underlying database instance
    */
   public synchronized final void close() {
-    Log.d(getLoggerTag(), "Closing database for Table " + tableName);
+    Log.d(getLoggerTag(), "Closing database for Table " + getName());
     if (dbOpenCounter.decrementAndGet() == 0) {
       this.database.close();
-      Log.i(getLoggerTag(), "Closed database for Table " + tableName);
+      Log.i(getLoggerTag(), "Closed database for Table " + getName());
     }
   }
 
@@ -131,17 +128,17 @@ public abstract class Table<T extends DataObject<T>> extends AbstractWritableDat
    * @return The data for the row that was created with the appropriate id also populated.
    */
   public Long create(T data) {
-    Log.d(getLoggerTag(), "Adding new row to table " + tableName + " for data object " + data);
+    Log.d(getLoggerTag(), "Adding new row to table " + getName() + " for data object " + data);
     assertDatabaseOpen();
     ContentValues contentValues = new ContentValues();
     getContentValuesPopulator().populate(contentValues, data);
-    Log.d(getLoggerTag(), "Adding new row to table " + tableName + " with content values " + contentValues);
+    Log.d(getLoggerTag(), "Adding new row to table " + getName() + " with content values " + contentValues);
 
     if(listenerRegistry != null)
     	listenerRegistry.listener(data, this);
     
     // TODO(abhideep): Call a method that converts a rowd Id to a Long
-    return database.insert(tableName, null, contentValues);
+    return database.insert(getName(), null, contentValues);
   }
 
   /**
@@ -160,7 +157,7 @@ public abstract class Table<T extends DataObject<T>> extends AbstractWritableDat
    * @return List of data that was returned for the query
    */
   public List<T> query(Query query) {
-    Cursor cursor = database.query(tableName, new String[] {}, null, null, null, null, null);
+    Cursor cursor = database.query(getName(), new String[] {}, null, null, null, null, null);
     CursorDataExtractor<T> extractor = getCursorDataExtractor();
     List<T> dataList = new ArrayList<T>();
 
@@ -170,7 +167,7 @@ public abstract class Table<T extends DataObject<T>> extends AbstractWritableDat
       dataList.add(data);
       cursor.moveToNext();
     }
-    Log.d(getLoggerTag(), "Query " + query + " on table " + tableName + " returned " + dataList.size() + " values");
+    Log.d(getLoggerTag(), "Query " + query + " on table " + getName() + " returned " + dataList.size() + " values");
     // make sure to close the cursor
     cursor.close();
     return dataList;
@@ -179,6 +176,4 @@ public abstract class Table<T extends DataObject<T>> extends AbstractWritableDat
   public void setListener(TableListenerRegistryConfig<T> listenerConfig ){
      this.listenerRegistry = listenerConfig;
   }
-  
-
 }

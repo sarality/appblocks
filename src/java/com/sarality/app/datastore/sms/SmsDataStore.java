@@ -28,9 +28,8 @@ public class SmsDataStore extends AbstractContentResolverDataStore<SmsMessage> {
   private final Uri baseUri = Uri.parse("content://sms/");
 
   public SmsDataStore(Context context) {
-    super(context.getApplicationContext(), 
-          Arrays.<com.sarality.app.datastore.Column>asList(Column.values()),
-          new SmsMessageExtractor());
+    super(context.getApplicationContext(), DATASTORE_NAME,
+        Arrays.<com.sarality.app.datastore.Column>asList(Column.values()), new SmsMessageExtractor());
   }
 
   public enum Column implements com.sarality.app.datastore.Column {

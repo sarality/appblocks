@@ -23,6 +23,9 @@ public abstract class AbstractDataStore<T extends DataObject<T>> implements Data
   // The application context for the data store. 
   private final Context applicationContext;
 
+  // The name of the data store
+  private final String name;
+
   // The columns of the database table.
   private final List<Column> columnList;
 
@@ -36,8 +39,9 @@ public abstract class AbstractDataStore<T extends DataObject<T>> implements Data
    * @param columnList List of Column defined for the DataStore.
    * @param extractor Class that extracts the DataObject from the Cursor
    */
-  public AbstractDataStore(Context context, List<Column> columnList, CursorDataExtractor<T> extractor) {
+  public AbstractDataStore(Context context, String name, List<Column> columnList, CursorDataExtractor<T> extractor) {
     this.applicationContext = context.getApplicationContext();
+    this.name = name;
     this.columnList = new ArrayList<Column>();
     this.columnList.addAll(columnList);
 
@@ -52,6 +56,11 @@ public abstract class AbstractDataStore<T extends DataObject<T>> implements Data
   @Override
   public final Context getApplicationContext() {
     return applicationContext;
+  }
+
+  @Override
+  public final String getName() {
+    return name;
   }
 
   @Override
