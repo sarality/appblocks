@@ -30,9 +30,9 @@ public abstract class AbstractWritableDataStore<T extends DataObject<T>, I> exte
    * @param extractor Class that extracts the DataObject from the Cursor
    * @param populator Class that populates ContentValues used to create a new entry in the data store or update an existing one.
    */
-  public AbstractWritableDataStore(Context context, List<Column> columnList, CursorDataExtractor<T> extractor,
+  public AbstractWritableDataStore(Context context, String name, List<Column> columnList, CursorDataExtractor<T> extractor,
           ContentValuesPopulator<T> populator) {
-    super(context, columnList, extractor);
+    super(context, name, columnList, extractor);
     this.populator = populator;
   }
 

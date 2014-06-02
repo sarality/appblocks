@@ -17,8 +17,8 @@ public abstract class AbstractContentResolverDataStore<T extends DataObject<T>>
 
   private static final String TAG = "AbstractContentResolverDataStore";
   
-  public AbstractContentResolverDataStore(Context context, List<Column> columnList, CursorDataExtractor<T> extractor) {
-    super(context, columnList, extractor);
+  public AbstractContentResolverDataStore(Context context, String name, List<Column> columnList, CursorDataExtractor<T> extractor) {
+    super(context, name, columnList, extractor);
   }
 
   public abstract Uri getQueryUri(Query query);
