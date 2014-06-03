@@ -28,4 +28,19 @@ public interface ViewAction {
    * @return
    */
   public boolean performAction(View view, ViewActionTrigger trigger, ViewDetail viewDetail);
+  /**
+   * Prepare the Action at the time of setup
+   * 
+   * @param view The View that would trigger the action
+   * @param value The actual contents of the data on which the action would need to be performed
+   * @return
+   */
+  public <T> void prepareAction(View view, T value);
+  /**
+   * Cloning the action for each item in the list
+   * 
+   * @param 
+   * @return ViewAction a new instance should be created 
+   */
+  public ViewAction clone() throws CloneNotSupportedException;
 }
