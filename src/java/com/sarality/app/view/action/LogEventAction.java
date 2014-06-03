@@ -10,7 +10,7 @@ import android.view.View;
  * 
  * @author abhideep@ (Abhideep Singh)
  */
-public class LogEventAction extends BaseViewAction implements ViewAction {
+public class LogEventAction extends BaseViewAction implements ViewAction{
 
   // Tag to be used for Logging
   private static final String TAG = "LogEventAction";
@@ -30,4 +30,14 @@ public class LogEventAction extends BaseViewAction implements ViewAction {
     Log.d(TAG, "Performed Action for event on View with Id " + view.getId() + " and view " + view);
     return true;
   }
+
+  public ViewAction clone() throws CloneNotSupportedException{
+     return this;
+  }
+
+  @Override
+  public <T> void prepareAction(View view, T value) {
+    // No Setup required
+  }
+  
 }

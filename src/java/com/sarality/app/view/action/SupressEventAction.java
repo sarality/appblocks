@@ -13,4 +13,13 @@ public class SupressEventAction extends BaseViewAction {
     // Do nothing. Just eat up the event
     return true;
   }
+
+  @Override
+  public <T> void prepareAction(View view, T value) {
+    // No Setup required
+  }
+  
+  public ViewAction clone() throws CloneNotSupportedException{
+    return this;
+ }
 }

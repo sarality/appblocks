@@ -36,4 +36,7 @@ public abstract class BaseViewAction implements ViewAction {
   public final TriggerType getTriggerType() {
     return triggerType;
   }
+  
+  @Override
+  public abstract ViewAction clone() throws CloneNotSupportedException;
 }
