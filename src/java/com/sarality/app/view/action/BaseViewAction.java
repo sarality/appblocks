@@ -1,7 +1,5 @@
 package com.sarality.app.view.action;
 
-import android.view.View;
-
 /**
  * Base implementation for {@link ViewAction}.
  * <p>
@@ -17,8 +15,6 @@ public abstract class BaseViewAction implements ViewAction {
 
   // The Type of event that triggers the action
   private final TriggerType triggerType;
-  
-  protected View view; 
 
   /**
    * Constructor.
@@ -41,8 +37,6 @@ public abstract class BaseViewAction implements ViewAction {
     return triggerType;
   }
   
-  @Override 
-  public ViewAction clone() throws CloneNotSupportedException{
-    throw new CloneNotSupportedException();
-  }
+  @Override
+  public abstract ViewAction clone() throws CloneNotSupportedException;
 }
