@@ -14,7 +14,7 @@ import android.view.View;
  */
 public class ListRowViewCache {
 
-  private static final String TAG = "com.sarality.app.list.ListRowViewCache";
+  private static final String TAG = "ListRowViewCache";
 
   // Cache of ViewId and View
   private final SparseArray<View> viewCache = new SparseArray<View>();
