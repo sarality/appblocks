@@ -180,11 +180,12 @@ public abstract class Table<T extends DataObject<T>> extends AbstractWritableDat
      this.listenerRegistry = listenerConfig;
   }
 
-  public void update(T data, String whereClause) {
+  public void update(T data, Query query) {
     open();
     ContentValues contentValues = new ContentValues();
     getContentValuesPopulator().populate(contentValues, data);
-    database.update(tableName, contentValues, whereClause, null);
+    int num = database.update(tableName, contentValues, query.getWhereList(), query.getWhereValueList());
+    Log.d(getLoggerTag(), "Updated " + num + "number of cols");
     close();
   }
  

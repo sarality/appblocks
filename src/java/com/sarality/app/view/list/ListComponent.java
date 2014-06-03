@@ -3,11 +3,13 @@ package com.sarality.app.view.list;
 
 import java.util.List;
 
+import android.app.Activity;
 import android.util.Log;
 import android.widget.ListView;
 
 import com.sarality.app.common.collect.Lists;
 import com.sarality.app.view.action.ViewAction;
+import com.sarality.app.view.datasource.DataSource;
 
 /**
  * Component used to render a ListView and setup the associated actions for it.
@@ -20,25 +22,37 @@ public class ListComponent<T> {
   private static final String TAG = "ListComponent";
   
   // The view associated with the List to be rendered.
-  private final ListView view;
-
+  private final int viewId;
+  
   // List of actions to be setup on the List.
   private List<ViewAction> actionList = Lists.of();
   
   // List of actions to be setup on each row in the List.
   private List<ViewAction> rowActionList = Lists.of();
   
-  public ListComponent(ListView view) {
-    this.view = view;
+  private ListAsyncLoaderManager<T>  asyncLoader;
+  
+  private final Activity context;
+  
+  public ListComponent(Activity context, int viewId, DataSource<T> dataSource,
+      BaseListRowRenderer<T> renderer) {
+    this.context = context;
+    this.viewId = viewId;
+    asyncLoader = new ListAsyncLoaderManager<T>(context, dataSource, renderer, this);
   }
 
+  
+  public ListAsyncLoaderManager<T> getAsyncLoader(){
+    return asyncLoader;
+  }
+  
   /**
    * @return ListView that contains the List
    */
   public ListView getView() {
-    return view;
+    return (ListView)context.findViewById(viewId);
   }
-
+  
   /**
    * Register an action for each row in the List.
    * 
@@ -66,14 +80,15 @@ public class ListComponent<T> {
     return rowActionList;
   }
 
-  /**
-   * Initialize the ListComponent with the given DataSource
-   * 
-   * @param source
-   */
   public void setAdapter(ListComponentAdapter<T> adapter) {
-    Log.d(TAG, "setting adapter");
-    view.setAdapter(adapter);
+    final ListView listview = (ListView) context.findViewById(viewId);
+    Log.d(TAG, "setting adapter for view " + listview);
+    listview.setAdapter(adapter);
   }
+  
+  public void refresh() {
+    asyncLoader.onContentChanged();
+  }
+
   
 }

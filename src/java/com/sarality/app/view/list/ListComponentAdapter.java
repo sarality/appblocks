@@ -20,7 +20,7 @@ import android.widget.ArrayAdapter;
  *
  * @param <T> The data/model for each row in the list
  */
-public class ListComponentAdapter<T> extends ArrayAdapter<T> {
+class ListComponentAdapter<T> extends ArrayAdapter<T> {
   private static final String TAG = "ListComponentAdapter";
   private final Activity context;
   private final ListRowRenderer<T> rowRenderer;
@@ -39,7 +39,6 @@ public class ListComponentAdapter<T> extends ArrayAdapter<T> {
   @Override
   public View getView(int position, View convertView, ViewGroup parent) {
     View rowView = convertView;
-    Log.d(TAG, "Number of items is " + rowValueList.size());
     T rowValue = rowValueList.get(position);
     if (rowView == null) {
       // Inflate a new row into the list
@@ -50,13 +49,13 @@ public class ListComponentAdapter<T> extends ArrayAdapter<T> {
       ListRowViewCache viewCache = new ListRowViewCache();
       rowRenderer.populateViewCache(rowView, viewCache, rowValue);
       rowView.setTag(viewCache);
-
-      // Setup actions on the new row
-      rowRenderer.setupActions(rowView, rowValue, actionList);
     }
+
     ListRowViewCache viewCache = (ListRowViewCache) rowView.getTag();
-    //Log.i("ListComponentAdapter", "Row View Tag is " + viewCache);
     rowRenderer.render(rowView, viewCache, rowValue);
+
+    // Setup actions on the new row
+    rowRenderer.setupActions(rowView, rowValue, actionList);
     return rowView;
   }
 

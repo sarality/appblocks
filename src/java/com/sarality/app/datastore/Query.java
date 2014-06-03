@@ -2,6 +2,7 @@ package com.sarality.app.datastore;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -40,5 +41,21 @@ public class Query {
 
   public List<Column> getColumns() {
     return columns;
+  }
+  
+  public String getWhereList(){
+    StringBuilder whereClause = new StringBuilder();
+    Iterator<Column> iterate = whereColumnList.iterator();
+    while(iterate.hasNext()){
+      whereClause.append(iterate.next().getName() + "= ?");
+      if(iterate.hasNext()){
+        whereClause.append(",");
+      }
+    }
+    return whereClause.toString();
+  }
+  
+  public String[] getWhereValueList(){
+    return whereColumnValueList.toArray(new String[whereColumnValueList.size()]);
   }
 }

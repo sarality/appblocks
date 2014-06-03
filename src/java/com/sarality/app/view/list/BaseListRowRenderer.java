@@ -25,10 +25,7 @@ public abstract class BaseListRowRenderer<T> implements ListRowRenderer<T> {
   @Override
   public void setupActions(View rowView, T value, List<ViewAction> actionList) {
     for (ViewAction action : actionList) {
-      if (Log.isLoggable(TAG, Log.VERBOSE)) {
-        Log.v(TAG, "Setting up Listener for for " + action.getTriggerType() + " Event on view with Id " + action.getViewId() 
-            + " inside row with Id " + rowView.getId());
-      }
+      ViewAction clonedAction;
       View view = rowView.findViewById(action.getViewId());
       if (view == null) {
         String message = "Invalid Configuration for " + action.getTriggerType() + " Event. No View with Id " + action.getViewId() 
@@ -37,14 +34,25 @@ public abstract class BaseListRowRenderer<T> implements ListRowRenderer<T> {
         Log.e(TAG, message, exception);
         throw exception;
       }
-      TriggerType input = action.getTriggerType();
-      if (input == TriggerType.CLICK) {
-        new ClickActionPerformer(action).setupListener(view);
-      } else if (input == TriggerType.LONG_CLICK) {
-        new LongClickActionPerformer(action).setupListener(view);
-      } else if (input == TriggerType.TOUCH || input == TriggerType.TOUCH_DOWN || input == TriggerType.TOUCH_UP) {
-        new TouchActionPerformer(action).setupListener(view);;
+      
+      try {
+        clonedAction = action.clone();
+        clonedAction.prepareAction(view, value);
+
+        TriggerType input = action.getTriggerType();
+        if (input == TriggerType.CLICK) {
+          new ClickActionPerformer(clonedAction).setupListener(view);
+        } else if (input == TriggerType.LONG_CLICK) {
+          new LongClickActionPerformer(clonedAction).setupListener(view);
+        } else if (input == TriggerType.TOUCH || input == TriggerType.TOUCH_DOWN || input == TriggerType.TOUCH_UP) {
+          new TouchActionPerformer(clonedAction).setupListener(view);;
+        }
+
+      } catch (CloneNotSupportedException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
       }
+
     }
   }
 }

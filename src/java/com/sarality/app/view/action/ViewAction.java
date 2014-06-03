@@ -28,4 +28,12 @@ public interface ViewAction {
    * @return
    */
   public boolean performAction(View view, ViewActionTrigger trigger, ViewDetail viewDetail);
+
+  public <T> void prepareAction(View view, T value);
+  
+  public ViewAction clone() throws CloneNotSupportedException;
+
+  public View getView();
+
+  
 }
