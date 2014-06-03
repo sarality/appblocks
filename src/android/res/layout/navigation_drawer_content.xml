@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+    Description: Empty content area to be used with the Navigation Drawer.
+    Should be replaced with layout for the actual content, either here 
+    or in the navigation_drawer_layout.xml
+
+    Author: abhideep@dothat.in (Abhideep Singh)
+-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawer_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+</RelativeLayout>
