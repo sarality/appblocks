@@ -41,4 +41,21 @@ public class Query {
   public List<Column> getColumns() {
     return columns;
   }
+  
+  public String getWhereClause(){
+    StringBuilder whereClause = new StringBuilder();
+    boolean isFirst = true;
+    for(Column col:whereColumnList){
+      if(!isFirst){
+        whereClause.append(",");
+      }      
+      isFirst = false;
+      whereClause.append(col.getName() + "= ?");
+    }
+    return whereClause.toString();
+  }
+  
+  public String[] getWhereClauseValues(){
+    return whereColumnValueList.toArray(new String[whereColumnValueList.size()]);
+  }
 }

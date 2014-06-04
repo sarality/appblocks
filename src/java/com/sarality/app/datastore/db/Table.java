@@ -55,7 +55,6 @@ public abstract class Table<T extends DataObject<T>> extends AbstractWritableDat
           TableSchemaUpdater schemaUpdter) {
     super(application.getApplicationContext(), tableName, columnList, extractor, populator);
     this.dbName = dbName;
-
     this.tableVersion = tableVersion;
     this.tableInfo = new TableInfo(columnList);
     this.dbProvider = new TableConnectionProvider(application.getApplicationContext(), this, null, schemaUpdter);
@@ -68,7 +67,7 @@ public abstract class Table<T extends DataObject<T>> extends AbstractWritableDat
   public final String getTableName() {
     return getName();
   }
-
+  
   public final int getTableVersion() {
     return tableVersion;
   }
@@ -176,4 +175,14 @@ public abstract class Table<T extends DataObject<T>> extends AbstractWritableDat
   public void setListener(TableListenerRegistryConfig<T> listenerConfig ){
      this.listenerRegistry = listenerConfig;
   }
+
+  public void update(T data, Query query) {
+    assertDatabaseOpen();
+    ContentValues contentValues = new ContentValues();
+    getContentValuesPopulator().populate(contentValues, data);
+    int num = database.update(getName(), contentValues, query.getWhereClause(), query.getWhereClauseValues());
+    Log.d(getLoggerTag(), "Updated " + num + "number of cols");
+    close();
+  }
+ 
 }
