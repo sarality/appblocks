@@ -2,7 +2,7 @@ package com.sarality.app.view.list;
 
 import java.util.List;
 
-import android.app.Activity;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.widget.ListView;
 
@@ -21,37 +21,38 @@ public class ListComponent<T> {
   private static final String TAG = "ListComponent";
   
   // Activity where this List is rendered.
-  private final Activity activity;
-
+  private final FragmentActivity activity;
+ 
   // The view associated with the List to be rendered.
   private final ListView view;
   private final ListRowRenderer<T> rowRenderer;
-
+  
   // List of actions to be setup on the List.
   private List<ViewAction> actionList = Lists.of();
   
   // List of actions to be setup on each row in the List.
   private List<ViewAction> rowActionList = Lists.of();
-
-  // The source for the data used to render the List.
-  private DataSource<T> dataSource;
   
-  // Adapter used to render the List.
+  //Adapter used to render the List.
   private ListComponentAdapter<T> adapter;
   
-  public ListComponent(Activity activity, ListView view, ListRowRenderer<T> rowRenderer) {
+  private ListComponentLoaderCallback<T>  loaderCallback;
+  
+  private ListComponentLoader<T> loader;
+  
+  public ListComponent(FragmentActivity activity, ListView view, ListRowRenderer<T> rowRenderer) {
     this.activity = activity;
     this.view = view;
     this.rowRenderer = rowRenderer;
   }
-
+  
   /**
    * @return ListView that contains the List
    */
   public ListView getView() {
     return view;
   }
-
+  
   /**
    * Register an action for each row in the List.
    * 
@@ -80,20 +81,47 @@ public class ListComponent<T> {
   }
 
   /**
-   * Initialize the ListComponent with the given DataSource
+    * Initialize the ListComponent with the given DataSource
+    * 
+    * @param source
+    */
+  public void init(DataSource<T> source) {
+    //Load the data
+    loader = new ListComponentLoader<T>(activity, source);
+    render(loader.loadData());
+  }
+
+  /**
+   * Initialize the ListComponent to load data Asynchronously
    * 
    * @param source
    */
-  public void init(DataSource<T> source) {
-    //TODO(abhideep): Add Async support here
-    dataSource = source;
-    dataSource.loadData();
+   public void  initAsync(DataSource<T> dataSource) {
+    loaderCallback = new ListComponentLoaderCallback<T>(activity, dataSource, this);
+    activity.getSupportLoaderManager().initLoader(0, null, loaderCallback).forceLoad();
+  }
 
-    List<T> dataList = dataSource.getData();
-    adapter = new ListComponentAdapter<T>(activity, rowRenderer, dataList, rowActionList);
-    Log.v(TAG, "List Component will display " + dataList.size() + " items");
-
-    // TODO(abhideep): Treat static and dynamic data sources differently
+   /**
+    * Render the view with the data
+    * 
+    * @param data
+    */
+  public void render(List<T> data){
+    adapter = new ListComponentAdapter<T>(activity, rowRenderer, data, getRowActions());
     view.setAdapter(adapter);
+  }
+
+  /**
+   * Refresh the data from the source and re-render
+   * 
+   * @param 
+   */
+  public void refresh() {
+    if(loaderCallback!= null){
+      loaderCallback.onContentChanged();
+    }
+    else {// Sync Load
+      adapter.reinitalize(loader.loadData());
+    }
   }
 }
