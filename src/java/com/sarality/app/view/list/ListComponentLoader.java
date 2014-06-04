@@ -11,7 +11,7 @@ import android.util.Log;
 public class ListComponentLoader<T> extends AsyncTaskLoader<List<T>> {
 
   private static final String TAG = "ListComponentLoader";
-  DataSource<T> datasource;
+  private final DataSource<T> datasource;
 
   public ListComponentLoader(Context context, DataSource<T> datasource) {
     super(context);

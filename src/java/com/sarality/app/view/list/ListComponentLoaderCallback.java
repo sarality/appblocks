@@ -16,21 +16,17 @@ import android.util.Log;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class ListAsyncLoaderManager<T> implements LoaderManager.LoaderCallbacks<List<T>>{
+public class ListComponentLoaderCallback<T> implements LoaderManager.LoaderCallbacks<List<T>>{
 
   private static final String TAG = "ListAsyncLoaderManager";
   private final DataSource<T> dataSource;
   private final Activity context;
   private ListComponentLoader<T> loader;
-  private final ListRowRenderer<T> renderer;
-  private ListComponentAdapter<T> adapter;
   private final ListComponent<T> component;
   
-  public ListAsyncLoaderManager(Activity context, DataSource<T> dataSource,
-      BaseListRowRenderer<T> renderer, ListComponent<T> component){
+  public ListComponentLoaderCallback(Activity context, DataSource<T> dataSource, ListComponent<T> component){
     this.context = context;
     this.dataSource = dataSource;
-    this.renderer = renderer;
     this.component = component;
   }
   
@@ -43,9 +39,7 @@ public class ListAsyncLoaderManager<T> implements LoaderManager.LoaderCallbacks<
 
   @Override
   public void onLoadFinished(Loader<List<T>> loader, List<T> data) {
-    adapter = new ListComponentAdapter<T>(context, renderer, data,
-        component.getRowActions());
-    component.setAdapter(adapter);
+    component.render(data);
   }
 
   @Override
