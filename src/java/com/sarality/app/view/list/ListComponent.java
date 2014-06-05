@@ -1,12 +1,11 @@
 package com.sarality.app.view.list;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.widget.ListView;
 
-import com.sarality.app.common.collect.Lists;
 import com.sarality.app.view.action.ViewAction;
 import com.sarality.app.view.datasource.DataSource;
 
@@ -18,7 +17,6 @@ import com.sarality.app.view.datasource.DataSource;
  * @param <T> Type of data that is used to render the ListView.
  */
 public class ListComponent<T> {
-  private static final String TAG = "ListComponent";
   
   // Activity where this List is rendered.
   private final FragmentActivity activity;
@@ -28,10 +26,10 @@ public class ListComponent<T> {
   private final ListRowRenderer<T> rowRenderer;
   
   // List of actions to be setup on the List.
-  private List<ViewAction> actionList = Lists.of();
+  private List<ViewAction<T>> actionList = new ArrayList<ViewAction<T>>();
   
   // List of actions to be setup on each row in the List.
-  private List<ViewAction> rowActionList = Lists.of();
+  private List<ViewAction<T>> rowActionList = new ArrayList<ViewAction<T>>();
   
   //Adapter used to render the List.
   private ListComponentAdapter<T> adapter;
@@ -58,7 +56,7 @@ public class ListComponent<T> {
    * 
    * @param action Action to be setup for each row of the List.
    */
-  public void registerRowAction(ViewAction action) {
+  public void registerRowAction(ViewAction<T> action) {
     rowActionList.add(action);
   }
 
@@ -69,14 +67,14 @@ public class ListComponent<T> {
    * 
    * @param action Action to be setup for the List.
    */
-  public void registerAction(ViewAction action) {
+  public void registerAction(ViewAction<T> action) {
     actionList.add(action);
   }
   
   /**
    * @return List of Actions that are associated with each row in the List.
    */
-  public List<ViewAction> getRowActions() {
+  public List<ViewAction<T>> getRowActions() {
     return rowActionList;
   }
 

@@ -23,9 +23,9 @@ public abstract class BaseListRowRenderer<T> implements ListRowRenderer<T> {
   private static final String TAG = "BaseListRowRenderer";
 
   @Override
-  public void setupActions(View rowView, T value, List<ViewAction> actionList) {
-    for (ViewAction action : actionList) {
-      ViewAction clonedAction;
+  public void setupActions(View rowView, ListRowViewCache rowViewCache, T value, List<ViewAction<T>> actionList) {
+    for (ViewAction<T> action : actionList) {
+      ViewAction<T> clonedAction;
       View view = rowView.findViewById(action.getViewId());
       if (view == null) {
         String message = "Invalid Configuration for " + action.getTriggerType() + " Event. No View with Id " + action.getViewId() 
@@ -35,22 +35,21 @@ public abstract class BaseListRowRenderer<T> implements ListRowRenderer<T> {
         throw exception;
       }
       
-      try {
-        clonedAction = action.clone();
-      } catch (CloneNotSupportedException e) {
+      clonedAction = action.cloneInstance();
+      if (clonedAction == null) {
         Log.e(TAG, "Action for Trigger type" + action.getTriggerType() + "could not be cloned, Using original " +
-        		"instance. Actions may not perform as desired");
+            "instance. Actions may not perform as desired");
         clonedAction = action;
       }
 
-      clonedAction.prepareAction(view, value);
+      clonedAction.prepareView(view, value);
       TriggerType input = action.getTriggerType();
       if (input == TriggerType.CLICK) {
-        new ClickActionPerformer(clonedAction).setupListener(view);
+        new ClickActionPerformer<T>(clonedAction).setupListener(view);
       } else if (input == TriggerType.LONG_CLICK) {
-        new LongClickActionPerformer(clonedAction).setupListener(view);
+        new LongClickActionPerformer<T>(clonedAction).setupListener(view);
       } else if (input == TriggerType.TOUCH || input == TriggerType.TOUCH_DOWN || input == TriggerType.TOUCH_UP) {
-        new TouchActionPerformer(clonedAction).setupListener(view);;
+        new TouchActionPerformer<T>(clonedAction).setupListener(view);;
       }
     }
   }

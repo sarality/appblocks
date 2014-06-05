@@ -8,27 +8,29 @@ import android.view.View;
  * listeners and make the call to perform the action when the event is triggered.
  * 
  * @author abhideep@ (Abhideep Singh)
+ * 
+ * @param <T> The type of data that is used to setup the view on which the action is being performed.
  */
-public abstract class BaseActionPerformer {
+public abstract class BaseActionPerformer<T> {
   
   private static final String TAG = "BaseActionPerformer";
 
   // The action that needs to be performed
-  private final ViewAction action;
+  private final ViewAction<T> action;
 
   /**
    * Constructor.
    * 
    * @param action Action that needs to be performed.
    */
-  public BaseActionPerformer(ViewAction action) {
+  public BaseActionPerformer(ViewAction<T> action) {
     this.action = action;
   }
 
   /**
    * @return Action that needs to be performed.
    */
-  protected ViewAction getAction() {
+  protected ViewAction<T> getAction() {
     return action;
   }
 

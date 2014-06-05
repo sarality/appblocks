@@ -25,10 +25,10 @@ class ListComponentAdapter<T> extends ArrayAdapter<T> {
   private final Activity context;
   private final ListRowRenderer<T> rowRenderer;
   private List<T> rowValueList;
-  private final List<ViewAction> actionList;
+  private final List<ViewAction<T>> actionList;
 
   ListComponentAdapter(Activity context, ListRowRenderer<T> rowRenderer, List<T> rowValueList, 
-      List<ViewAction> actionList) {
+      List<ViewAction<T>> actionList) {
     super(context, 0, rowValueList);
     this.context = context;
     this.rowRenderer = rowRenderer;
@@ -60,7 +60,7 @@ class ListComponentAdapter<T> extends ArrayAdapter<T> {
     rowRenderer.render(rowView, viewCache, rowValue);
 
     // Setup actions on the new row
-    rowRenderer.setupActions(rowView, rowValue, actionList);
+    rowRenderer.setupActions(rowView, viewCache, rowValue, actionList);
     return rowView;
   }
 

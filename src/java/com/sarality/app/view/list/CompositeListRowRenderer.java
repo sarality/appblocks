@@ -46,8 +46,8 @@ public class CompositeListRowRenderer<T> implements ListRowRenderer<T> {
   }
 
   @Override
-  public void setupActions(View rowView, T value, List<ViewAction> actionList) {
+  public void setupActions(View rowView, ListRowViewCache rowViewCache, T value, List<ViewAction<T>> actionList) {
     ListRowRenderer<T> renderer = selector.select(value);
-    renderer.setupActions(rowView, value, actionList);
+    renderer.setupActions(rowView, rowViewCache, value, actionList);
   }
 }
