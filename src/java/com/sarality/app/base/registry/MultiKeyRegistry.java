@@ -5,8 +5,12 @@ import java.util.List;
 
 public class MultiKeyRegistry<K, V> extends Registry<K, V> {
 
-  public MultiKeyRegistry(EntryProvider<K,V> provider) {
-    super(provider.provide());
+  public MultiKeyRegistry() {
+    super();
+  }
+
+  public void register(EntryProvider<K, V> provider) {
+    register(provider.provide());
   }
 
   public static class EntryProvider<K, V> {

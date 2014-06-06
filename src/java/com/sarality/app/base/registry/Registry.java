@@ -8,14 +8,18 @@ import java.util.Map;
 public class Registry<K, V> {
   private final Map<K, V> registry = new HashMap<K, V>();
 
-  protected Registry(List<Entry<K, V>> entryList) {
+  protected Registry() {
+    // Empty registry
+  }
+
+  public void register(List<Entry<K, V>> entryList) {
     for (Entry<K, V> entry : entryList) {
       registry.put(entry.getKey(), entry.getValue());
     }    
   }
 
-  public Registry(Registry.EntryProvider<K, V> provider) {
-    this(provider.provide());
+  public void register(EntryProvider<K, V> entryProvider) {
+    register(entryProvider.provide());
   }
 
   public V lookup(K key) {

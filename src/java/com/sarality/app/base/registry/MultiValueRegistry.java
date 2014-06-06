@@ -7,8 +7,12 @@ import java.util.Map;
 
 public class MultiValueRegistry<K, V> extends Registry<K, List<V>> {
 
-  public MultiValueRegistry(EntryProvider<K, V> provider) {
-    super(provider.provide());
+  public MultiValueRegistry() {
+    super();
+  }
+
+  public void register(EntryProvider<K, V> entryProvider) {
+    register(entryProvider.provide());
   }
 
   public static class EntryProvider<K, V> {
