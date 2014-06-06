@@ -16,8 +16,8 @@ import com.sarality.app.datastore.ColumnFormat;
  * @author abhideep@ (Abhideep Singh)
  */
 public class DateValuePopulator implements ValuePopulator<Date>, FieldDataValuePopulator {
-  SimpleDateFormat defaultFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
-  SimpleDateFormat dateAsIntegerFormatter = new SimpleDateFormat("yyyyMMddHHmmss", Locale.US);
+  private final SimpleDateFormat defaultFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
+  private final SimpleDateFormat dateAsIntegerFormatter = new SimpleDateFormat("yyyyMMddHHmmss", Locale.US);
 
   @Override
   public void populate(ContentValues contentValues, Column column, Date value,

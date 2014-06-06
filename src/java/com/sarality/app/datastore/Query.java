@@ -1,7 +1,5 @@
 package com.sarality.app.datastore;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -10,52 +8,32 @@ import java.util.List;
  * @author abhideep@ (Abhideep Singh)
  */
 public class Query {
-  private final List<Column> whereColumnList = new ArrayList<Column>();
-  private final List<String> whereColumnValueList = new ArrayList<String>();
-
   private final List<Column> columns;
+  private final String whereClause;
+  private final List<String> whereColumnValueList;
 
-  public Query(List<Column> columns) {
+  public Query(List<Column> columns, String whereClause, List<String> whereClauseValueList) {
     this.columns = columns;
+    this.whereClause = whereClause;
+    this.whereColumnValueList = whereClauseValueList;
   }
 
-  public Query(Column... columns) {
-    this(Arrays.asList(columns));
+  public Query() {
+    this(null, null, null);
   }
-
-  /**
-   * Constructor for a Query that fetches all Columns from the DataStore.
-   * 
-   * @param table
-   */
-  public Query(DataStore<?> store) {
-    this(store.getColumns());
-  }
-
-  public Query withFilter(Column column, String value) {
-    whereColumnList.add(column);
-    whereColumnValueList.add(value);
-    return this;
-  }
-
+  
   public List<Column> getColumns() {
     return columns;
   }
 
   public String getWhereClause() {
-    StringBuilder whereClause = new StringBuilder();
-    boolean isFirst = true;
-    for (Column col : whereColumnList) {
-      if (!isFirst) {
-        whereClause.append(", ");
-      }
-      isFirst = false;
-      whereClause.append(col.getName() + " = ?");
-    }
-    return whereClause.toString();
+    return whereClause;
   }
 
   public String[] getWhereClauseValues() {
+    if (whereColumnValueList == null || whereColumnValueList.size() < 1) {
+      return null;
+    }
     return whereColumnValueList.toArray(new String[whereColumnValueList.size()]);
   }
 }
