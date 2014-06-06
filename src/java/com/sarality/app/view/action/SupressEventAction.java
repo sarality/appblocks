@@ -2,7 +2,14 @@ package com.sarality.app.view.action;
 
 import android.view.View;
 
-public class SupressEventAction extends BaseViewAction {
+/**
+ * Action to suppress any events on a given View.
+ * 
+ * @author abhideep@ (Abhideep Singh)
+ *
+ * @param <T> The type of data that is used to setup the view on which the event is supressed.
+ */
+public class SupressEventAction<T> extends BaseViewAction<T> {
 
   public SupressEventAction(int viewId, TriggerType event) {
     super(viewId, event);
@@ -15,11 +22,11 @@ public class SupressEventAction extends BaseViewAction {
   }
 
   @Override
-  public <T> void prepareAction(View view, T value) {
+  public void prepareView(View view, T value) {
     // No Setup required
   }
-  
-  public ViewAction clone() throws CloneNotSupportedException{
-    return this;
- }
+
+  public ViewAction<T> cloneInstance() {
+    return new SupressEventAction<T>(getViewId(), getTriggerType());
+  }
 }

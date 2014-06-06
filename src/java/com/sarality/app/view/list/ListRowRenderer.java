@@ -50,5 +50,5 @@ public interface ListRowRenderer<T> {
    * @param value Data used to generate the row.
    * @param actionList List of Actions to be setup on the row and it's elements.
    */
-  public void setupActions(View rowView, T value, List<ViewAction> actionList);
+  public void setupActions(View rowView, ListRowViewCache rowViewCache, T value, List<ViewAction<T>> actionList);
 }

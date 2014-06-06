@@ -6,8 +6,10 @@ import android.view.View;
  * Interface for all Actions triggers by an event on a View
  * 
  * @author abhideep@ (Abhideep Singh)
+ * 
+ * @param <T> The type of data that is used to setup the View that triggers the action.
  */
-public interface ViewAction {
+public interface ViewAction<T> {
 
   /**
    * @return Id of the view that triggers the action
@@ -18,6 +20,15 @@ public interface ViewAction {
    * @return Type of event that triggers the action
    */
   public TriggerType getTriggerType();
+
+  /**
+   * Prepare the View so that the Action can be performed on it later.
+   * 
+   * @param view The View that would trigger the action.
+   * @param value The actual contents of the data on which the action would need to be performed.
+   * @return
+   */
+  public void prepareView(View view, T value);
   
   /**
    * Perform the action
@@ -28,19 +39,11 @@ public interface ViewAction {
    * @return
    */
   public boolean performAction(View view, ViewActionTrigger trigger, ViewDetail viewDetail);
+
   /**
-   * Prepare the Action at the time of setup
+   * Clones the instance of the Action
    * 
-   * @param view The View that would trigger the action
-   * @param value The actual contents of the data on which the action would need to be performed
-   * @return
-   */
-  public <T> void prepareAction(View view, T value);
-  /**
-   * Cloning the action for each item in the list
-   * 
-   * @param 
    * @return ViewAction a new instance should be created 
    */
-  public ViewAction clone() throws CloneNotSupportedException;
+  public ViewAction<T> cloneInstance();
 }

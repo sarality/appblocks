@@ -7,8 +7,10 @@ package com.sarality.app.view.action;
  * the type of event that triggers the action.
  * 
  * @author abhideep@ (Abhideep Singh)
+ * 
+ * @param <T> The type of data that is used to setup the view which triggers the action.
  */
-public abstract class BaseViewAction implements ViewAction {
+public abstract class BaseViewAction<T> implements ViewAction<T> {
 
   // The Id of the view that triggers the action
   private final int viewId;
@@ -38,5 +40,5 @@ public abstract class BaseViewAction implements ViewAction {
   }
   
   @Override
-  public abstract ViewAction clone() throws CloneNotSupportedException;
+  public abstract ViewAction<T> cloneInstance();
 }

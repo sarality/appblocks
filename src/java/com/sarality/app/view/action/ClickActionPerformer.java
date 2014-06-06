@@ -7,10 +7,12 @@ import android.view.View.OnClickListener;
  * Performs the Action when the given view is clicked.
  * 
  * @author abhideep@ (Abhideep Singh)
+ * 
+ * @param <T> The type of data that is used to setup the view on which the action is being performed.
  */
-public class ClickActionPerformer extends BaseActionPerformer implements OnClickListener {
+public class ClickActionPerformer<T> extends BaseActionPerformer<T> implements OnClickListener {
 
-  public ClickActionPerformer(ViewAction action) {
+  public ClickActionPerformer(ViewAction<T> action) {
     super(action);
   }
 
