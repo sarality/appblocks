@@ -25,6 +25,7 @@ public interface DataObject<T> {
    */
   public Builder<T> newBuilder();
   
+  
   /**
    * Interface for all Builder classes that create a Data Object.
    * 
@@ -33,6 +34,25 @@ public interface DataObject<T> {
    * @param <T> The type of data object that the Builder builds
    */
   public interface Builder<T> {
+
+    /**
+     * @return Data Object as defined by the builder.
+     */
     public T build();
+  }
+  
+  /**
+   * Interface for a Factory for the Builder.
+   * 
+   * @author abhideep@ (Abhideep Singh)
+   *
+   * @param <T> The type of data object that the Builder builds.
+   */
+  public interface BuilderFactory<T> {
+
+    /**
+     * @return A new empty instance of the Builder
+     */
+    Builder<T> newBuilder();
   }
 }
