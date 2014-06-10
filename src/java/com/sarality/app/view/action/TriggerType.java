@@ -10,5 +10,7 @@ public enum TriggerType {
   LONG_CLICK,
   TOUCH,
   TOUCH_UP,
-  TOUCH_DOWN,  
+  TOUCH_DOWN,
+  COMPLETE_SUCCESS,
+  COMPLETE_FAILURE
 }

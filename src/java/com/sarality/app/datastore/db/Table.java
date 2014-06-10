@@ -193,7 +193,6 @@ public abstract class Table<T extends DataObject<T>> extends AbstractWritableDat
     getContentValuesPopulator().populate(contentValues, data);
     int num = database.update(getName(), contentValues, query.getWhereClause(), query.getWhereClauseValues());
     Log.d(getLoggerTag(), "Updated " + num + "number of cols");
-    close();
   }
 
 }

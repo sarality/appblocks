@@ -16,7 +16,7 @@ public class SupressEventAction<T> extends BaseViewAction<T> {
   }
 
   @Override
-  public boolean performAction(View view, ViewActionTrigger actionDetail, ViewDetail viewDetail) {
+  public boolean doAction(View view, ViewActionTrigger actionDetail, ViewDetail viewDetail) {
     // Do nothing. Just eat up the event
     return true;
   }
