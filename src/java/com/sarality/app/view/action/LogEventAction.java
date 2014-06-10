@@ -33,7 +33,7 @@ public class LogEventAction<T> extends BaseViewAction<T> implements ViewAction<T
   }
   
   @Override
-  public boolean performAction(View view, ViewActionTrigger actionDetail, ViewDetail viewDetail) {
+  public boolean doAction(View view, ViewActionTrigger actionDetail, ViewDetail viewDetail) {
     Log.d(TAG, "Performed Action for event on View with Id " + view.getId() + " and view " + view);
     return true;
   }
@@ -41,4 +41,5 @@ public class LogEventAction<T> extends BaseViewAction<T> implements ViewAction<T
   public ViewAction<T> cloneInstance() {
     return new LogEventAction<T>(getViewId(), getTriggerType());
   }
+
 }

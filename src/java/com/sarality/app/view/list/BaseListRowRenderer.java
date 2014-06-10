@@ -5,8 +5,8 @@ import java.util.List;
 import android.util.Log;
 import android.view.View;
 
-import com.sarality.app.view.action.ClickActionPerformer;
 import com.sarality.app.view.action.LongClickActionPerformer;
+import com.sarality.app.view.action.MultiClickActionPerformer;
 import com.sarality.app.view.action.TouchActionPerformer;
 import com.sarality.app.view.action.TriggerType;
 import com.sarality.app.view.action.ViewAction;
@@ -24,6 +24,7 @@ public abstract class BaseListRowRenderer<T> implements ListRowRenderer<T> {
 
   @Override
   public void setupActions(View rowView, ListRowViewCache rowViewCache, T value, List<ViewAction<T>> actionList) {
+    MultiClickActionPerformer<T> multiClicks = new MultiClickActionPerformer<T>();
     for (ViewAction<T> action : actionList) {
       ViewAction<T> clonedAction;
       View view = rowView.findViewById(action.getViewId());
@@ -45,7 +46,7 @@ public abstract class BaseListRowRenderer<T> implements ListRowRenderer<T> {
       clonedAction.prepareView(view, value);
       TriggerType input = action.getTriggerType();
       if (input == TriggerType.CLICK) {
-        new ClickActionPerformer<T>(clonedAction).setupListener(view);
+        multiClicks.setupListener(view, clonedAction);
       } else if (input == TriggerType.LONG_CLICK) {
         new LongClickActionPerformer<T>(clonedAction).setupListener(view);
       } else if (input == TriggerType.TOUCH || input == TriggerType.TOUCH_DOWN || input == TriggerType.TOUCH_UP) {

@@ -1,5 +1,7 @@
 package com.sarality.app.view.action;
 
+import java.util.List;
+
 import android.view.View;
 
 /**
@@ -46,4 +48,21 @@ public interface ViewAction<T> {
    * @return ViewAction a new instance should be created 
    */
   public ViewAction<T> cloneInstance();
+
+  /**
+   * Register the set of actions that need to be performed after this action is completed
+   * 
+   * @param triggeredAction The new action that will be performed once this action is complete.
+   * @return
+   */
+  public void registerAction(ViewAction<?> triggeredAction);
+
+  /**
+   * returns the list of actions
+   * 
+   * @param 
+   * @return List of actions
+   */
+  public List<ViewAction<?>> getActions();
+
 }
