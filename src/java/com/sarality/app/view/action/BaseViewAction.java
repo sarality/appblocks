@@ -1,7 +1,9 @@
 package com.sarality.app.view.action;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import android.util.Log;
 import android.view.View;
 
 import com.sarality.app.common.collect.Lists;
@@ -20,6 +22,8 @@ import com.sarality.app.common.collect.Lists;
  */
 public abstract class BaseViewAction<T> implements ViewAction<T> {
 
+  private static final String TAG = "BaseViewAction";
+
   // The Id of the view that triggers the action
   private final int viewId;
 
@@ -27,7 +31,13 @@ public abstract class BaseViewAction<T> implements ViewAction<T> {
   private final TriggerType triggerType;
 
   // List of actions to be performed after this action is complete
-  private List<ViewAction<?>> actionList = Lists.of();
+  private List<ViewAction<?>> successActionList = Lists.of();
+
+  // List of actions to be performed after this action is a failure
+  private List<ViewAction<?>> failureActionList = Lists.of();
+
+  // List of actions to be performed before the action is started
+  private List<ViewAction<?>> beforeActionList = Lists.of();
 
   /**
    * Constructor.
@@ -54,13 +64,31 @@ public abstract class BaseViewAction<T> implements ViewAction<T> {
 
   @Override
   public void registerAction(ViewAction<?> action) {
-    // TODO separate out the Start/Success/Failure lists
-    actionList.add(action);
+    switch (action.getTriggerType()) {
+      case COMPLETE_SUCCESS:
+        successActionList.add(action);
+        break;
+      case COMPLETE_FAILURE:
+        failureActionList.add(action);
+        break;
+      case BEFORE:
+        beforeActionList.add(action);
+        break;
+      default:
+        if (Log.isLoggable(TAG, Log.ERROR)) {
+          Log.e(TAG, "Invalid TriggerType " + action.getTriggerType());
+        }
+        return;
+    }
   }
 
   @Override
   public List<ViewAction<?>> getActions() {
-    return actionList;
+    List<ViewAction<?>> completeActionList = new ArrayList<ViewAction<?>>();
+    completeActionList.addAll(successActionList);
+    completeActionList.addAll(failureActionList);
+    completeActionList.addAll(beforeActionList);
+    return completeActionList;
   }
 
   public abstract boolean doAction(View view, ViewActionTrigger actionDetail, ViewDetail viewDetail);
@@ -68,12 +96,12 @@ public abstract class BaseViewAction<T> implements ViewAction<T> {
   @Override
   public final boolean performAction(View view, ViewActionTrigger actionDetail, ViewDetail viewDetail) {
     try {
-      // TODO onStart();
+      runAction(beforeActionList, view, actionDetail, viewDetail);
       boolean returnValue = doAction(view, actionDetail, viewDetail);
-      onSuccess(view, actionDetail, viewDetail);
+      runAction(successActionList, view, actionDetail, viewDetail);
       return returnValue;
     } catch (Throwable t) {
-      // TODO onFailure();
+      runAction(failureActionList, view, actionDetail, viewDetail);
     }
     return true;
   }
@@ -91,9 +119,10 @@ public abstract class BaseViewAction<T> implements ViewAction<T> {
    *          Details about the view that triggered the action
    * @return
    */
-  private void onSuccess(View view, ViewActionTrigger actionDetail, ViewDetail viewDetail) {
+  private void runAction(List<ViewAction<?>> actionList, View view, ViewActionTrigger actionDetail,
+      ViewDetail viewDetail) {
     for (ViewAction<?> action : actionList) {
-      ViewActionTrigger detail = new ViewActionTrigger(view, TriggerType.COMPLETE_SUCCESS,
+      ViewActionTrigger detail = new ViewActionTrigger(view, action.getTriggerType(),
           actionDetail.getMotionEvent());
       action.performAction(view, detail, viewDetail);
     }
