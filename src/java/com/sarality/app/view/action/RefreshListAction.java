@@ -9,11 +9,26 @@ import com.sarality.app.view.action.ViewActionTrigger;
 import com.sarality.app.view.action.ViewDetail;
 import com.sarality.app.view.list.ListComponent;
 
-public class ListComponentRefreshAction<T> extends BaseViewAction<T> {
+/**
+ * Action that would refresh the ListComponent and re-render
+ * 
+ * @author sunayna@ (Sunayna Uberoy)
+ */
+public class RefreshListAction<T> extends BaseViewAction<T> {
 
   private final ListComponent<T> component;
 
-  public ListComponentRefreshAction(int viewId, TriggerType triggerType, ListComponent<T> component) {
+  /**
+   * Constructor.
+   * 
+   * @param viewId
+   *          Id of the View that triggers the action.
+   * @param triggerType
+   *          Type of event that triggers the action.
+   * @param component
+   *          Reference to the list component that would need to be refreshed          
+   */
+  public RefreshListAction(int viewId, TriggerType triggerType, ListComponent<T> component) {
     super(viewId, triggerType);
     this.component = component;
   }
@@ -31,7 +46,7 @@ public class ListComponentRefreshAction<T> extends BaseViewAction<T> {
 
   @Override
   public ViewAction<T> cloneInstance() {
-    return new ListComponentRefreshAction<T>(getViewId(), getTriggerType(), component);
+    return new RefreshListAction<T>(getViewId(), getTriggerType(), component);
   }
 
 }

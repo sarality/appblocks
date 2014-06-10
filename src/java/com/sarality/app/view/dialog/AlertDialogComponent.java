@@ -36,25 +36,40 @@ public class AlertDialogComponent<T> {
    * @param context
    *          Context of the activity starting it.
    * @param date
-   *          Activation Date to be changed once the user has selected one of the options
+   *          Activation Date to be changed once the user has selected one of
+   *          the options
    * @param snoozeAction
-   *          Reference to the caller.         
+   *          Reference to the caller.
    */
   public AlertDialogComponent(Activity context, int viewId) {
     this.context = context;
     this.viewId = viewId;
   }
 
+  /**
+   * Registers the actions that would be setup on individual items within the
+   * Dialog
+   * 
+   * @param action
+   *          The actual action that would be registered with the Dialog
+   */
   public void registerAction(ViewAction<T> action) {
     actionList.add(action);
   }
 
+  /**
+   * Initializes the AlertDialog Sets up the view Sets up the actions on the
+   * views within the Dialog Builds the Dialog Displays the Dialog
+   * 
+   * @param data
+   *          Data to be passed to the action to act on
+   */
   public void init(T data) {
     AlertDialog.Builder builder = new AlertDialog.Builder(context);
     LayoutInflater factory = LayoutInflater.from(context);
     final View content = factory.inflate(viewId, null);
 
-    setupActions(content , data);
+    setupActions(content, data);
 
     builder.setView(content);
     builder.setCancelable(true);
@@ -62,14 +77,21 @@ public class AlertDialogComponent<T> {
     dialog.show();
   }
 
-  public void setupActions(View rowView, T data) {
-    Log.d(TAG,"Setting up actions");
+  /**
+   * Sets up the actions on the views
+   * 
+   * @param dialogView
+   *          The dialog layout
+   * @param data
+   *          The data to be sent to the action to act on
+   */
+  public void setupActions(View dialogView, T data) {
     for (ViewAction<T> action : actionList) {
       ViewAction<T> clonedAction;
-      View view = rowView.findViewById(action.getViewId());
+      View view = dialogView.findViewById(action.getViewId());
       if (view == null) {
-        String message = "Invalid Configuration for " + action.getTriggerType() + " Event. No View with Id " + action.getViewId() 
-            + " found in row " + rowView.getId();
+        String message = "Invalid Configuration for " + action.getTriggerType() + " Event. No View with Id "
+            + action.getViewId() + " found in row " + dialogView.getId();
         IllegalStateException exception = new IllegalStateException(message);
         Log.e(TAG, message, exception);
         throw exception;
@@ -87,12 +109,12 @@ public class AlertDialogComponent<T> {
       }
     }
   }
-  
-  public void dismiss(){
+
+  /**
+   * Dismisses the dialog
+   */
+  public void dismiss() {
     dialog.dismiss();
   }
 
 }
-
-
-

@@ -14,7 +14,9 @@ import com.sarality.app.common.collect.Lists;
  * 
  * @author abhideep@ (Abhideep Singh)
  * 
- * @param <T> The type of data that is used to setup the view which triggers the action.
+ * @param <T>
+ *          The type of data that is used to setup the view which triggers the
+ *          action.
  */
 public abstract class BaseViewAction<T> implements ViewAction<T> {
 
@@ -24,14 +26,16 @@ public abstract class BaseViewAction<T> implements ViewAction<T> {
   // The Type of event that triggers the action
   private final TriggerType triggerType;
 
-  //List of actions to be performed after this action is complete
+  // List of actions to be performed after this action is complete
   private List<ViewAction<?>> actionList = Lists.of();
 
   /**
    * Constructor.
    * 
-   * @param viewId Id of view that triggers the action.
-   * @param event Type of event that triggers the action.
+   * @param viewId
+   *          Id of view that triggers the action.
+   * @param event
+   *          Type of event that triggers the action.
    */
   public BaseViewAction(int viewId, TriggerType triggerType) {
     this.viewId = viewId;
@@ -50,6 +54,7 @@ public abstract class BaseViewAction<T> implements ViewAction<T> {
 
   @Override
   public void registerAction(ViewAction<?> action) {
+    // TODO separate out the Start/Success/Failure lists
     actionList.add(action);
   }
 

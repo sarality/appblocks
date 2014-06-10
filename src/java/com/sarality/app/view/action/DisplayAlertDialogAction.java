@@ -7,18 +7,16 @@ import com.sarality.app.view.action.ViewActionTrigger;
 import com.sarality.app.view.action.ViewDetail;
 import com.sarality.app.view.dialog.AlertDialogComponent;
 
-import android.app.Activity;
 import android.view.View;
 
 /**
- * Action that would snooze a reminder.
+ * Action that would display an alert Dialog.
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
 public class DisplayAlertDialogAction<T> extends BaseViewAction<T> implements ViewAction<T> {
   private T data;
   private final AlertDialogComponent<T> alertDialog;
-  private final Activity context;
 
   /**
    * Constructor.
@@ -28,11 +26,9 @@ public class DisplayAlertDialogAction<T> extends BaseViewAction<T> implements Vi
    * @param triggerType
    *          Type of event that triggers the action.
    */
-  public DisplayAlertDialogAction(Activity context, int viewId, TriggerType triggerType,
-      AlertDialogComponent<T> alertDialog) {
+  public DisplayAlertDialogAction(int viewId, TriggerType triggerType, AlertDialogComponent<T> alertDialog) {
     super(viewId, triggerType);
     this.alertDialog = alertDialog;
-    this.context = context;
   }
 
   @Override
@@ -43,7 +39,7 @@ public class DisplayAlertDialogAction<T> extends BaseViewAction<T> implements Vi
 
   @Override
   public DisplayAlertDialogAction<T> cloneInstance() {
-    DisplayAlertDialogAction<T> action = new DisplayAlertDialogAction<T>(context, this.getViewId(), this.getTriggerType(),
+    DisplayAlertDialogAction<T> action = new DisplayAlertDialogAction<T>(this.getViewId(), this.getTriggerType(),
         this.alertDialog);
     return action;
   }
@@ -51,11 +47,5 @@ public class DisplayAlertDialogAction<T> extends BaseViewAction<T> implements Vi
   @Override
   public void prepareView(View view, T input) {
     this.data = input;
-   /* ReminderData.Builder builder = new ReminderData.Builder();
-    data = builder.setReminderId(input.getReminderId()).setReminderType(input.getReminderType())
-        .setActivityType(input.getActivityType()).setServiceType(input.getServiceType())
-        .setServiceProvider(input.getServiceProvider()).setActivationDate(input.getActivationDate())
-        .setActivityEndDate(input.getActivityEndDate()).setActivityStartDate(input.getActivityStartDate())
-        .setExpirationDate(input.getExpirationDate()).build();*/
   }
 }
