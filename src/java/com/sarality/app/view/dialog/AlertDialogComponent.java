@@ -5,14 +5,10 @@ import java.util.List;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import com.sarality.app.view.action.ClickActionPerformer;
-import com.sarality.app.view.action.LongClickActionPerformer;
-import com.sarality.app.view.action.TouchActionPerformer;
-import com.sarality.app.view.action.TriggerType;
+import com.sarality.app.view.action.ComponentAction;
 import com.sarality.app.view.action.ViewAction;
 
 /**
@@ -22,7 +18,6 @@ import com.sarality.app.view.action.ViewAction;
  * @param <T>
  */
 public class AlertDialogComponent<T> {
-  private static final String TAG = null;
   private final Activity context;
   private AlertDialog dialog;
 
@@ -85,29 +80,9 @@ public class AlertDialogComponent<T> {
    * @param data
    *          The data to be sent to the action to act on
    */
-  public void setupActions(View dialogView, T data) {
-    for (ViewAction<T> action : actionList) {
-      ViewAction<T> clonedAction;
-      View view = dialogView.findViewById(action.getViewId());
-      if (view == null) {
-        String message = "Invalid Configuration for " + action.getTriggerType() + " Event. No View with Id "
-            + action.getViewId() + " found in row " + dialogView.getId();
-        IllegalStateException exception = new IllegalStateException(message);
-        Log.e(TAG, message, exception);
-        throw exception;
-      }
-
-      clonedAction = action.cloneInstance();
-      clonedAction.prepareView(view, data);
-      TriggerType input = action.getTriggerType();
-      if (input == TriggerType.CLICK) {
-        new ClickActionPerformer<T>(clonedAction).setupListener(view);
-      } else if (input == TriggerType.LONG_CLICK) {
-        new LongClickActionPerformer<T>(clonedAction).setupListener(view);
-      } else if (input == TriggerType.TOUCH || input == TriggerType.TOUCH_DOWN || input == TriggerType.TOUCH_UP) {
-        new TouchActionPerformer<T>(clonedAction).setupListener(view);
-      }
-    }
+  public void setupActions(View layout, T data) {
+    ComponentAction<T> componentAction = new ComponentAction<T>();
+    componentAction.setupActions(actionList, layout, data);
   }
 
   /**

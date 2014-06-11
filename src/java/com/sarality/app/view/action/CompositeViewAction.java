@@ -8,112 +8,99 @@ import android.view.View;
 import com.sarality.app.base.registry.MultiValueRegistry;
 
 /**
- * Creates a list of actions per view and sets up the observer for each of the
- * views
+ * Similar to ViewAction but will have a list of actions for a given view
  * 
  * @author sunayna@dothat.in sunayna
  * 
  */
 public class CompositeViewAction<T> extends MultiValueRegistry<View, ViewAction<T>> {
 
+  // The Id of the view that triggers the action
+  private final int viewId;
+
   // Complete list of actions
-  private final List<ViewAction<T>> actionList;
+  private List<ViewAction<T>> onClickActionList;
 
-  // Layout view
-  private final View view;
+  // Complete list of actions
+  private List<ViewAction<T>> onLongClickActionList;
 
-  // EntryProvider creating a mapping between view and Action
-  private ViewActionRegistry<T> viewActionregistry;
+  // Complete list of actions
+  private List<ViewAction<T>> onTouchActionList;
 
   /**
-   * Constructor
+   * Constructor.
    * 
-   * @param view
-   *          Layout view
-   * @param actionList
-   *          The actions that will be performed on each of the viewIds with in
-   *          the layout
+   * @param viewId
+   *          Id of view that triggers the action.
+   * @param event
+   *          Type of event that triggers the action.
    */
-  public CompositeViewAction(View view, List<ViewAction<T>> actionList) {
-    this.actionList = actionList;
-    this.view = view;
+  public CompositeViewAction(int viewId) {
+    this.viewId = viewId;
+    onClickActionList = new ArrayList<ViewAction<T>>();
+    onLongClickActionList = new ArrayList<ViewAction<T>>();
+    onTouchActionList = new ArrayList<ViewAction<T>>();
   }
 
   /**
-   * Sets up the registry and Sets up the ActionPerformer on the view
+   * Register the set of actions that need to be performed before this action is
+   * started
    * 
-   * @param data
-   *          Custom data for each of the actions
+   * @param triggeredAction
+   *          The new action that will be need to be performed before current
+   *          action is executed.
    */
-  public void setupActions(T data) {
-    viewActionregistry = new ViewActionRegistry<T>();
-
-    for (ViewAction<T> action : actionList) {
-      View currentView = view.findViewById(action.getViewId());
-      action.prepareView(currentView, data);
-      viewActionregistry.register(currentView, action);
-      setActionPerformer(currentView, action.getTriggerType());
+  public void registerAction(ViewAction<T> action) {
+    switch (action.getTriggerType()) {
+      case CLICK:
+        onClickActionList.add(action);
+        break;
+      case LONG_CLICK:
+        onLongClickActionList.add(action);
+        break;
+      case TOUCH:
+      case TOUCH_DOWN:
+      case TOUCH_UP:
+        onTouchActionList.add(action);
+        break;
+      default:
+        break;
     }
-    super.register(viewActionregistry);
   }
 
   /**
-   * Provides the list of actions for a view and trigger type
+   * Provides the list of actions for Click trigger type
    * 
-   * @param view
-   *          View for each the action has been setup
-   * @param triggerType
-   *          Trigger on a view that would generate an action
    * @return List of actions on a view given the trigger type
    */
-  public List<ViewAction<T>> lookup(View view, TriggerType triggerType) {
-    List<ViewAction<T>> actionList = super.lookup(view);
-    List<ViewAction<T>> returnList = new ArrayList<ViewAction<T>>();
-
-    for (ViewAction<T> action : actionList) {
-      if (action.getTriggerType() == triggerType) {
-        returnList.add(action);
-      }
-    }
-    return returnList;
+  public List<ViewAction<T>> getOnClickActionList() {
+    return onClickActionList;
   }
 
   /**
-   * Sets up the ActionPerformer for each of the views
+   * Provides the list of actions for LongClick trigger type
    * 
-   * @param view
-   *          View on which the actionPerformer would be set
-   * @param trigger
-   *          Type of action performer that would be set
+   * @return List of actions on a view given the trigger type
    */
-  private void setActionPerformer(View view, TriggerType trigger) {
-    // TODO : to be completed once reviewed
-    // Will need modifications to ActionPerformer constructors
-    // Will setup observers for each of the trigger items
-    // For eg.
-    // switch(trigger){
-    // case CLICK:
-    // new ClickActionPerformer<T>(this).setupListener(view);
+  public List<ViewAction<T>> getOnLongClickActionList() {
+    return onLongClickActionList;
   }
-}
-
-/**
- * Mapping between View and ViewAction
- * 
- * @author sunayna@dothat.in sunayna
- * 
- */
-class ViewActionRegistry<T> extends MultiValueRegistry.EntryProvider<View, ViewAction<T>> {
 
   /**
-   * Adds entry into registry for a view.
+   * Provides the list of actions for Touch trigger type
    * 
-   * @param view
-   *          Key in the registry
-   * @param action
-   *          Value in the registry : List of actions
+   * @return List of actions on a view given the trigger type
    */
-  protected void register(View view, ViewAction<T> action) {
-    addEntry(view, action);
+  public List<ViewAction<T>> getOnTouchActionList() {
+    return onTouchActionList;
+  }
+
+  /**
+   * Gets the viewId for this composite ViewAction
+   * 
+   * @return view Id
+   */
+  public int getViewId() {
+    return viewId;
   }
 }
