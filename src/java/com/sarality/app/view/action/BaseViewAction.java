@@ -3,7 +3,6 @@ package com.sarality.app.view.action;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.util.Log;
 import android.view.View;
 
 import com.sarality.app.common.collect.Lists;
@@ -21,8 +20,6 @@ import com.sarality.app.common.collect.Lists;
  *          action.
  */
 public abstract class BaseViewAction<T> implements ViewAction<T> {
-
-  private static final String TAG = "BaseViewAction";
 
   // The Id of the view that triggers the action
   private final int viewId;
@@ -63,23 +60,18 @@ public abstract class BaseViewAction<T> implements ViewAction<T> {
   }
 
   @Override
-  public void registerAction(ViewAction<?> action) {
-    switch (action.getTriggerType()) {
-      case COMPLETE_SUCCESS:
-        successActionList.add(action);
-        break;
-      case COMPLETE_FAILURE:
-        failureActionList.add(action);
-        break;
-      case BEFORE:
-        beforeActionList.add(action);
-        break;
-      default:
-        if (Log.isLoggable(TAG, Log.ERROR)) {
-          Log.e(TAG, "Invalid TriggerType " + action.getTriggerType());
-        }
-        return;
-    }
+  public void registerBeforeExecutionAction(ViewAction<?> action) {
+    beforeActionList.add(action);
+  }
+  
+  @Override
+  public void registerOnSuccessAction(ViewAction<?> action) {
+    successActionList.add(action);
+  }
+  
+  @Override
+  public void registerOnFailureAction(ViewAction<?> action) {
+    failureActionList.add(action);
   }
 
   @Override
@@ -125,6 +117,18 @@ public abstract class BaseViewAction<T> implements ViewAction<T> {
       ViewActionTrigger detail = new ViewActionTrigger(view, action.getTriggerType(),
           actionDetail.getMotionEvent());
       action.performAction(view, detail, viewDetail);
+    }
+  }
+  
+  public void cloneActions(ViewAction<?> action){
+    for(ViewAction<?> successAction: successActionList){
+      action.registerOnSuccessAction(successAction);
+    }
+    for(ViewAction<?> failureAction: failureActionList){
+      action.registerOnFailureAction(failureAction);
+    }
+    for(ViewAction<?> beforeAction: beforeActionList){
+      action.registerBeforeExecutionAction(beforeAction);
     }
   }
 }
