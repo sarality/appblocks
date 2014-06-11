@@ -56,14 +56,34 @@ public interface ViewAction<T> {
   public ViewAction<T> cloneInstance();
 
   /**
+   * Register the set of actions that need to be performed before this action is
+   * started
+   * 
+   * @param triggeredAction
+   *          The new action that will be need to be performed before current acion is 
+   *          executed. 
+   */
+  public void registerBeforeExecutionAction(ViewAction<?> triggeredAction);
+
+  /**
    * Register the set of actions that need to be performed after this action is
-   * completed
+   * successfully completed
    * 
    * @param triggeredAction
    *          The new action that will be performed once this action is
    *          complete.
    */
-  public void registerAction(ViewAction<?> triggeredAction);
+  public void registerOnSuccessAction(ViewAction<?> triggeredAction);
+
+  /**
+   * Register the set of actions that need to be performed after this action if the action
+   * has a failure in it
+   * 
+   * @param triggeredAction
+   *          The new action that will be performed once this action is
+   *          complete.
+   */
+  public void registerOnFailureAction(ViewAction<?> triggeredAction);
 
   /**
    * Returns the list of actions
