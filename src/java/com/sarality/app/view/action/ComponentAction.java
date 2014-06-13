@@ -24,11 +24,11 @@ public class ComponentAction<T> {
    *          View action
    */
   public void addViewAction(int viewId, ViewAction<T> action) {
-    CompositeViewAction<T> compositeAction = null;
-    if (viewMap.get(viewId) == null) {
+    CompositeViewAction<T> compositeAction = viewMap.get(viewId);
+     if ( compositeAction == null) {
       compositeAction = new CompositeViewAction<T>(viewId);
       viewMap.put(viewId, compositeAction);
-    }
+    }  
     compositeAction.registerAction(action);
   }
 
@@ -70,11 +70,11 @@ public class ComponentAction<T> {
 
       View view = layout.findViewById(compositeAction.getViewId());
       if (!compositeAction.getOnClickActionList().isEmpty()) {
-        new ClickActionPerformer<T>(compositeAction.getOnClickActionList()).setupListener(view);
+        new ClickActionPerformer<T>(compositeAction).setupListener(view);
       } else if (!compositeAction.getOnLongClickActionList().isEmpty()) {
-        new LongClickActionPerformer<T>(compositeAction.getOnClickActionList()).setupListener(view);
+        new LongClickActionPerformer<T>(compositeAction).setupListener(view);
       } else if (!compositeAction.getOnLongClickActionList().isEmpty()) {
-        new TouchActionPerformer<T>(compositeAction.getOnClickActionList()).setupListener(view);
+        new TouchActionPerformer<T>(compositeAction).setupListener(view);
       }
     }
   }

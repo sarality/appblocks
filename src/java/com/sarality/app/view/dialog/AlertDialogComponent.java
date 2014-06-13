@@ -8,12 +8,8 @@ import android.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.TextView;
 
-import com.sarality.app.view.action.ClickActionPerformer;
-import com.sarality.app.view.action.LongClickActionPerformer;
-import com.sarality.app.view.action.TouchActionPerformer;
-import com.sarality.app.view.action.TriggerType;
+import com.sarality.app.view.action.ComponentAction;
 import com.sarality.app.view.action.ViewAction;
 
 /**
@@ -30,6 +26,7 @@ public class AlertDialogComponent<T> {
   // List of actions to be setup on each row in the List.
   private List<ViewAction<T>> actionList = new ArrayList<ViewAction<T>>();
   private DialogType dialogType;
+  private int viewId;
 
   /**
    * Constructor.
@@ -42,9 +39,8 @@ public class AlertDialogComponent<T> {
    * @param snoozeAction
    *          Reference to the caller.
    */
-  public AlertDialogComponent(Activity context, DialogType dialogType) {
+  public AlertDialogComponent(Activity context) {
     this.context = context;
-    this.dialogType = dialogType;
   }
 
   /**
@@ -58,9 +54,10 @@ public class AlertDialogComponent<T> {
     actionList.add(action);
   }
 
-  public DialogType getDialogType(){
-    return dialogType; 
+  public DialogType getDialogType() {
+    return dialogType;
   }
+
   /**
    * Initializes the AlertDialog Sets up the view Sets up the actions on the
    * views within the Dialog Builds the Dialog Displays the Dialog
@@ -69,27 +66,40 @@ public class AlertDialogComponent<T> {
    *          Data to be passed to the action to act on
    */
   public void init(View view, T data) {
-    // AlertDialog.Builder builder = new AlertDialog.Builder(context);
-    // LayoutInflater factory = LayoutInflater.from(context);
-    // final View content = factory.inflate(viewId, null);
 
-    switch(dialogType){
+    switch (dialogType) {
       case DIALOG_LIST:
+        // TODO Add support for lists
         break;
       case DIALOG_TEXT:
+        showDialogWithText(view, data);
         break;
       case DIALOG_VIEW:
-        setupActions(view, data);
+        showDialogWithView(data);
         break;
       default:
-        break;
-      
+       return;
     }
-     
-    // builder.setView(content);
-    // builder.setCancelable(true);
-    // dialog = builder.create();
     dialog.show();
+  }
+
+  private void showDialogWithView(T data) {
+    Log.d(TAG, "Show View Dialog");
+    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+    LayoutInflater factory = LayoutInflater.from(context);
+    final View content = factory.inflate(viewId, null);
+    setupActions(content, data);
+    builder.setView(content);
+    builder.setCancelable(true);
+    dialog = builder.create();
+  }
+
+  private void showDialogWithText(View view, T data) {
+    Log.d(TAG, "Show Text Dialog " + view.getId());
+    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+    builder.setMessage(data.toString());
+    builder.setPositiveButton("OK", null);
+    dialog = builder.create();
   }
 
   /**
@@ -101,28 +111,8 @@ public class AlertDialogComponent<T> {
    *          The data to be sent to the action to act on
    */
   public void setupActions(View dialogView, T data) {
-    for (ViewAction<T> action : actionList) {
-      ViewAction<T> clonedAction;
-      View view = context.findViewById(action.getViewId());
-      if (view == null) {
-        String message = "Invalid Configuration for " + action.getTriggerType() + " Event. No View with Id "
-            + action.getViewId() + " found in row " + dialogView.getId();
-        IllegalStateException exception = new IllegalStateException(message);
-        Log.e(TAG, message, exception);
-        throw exception;
-      }
-
-      clonedAction = action.cloneInstance();
-      clonedAction.prepareView(view, data);
-      TriggerType input = action.getTriggerType();
-      if (input == TriggerType.CLICK) {
-        new ClickActionPerformer<T>(clonedAction).setupListener(view);
-      } else if (input == TriggerType.LONG_CLICK) {
-        new LongClickActionPerformer<T>(clonedAction).setupListener(view);
-      } else if (input == TriggerType.TOUCH || input == TriggerType.TOUCH_DOWN || input == TriggerType.TOUCH_UP) {
-        new TouchActionPerformer<T>(clonedAction).setupListener(view);
-      }
-    }
+    ComponentAction<T> componentAction = new ComponentAction<T>();
+    componentAction.setupActions(actionList, dialogView, data);
   }
 
   /**
@@ -132,75 +122,13 @@ public class AlertDialogComponent<T> {
     dialog.dismiss();
   }
 
-  public void ShowMessageDialog(String message) {
-    ShowDialog(message, DialogButton.OK, new String[] {}, 0);
+  public AlertDialogComponent<T> setDialogType(DialogType dialogType) {
+    this.dialogType = dialogType;
+    return this;
   }
 
-  public void ShowMessageDialog(String message, DialogButton type) {
-    ShowDialog(message, type, new String[] {}, 0);
-  }
-
-  public void ShowListDialog(String message, String[] listItems) {
-    ShowDialog(message, DialogButton.OK_CANCEL, listItems, 0);
-  }
-
-  public AlertDialogComponent<T> ShowListDialog(String message, DialogButton type,  int viewId) {
-    return ShowDialog(message, type, null, viewId);
-  }
-  
-  private AlertDialogComponent<T> ShowDialog(String message, DialogButton type, String[] listItems, int viewId) {
-    AlertDialog.Builder builder = new AlertDialog.Builder(context);
-    
-    if(dialogType == DialogType.DIALOG_VIEW){
-       LayoutInflater factory = LayoutInflater.from(context);
-       final View content = factory.inflate(viewId, null);
-       builder.setView(content);
-       builder.setCancelable(true);
-       dialog = builder.create();
-    }
-    
-    /*
-    List CheckedItems;
-    if (listItems.length > 0 && isMultiChoice == false) {
-      CheckedItems = new ArrayList();// won't be used in this case.
-      builder.setTitle(message);
-      builder.setItems(listItems, selectedItemListener);
-    } else if (listItems.length > 0 && isMultiChoice == true) {
-      CheckedItems = new ArrayList();
-      builder.setTitle(message);
-      builder.setMultiChoiceItems(listItems, null, new OnMultiChoiceClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which, boolean checked) {
-          if (checked)
-          // CheckedItems.add(which);
-          // else
-          {
-            // if (CheckedItems.contains(which))
-            // CheckedItems.remove(which);
-          }
-        }
-      });
-    } else {
-      builder.setTitle("Milk supply tracker");
-      builder.setMessage(message);
-    }
-    if (listItems.length == 0 || isMultiChoice) {
-      switch (type) {
-        case OK:
-          builder.setPositiveButton("OK", listener);
-          break;
-        case OK_CANCEL:
-          builder.setPositiveButton("OK", listener);
-          builder.setNegativeButton("Cancel", listener);
-          break;
-        case YES_NO:
-          builder.setPositiveButton("Yes", listener);
-          builder.setNegativeButton("No", listener);
-          break;
-      }
-    }
-    builder.create().show();*/
-    
+  public AlertDialogComponent<T> setLayout(int viewId) {
+    this.viewId = viewId;
     return this;
   }
 }

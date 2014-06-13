@@ -1,7 +1,5 @@
 package com.sarality.app.view.action;
 
-import java.util.List;
-
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -11,35 +9,29 @@ import android.view.View.OnTouchListener;
  * 
  * @author abhideep@ (Abhideep Singh)
  * 
- * @param <T>
- *          The type of data that is used to setup the view on which the touch
- *          based action is being performed.
+ * @param <T> The type of data that is used to setup the view on which the touch based action is being performed.
  */
 public class TouchActionPerformer<T> extends BaseActionPerformer<T> implements OnTouchListener {
 
   /**
-   * Constructor
+   * Constructor 
    * 
-   * @param list
-   *          ViewAction that needs to be performed on touch.
+   * @param action ViewAction that needs to be performed on touch.
    */
-  public TouchActionPerformer(List<ViewAction<T>> list) {
-    super(list);
+  public TouchActionPerformer(ViewAction<T> action) {
+    super(action);
   }
 
   @Override
   public boolean onTouch(View view, MotionEvent event) {
-    for (ViewAction<T> action : getActionList()) {
-      if (action.getTriggerType() == TriggerType.TOUCH_DOWN && event.getAction() != MotionEvent.ACTION_DOWN) {
-        return false;
-      }
-      if (action.getTriggerType() == TriggerType.TOUCH_UP && event.getAction() != MotionEvent.ACTION_UP) {
-        return false;
-      }
-      action.performAction(view, new ViewActionTrigger(view, getAction().getTriggerType(), event), new ViewDetail(view,
-          null));
+    if (getAction().getTriggerType() == TriggerType.TOUCH_DOWN && event.getAction() != MotionEvent.ACTION_DOWN) {
+      return false;
     }
-    return true;
+    if (getAction().getTriggerType() == TriggerType.TOUCH_UP && event.getAction() != MotionEvent.ACTION_UP) {
+      return false;
+    }
+    return getAction().performAction(view, new ViewActionTrigger(view, getAction().getTriggerType(), event),
+        new ViewDetail(view, null));
   }
 
   @Override
