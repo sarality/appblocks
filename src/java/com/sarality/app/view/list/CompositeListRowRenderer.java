@@ -1,10 +1,8 @@
 package com.sarality.app.view.list;
 
-import java.util.List;
-
 import android.view.View;
 
-import com.sarality.app.view.action.ViewAction;
+import com.sarality.app.view.action.ComponentActionManager;
 
 /**
  * Renders a ListView where each of the row is rendered differently.
@@ -46,8 +44,8 @@ public class CompositeListRowRenderer<T> implements ListRowRenderer<T> {
   }
 
   @Override
-  public void setupActions(View rowView, ListRowViewCache rowViewCache, T value, List<ViewAction<T>> actionList) {
+  public void setupActions(View rowView, ListRowViewCache rowViewCache, T value, ComponentActionManager<T> componentManager) {
     ListRowRenderer<T> renderer = selector.select(value);
-    renderer.setupActions(rowView, rowViewCache, value, actionList);
+    renderer.setupActions(rowView, rowViewCache, value, componentManager);
   }
 }

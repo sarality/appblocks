@@ -8,7 +8,7 @@ import android.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import com.sarality.app.view.action.ComponentAction;
+import com.sarality.app.view.action.ComponentActionManager;
 import com.sarality.app.view.action.ViewAction;
 
 /**
@@ -81,8 +81,8 @@ public class AlertDialogComponent<T> {
    *          The data to be sent to the action to act on
    */
   public void setupActions(View layout, T data) {
-    ComponentAction<T> componentAction = new ComponentAction<T>();
-    componentAction.setupActions(actionList, layout, data);
+    ComponentActionManager<T> componentAction = new ComponentActionManager<T>(actionList);
+    componentAction.setupActions(layout, data);
   }
 
   /**

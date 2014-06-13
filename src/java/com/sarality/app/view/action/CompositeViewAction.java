@@ -14,27 +14,20 @@ import android.view.View;
 public class CompositeViewAction<T> extends BaseViewAction<T> implements ViewAction<T> {
 
   // Complete list of actions
-  private List<ViewAction<T>> onClickActionList;
-
-  // Complete list of actions
-  private List<ViewAction<T>> onLongClickActionList;
-
-  // Complete list of actions
-  private List<ViewAction<T>> onTouchActionList;
+  private List<ViewAction<T>> actionList;
 
   /**
    * Constructor.
    * 
    * @param viewId
    *          Id of view that triggers the action.
+   * @param trigger
    * @param event
    *          Type of event that triggers the action.
    */
-  public CompositeViewAction(int viewId) {
-    super(viewId, null);
-    onClickActionList = new ArrayList<ViewAction<T>>();
-    onLongClickActionList = new ArrayList<ViewAction<T>>();
-    onTouchActionList = new ArrayList<ViewAction<T>>();
+  public CompositeViewAction(int viewId, TriggerType trigger) {
+    super(viewId, trigger);
+    actionList = new ArrayList<ViewAction<T>>();
   }
 
   /**
@@ -46,69 +39,12 @@ public class CompositeViewAction<T> extends BaseViewAction<T> implements ViewAct
    *          action is executed.
    */
   public void registerAction(ViewAction<T> action) {
-    switch (action.getTriggerType()) {
-      case CLICK:
-        onClickActionList.add(action);
-        break;
-      case LONG_CLICK:
-        onLongClickActionList.add(action);
-        break;
-      case TOUCH:
-      case TOUCH_DOWN:
-      case TOUCH_UP:
-        onTouchActionList.add(action);
-        break;
-      default:
-        break;
-    }
+    actionList.add(action);
   }
 
-  /**
-   * Provides the list of actions for Click trigger type
-   * 
-   * @return List of actions on a view given the trigger type
-   */
-  public List<ViewAction<T>> getOnClickActionList() {
-    return onClickActionList;
-  }
-
-  /**
-   * Provides the list of actions for LongClick trigger type
-   * 
-   * @return List of actions on a view given the trigger type
-   */
-  public List<ViewAction<T>> getOnLongClickActionList() {
-    return onLongClickActionList;
-  }
-
-  /**
-   * Provides the list of actions for Touch trigger type
-   * 
-   * @return List of actions on a view given the trigger type
-   */
-  public List<ViewAction<T>> getOnTouchActionList() {
-    return onTouchActionList;
-  }
 
   @Override
   public boolean doAction(View view, ViewActionTrigger trigger, ViewDetail viewDetail) {
-    List<ViewAction<T>> actionList = null;
-    switch (trigger.getTriggerType()) {
-      case CLICK:
-        actionList = getOnClickActionList();
-        break;
-      case LONG_CLICK:
-        actionList = getOnLongClickActionList();
-        break;
-      case TOUCH:
-      case TOUCH_DOWN:
-      case TOUCH_UP:
-        actionList = getOnTouchActionList();
-        break;
-      default:
-        return false;
-    }
-
     for (ViewAction<T> action : actionList) {
       action.performAction(view, trigger, viewDetail);
     }
@@ -118,7 +54,7 @@ public class CompositeViewAction<T> extends BaseViewAction<T> implements ViewAct
 
   @Override
   public ViewAction<T> cloneInstance() {
-    return new CompositeViewAction<T>(getViewId());
+    return new CompositeViewAction<T>(getViewId(), getTriggerType());
   }
 
   @Override

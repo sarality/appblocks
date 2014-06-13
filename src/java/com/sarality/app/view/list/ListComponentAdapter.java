@@ -2,14 +2,14 @@ package com.sarality.app.view.list;
 
 import java.util.List;
 
-import com.sarality.app.view.action.ViewAction;
-
 import android.app.Activity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+
+import com.sarality.app.view.action.ComponentActionManager;
 
 /**
  * An ArrayAdapter for a List Component.
@@ -25,15 +25,15 @@ class ListComponentAdapter<T> extends ArrayAdapter<T> {
   private final Activity context;
   private final ListRowRenderer<T> rowRenderer;
   private List<T> rowValueList;
-  private final List<ViewAction<T>> actionList;
+  private final ComponentActionManager<T> componentManager;
 
   ListComponentAdapter(Activity context, ListRowRenderer<T> rowRenderer, List<T> rowValueList, 
-      List<ViewAction<T>> actionList) {
+      ComponentActionManager<T> componentManager) {
     super(context, 0, rowValueList);
     this.context = context;
     this.rowRenderer = rowRenderer;
     this.rowValueList = rowValueList;
-    this.actionList = actionList;
+    this.componentManager = componentManager;
   }
 
   public void reinitalize(List<T> data){
@@ -60,7 +60,7 @@ class ListComponentAdapter<T> extends ArrayAdapter<T> {
     rowRenderer.render(rowView, viewCache, rowValue);
 
     // Setup actions on the new row
-    rowRenderer.setupActions(rowView, viewCache, rowValue, actionList);
+    rowRenderer.setupActions(rowView, viewCache, rowValue, componentManager);
     return rowView;
   }
 

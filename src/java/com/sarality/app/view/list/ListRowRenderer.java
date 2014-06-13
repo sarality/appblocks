@@ -1,24 +1,24 @@
 package com.sarality.app.view.list;
 
-import java.util.List;
-
-import com.sarality.app.view.action.ViewAction;
-
 import android.view.View;
+
+import com.sarality.app.view.action.ComponentActionManager;
 
 /**
  * Interface for classes that render a row in a List View.
  * 
  * @author abhideep@dothat.in (Abhideep Singh)
- *
- * @param <T> The type of data that is used to render a row.
+ * 
+ * @param <T>
+ *          The type of data that is used to render a row.
  */
 public interface ListRowRenderer<T> {
 
   /**
    * Returns the id of the Layout to be used for the row.
    * 
-   * @param value Data used to generate the row
+   * @param value
+   *          Data used to generate the row
    * @return Integer Id for the row layout
    */
   public int getRowLayout(T value);
@@ -37,18 +37,25 @@ public interface ListRowRenderer<T> {
   /**
    * Render the given ListView row.
    * 
-   * @param rowView View associated with the row.
-   * @param rowViewCache Cache of the elements inside the View for the row.
-   * @param value Data used to generate the row.
+   * @param rowView
+   *          View associated with the row.
+   * @param rowViewCache
+   *          Cache of the elements inside the View for the row.
+   * @param value
+   *          Data used to generate the row.
    */
   public void render(View rowView, ListRowViewCache rowViewCache, T value);
 
   /**
    * Setup the Actions and corresponding Listeners on the List View row.
    * 
-   * @param rowView View associated with the row.
-   * @param value Data used to generate the row.
-   * @param actionList List of Actions to be setup on the row and it's elements.
+   * @param rowView
+   *          View associated with the row.
+   * @param value
+   *          Data used to generate the row.
+   * @param actionList
+   *          List of Actions to be setup on the row and it's elements.
    */
-  public void setupActions(View rowView, ListRowViewCache rowViewCache, T value, List<ViewAction<T>> actionList);
+  public void
+      setupActions(View rowView, ListRowViewCache rowViewCache, T value, ComponentActionManager<T> actionManager);
 }
