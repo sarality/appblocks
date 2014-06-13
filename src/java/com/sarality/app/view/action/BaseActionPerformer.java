@@ -1,5 +1,7 @@
 package com.sarality.app.view.action;
 
+import java.util.List;
+
 import android.util.Log;
 import android.view.View;
 
@@ -15,8 +17,21 @@ public abstract class BaseActionPerformer<T> {
   
   private static final String TAG = "BaseActionPerformer";
 
+  // The list of actions that needs to be performed
+  private List<ViewAction<T>> actionList;
+
   // The action that needs to be performed
-  private final ViewAction<T> action;
+   private ViewAction<T> action;
+
+ 
+  /**
+   * Constructor.
+   * 
+   * @param actionList Actions that need to be performed.
+   */
+  public BaseActionPerformer(List<ViewAction<T>> actionList) {
+    this.actionList = actionList;
+  }
 
   /**
    * Constructor.
@@ -24,9 +39,9 @@ public abstract class BaseActionPerformer<T> {
    * @param action Action that needs to be performed.
    */
   public BaseActionPerformer(ViewAction<T> action) {
-    this.action = action;
+   this.action = action;
   }
-
+  
   /**
    * @return Action that needs to be performed.
    */
@@ -34,6 +49,13 @@ public abstract class BaseActionPerformer<T> {
     return action;
   }
 
+  /**
+   * @return Actions that need to be performed.
+   */
+  protected List<ViewAction<T>> getActionList() {
+    return actionList;
+  }
+  
   /**
    * Indicated whether the listener is being setup of the same
    * view that was defined in the ViewAction.

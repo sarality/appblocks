@@ -1,13 +1,9 @@
 package com.sarality.app.view.action;
 
-import com.sarality.app.view.action.BaseViewAction;
-import com.sarality.app.view.action.TriggerType;
-import com.sarality.app.view.action.ViewAction;
-import com.sarality.app.view.action.ViewActionTrigger;
-import com.sarality.app.view.action.ViewDetail;
-import com.sarality.app.view.dialog.AlertDialogComponent;
-
+import android.util.Log;
 import android.view.View;
+
+import com.sarality.app.view.dialog.AlertDialogComponent;
 
 /**
  * Action that would close the Dialog
@@ -32,6 +28,7 @@ public class DismissAlertDialogAction<T> extends BaseViewAction<T> implements Vi
 
   @Override
   public boolean doAction(View view, ViewActionTrigger actionDetail, ViewDetail viewDetail) {
+    Log.d("DismissAlertDialogAction", "I dismissed it!!");
     alertDialog.dismiss();
     return true;
   }
