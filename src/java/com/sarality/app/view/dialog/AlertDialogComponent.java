@@ -54,6 +54,11 @@ public class AlertDialogComponent<T> {
     actionList.add(action);
   }
 
+  /**
+   * Return the Dialog Type
+   * 
+   * @return Dialog Type
+   */
   public DialogType getDialogType() {
     return dialogType;
   }
@@ -78,11 +83,17 @@ public class AlertDialogComponent<T> {
         showDialogWithView(data);
         break;
       default:
-       return;
+        return;
     }
     dialog.show();
   }
 
+  /**
+   * Display the Dialog if it was setup with a view
+   * 
+   * @param data
+   *          Data to be used to set on the dialog
+   */
   private void showDialogWithView(T data) {
     Log.d(TAG, "Show View Dialog");
     AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -94,6 +105,14 @@ public class AlertDialogComponent<T> {
     dialog = builder.create();
   }
 
+  /**
+   * Display the Dialog with plain text
+   * 
+   * @param view
+   *          Reference view
+   * @param data
+   *          Data to be used to set on the dialog
+   */
   private void showDialogWithText(View view, T data) {
     Log.d(TAG, "Show Text Dialog " + view.getId());
     AlertDialog.Builder builder = new AlertDialog.Builder(context);
