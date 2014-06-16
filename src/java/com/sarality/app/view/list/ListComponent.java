@@ -6,6 +6,7 @@ import java.util.List;
 import android.support.v4.app.FragmentActivity;
 import android.widget.ListView;
 
+import com.sarality.app.view.action.ComponentActionManager;
 import com.sarality.app.view.action.ViewAction;
 import com.sarality.app.view.datasource.DataSource;
 
@@ -105,7 +106,8 @@ public class ListComponent<T> {
     * @param data
     */
   public void render(List<T> data){
-    adapter = new ListComponentAdapter<T>(activity, rowRenderer, data, getRowActions());
+    ComponentActionManager<T> componentActionManager = new ComponentActionManager<T>(getRowActions());
+    adapter = new ListComponentAdapter<T>(activity, rowRenderer, data, componentActionManager);
     view.setAdapter(adapter);
   }
 
