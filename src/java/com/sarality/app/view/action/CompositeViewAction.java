@@ -42,23 +42,27 @@ public class CompositeViewAction<T> extends BaseViewAction<T> implements ViewAct
     actionList.add(action);
   }
 
-
   @Override
   public boolean doAction(View view, ViewActionTrigger trigger, ViewDetail viewDetail) {
     for (ViewAction<T> action : actionList) {
       action.performAction(view, trigger, viewDetail);
     }
-
     return true;
   }
 
   @Override
   public ViewAction<T> cloneInstance() {
-    return new CompositeViewAction<T>(getViewId(), getTriggerType());
+    CompositeViewAction<T> newCompositeAction =  new CompositeViewAction<T>(getViewId(), getTriggerType());
+    for (ViewAction<T> action : actionList) {
+      newCompositeAction.registerAction(action.cloneInstance());
+    }
+    return newCompositeAction;
   }
 
   @Override
   public void prepareView(View view, T value) {
-    // Do nothing
+    for (ViewAction<T> action : actionList) {
+      action.prepareView(view, value);
+    }
   }
 }

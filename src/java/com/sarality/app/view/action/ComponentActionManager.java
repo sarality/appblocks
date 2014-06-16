@@ -3,7 +3,6 @@ package com.sarality.app.view.action;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import android.util.Log;
 import android.view.View;
@@ -16,6 +15,7 @@ public class ComponentActionManager<T> {
   // Map of View ID and compositeView Action
   Map<ViewTrigger, ViewAction<T>> viewMap;
 
+  // Complete list of actions for the a component
   private final List<ViewAction<T>> actionList;
 
   /**
@@ -53,11 +53,13 @@ public class ComponentActionManager<T> {
    *          View action
    */
   private void addViewAction(int viewId, TriggerType trigger, ViewAction<T> action) {
-    ViewTrigger viewTrigger = getViewTrigger(viewId, trigger);
+    ViewTrigger viewTrigger = new ViewTrigger(viewId, trigger);
+
     ViewAction<T> actionValue = viewMap.get(viewTrigger);
     if (actionValue == null) {
       viewMap.put(viewTrigger, action);
-    } else if (actionValue.getClass() == CompositeViewAction.class) {
+    } // TODO remove dependency on class
+    else if (actionValue.getClass() == CompositeViewAction.class) {
       CompositeViewAction<T> compositeView = (CompositeViewAction<T>) actionValue;
       compositeView.registerAction(action);
     } else {
@@ -66,27 +68,6 @@ public class ComponentActionManager<T> {
       compositeAction.registerAction(action);
       viewMap.put(viewTrigger, compositeAction);
     }
-
-  }
-
-  /**
-   * Gets the VieTrigger class given the viewId and Trigger Type
-   * 
-   * @param viewId
-   *          View Id
-   * @param trigger
-   *          Trigger type input
-   * @return returns the key for the mapping table or creates new instance of
-   *         the class
-   */
-  private ViewTrigger getViewTrigger(int viewId, TriggerType trigger) {
-    Set<ViewTrigger> viewTriggerSet = viewMap.keySet();
-    for (ViewTrigger viewTriggerElement : viewTriggerSet) {
-      if (viewTriggerElement.getViewId() == viewId && viewTriggerElement.getTriggerType() == trigger) {
-        return viewTriggerElement;
-      }
-    }
-    return new ViewTrigger(viewId, trigger);
   }
 
   /**
@@ -100,7 +81,7 @@ public class ComponentActionManager<T> {
    *          Custom data to be set for the action
    */
   public void setupActions(View layout, T value) {
-    for (ViewAction<T> action : actionList) {
+    for (ViewAction<T> action : viewMap.values()) {
       View view = layout.findViewById(action.getViewId());
       if (view == null) {
         String message = "Invalid Configuration for " + action.getTriggerType() + " Event. No View with Id "
@@ -110,29 +91,24 @@ public class ComponentActionManager<T> {
         throw exception;
       }
       action.prepareView(view, value);
+      setActionPerformer(view, action);
     }
-    setActionPerformer(layout);
   }
 
   /**
-   * Sets up the Action performer from the list of actions
+   * Sets up the Action performer for a particular kind of trigger 
    * 
    * @param layout
    *          layout view on which the actions are set
    */
-  private void setActionPerformer(View layout) {
-
-    for (ViewAction<T> action : viewMap.values()) {
-      View view = layout.findViewById(action.getViewId());
-
-      if (action.getTriggerType() == TriggerType.CLICK) {
-        new ClickActionPerformer<T>(action).setupListener(view);
-      } else if (action.getTriggerType() == TriggerType.LONG_CLICK) {
-        new LongClickActionPerformer<T>(action).setupListener(view);
-      } else if (action.getTriggerType() == TriggerType.TOUCH || action.getTriggerType() == TriggerType.TOUCH_DOWN
-          || action.getTriggerType() == TriggerType.TOUCH_UP) {
-        new TouchActionPerformer<T>(action).setupListener(view);
-      }
+  private void setActionPerformer(View view, ViewAction<T> action) {
+    if (action.getTriggerType() == TriggerType.CLICK) {
+      new ClickActionPerformer<T>(action).setupListener(view);
+    } else if (action.getTriggerType() == TriggerType.LONG_CLICK) {
+      new LongClickActionPerformer<T>(action).setupListener(view);
+    } else if (action.getTriggerType() == TriggerType.TOUCH || action.getTriggerType() == TriggerType.TOUCH_DOWN
+        || action.getTriggerType() == TriggerType.TOUCH_UP) {
+      new TouchActionPerformer<T>(action).setupListener(view);
     }
   }
 }
