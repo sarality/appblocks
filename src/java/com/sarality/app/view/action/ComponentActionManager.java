@@ -10,13 +10,10 @@ import android.view.View;
 public class ComponentActionManager<T> {
 
   // Tag for Logging
-  private static final String TAG = "ComponentAction";
+  private static final String TAG = "ComponentActionManager";
 
   // Map of View ID and compositeView Action
-  Map<ViewTrigger, ViewAction<T>> viewMap;
-
-  // Complete list of actions for the a component
-  private final List<ViewAction<T>> actionList;
+  private final Map<ViewTrigger, ViewAction<T>> viewMap;
 
   /**
    * Constructor
@@ -26,15 +23,7 @@ public class ComponentActionManager<T> {
    *          mapping between <View,Trigger> and <List of actions>
    */
   public ComponentActionManager(List<ViewAction<T>> actionList) {
-    this.actionList = actionList;
-    viewMap = new HashMap<ViewTrigger, ViewAction<T>>();
-    init();
-  }
-
-  /**
-   * Initializes the mapping
-   */
-  public void init() {
+    this.viewMap = new HashMap<ViewTrigger, ViewAction<T>>();
     for (ViewAction<T> action : actionList) {
       addViewAction(action.getViewId(), action.getTriggerType(), action);
     }

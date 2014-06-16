@@ -55,6 +55,11 @@ public class ViewTrigger {
     return result;
   }
 
+  
+  private boolean equals(Object a, Object b) {
+    return a == b || (a != null && a.equals(b));
+  }
+
   /*
    * (non-Javadoc)
    * 
@@ -62,17 +67,10 @@ public class ViewTrigger {
    */
   @Override
   public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
-    ViewTrigger other = (ViewTrigger) obj;
-    if (trigger != other.trigger)
-      return false;
-    if (viewId != other.viewId)
-      return false;
-    return true;
+    if (obj != null && obj instanceof ViewTrigger) {
+      ViewTrigger viewTrigger = (ViewTrigger) obj;
+      return equals(viewId, viewTrigger.getViewId()) && equals(trigger, viewTrigger.getTriggerType());
+    }
+    return false;
   }
 }
