@@ -33,7 +33,7 @@ public class DisplayAlertDialogAction<T> extends BaseViewAction<T> implements Vi
 
   @Override
   public boolean doAction(View view, ViewActionTrigger actionDetail, ViewDetail viewDetail) {
-    alertDialog.init(view, data);
+    alertDialog.init(data);
     return true;
   }
 
