@@ -167,7 +167,15 @@ public abstract class Table<T extends DataObject<T>> extends AbstractWritableDat
    * @return List of data that was returned for the query
    */
   public List<T> query(Query query) {
-    Cursor cursor = database.query(getName(), new String[] {}, null, null, null, null, null);
+    Cursor cursor = null;
+
+    if (query == null) {
+      cursor = database.query(getName(), new String[] {}, null, null, null, null, null);
+    } else {
+      cursor = database.query(getName(), query.getColumns(), query.getWhereClause(), query.getWhereClauseValues(),
+          null, null, query.getOrderBy());
+    }
+
     CursorDataExtractor<T> extractor = getCursorDataExtractor();
     List<T> dataList = new ArrayList<T>();
 
