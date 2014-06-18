@@ -14,9 +14,9 @@ import android.util.Log;
 import com.sarality.app.data.DataObject;
 import com.sarality.app.datastore.AbstractWritableDataStore;
 import com.sarality.app.datastore.Column;
-import com.sarality.app.datastore.Query;
 import com.sarality.app.datastore.extractor.CursorDataExtractor;
 import com.sarality.app.datastore.populator.ContentValuesPopulator;
+import com.sarality.app.datastore.query.Query;
 
 /**
  * Provides the ability to create and update a SqlLite table and then read and

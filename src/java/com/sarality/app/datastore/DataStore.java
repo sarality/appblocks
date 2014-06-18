@@ -6,6 +6,7 @@ import android.content.Context;
 
 import com.sarality.app.data.DataObject;
 import com.sarality.app.datastore.extractor.CursorDataExtractor;
+import com.sarality.app.datastore.query.Query;
 
 /**
  * Interface for all classes that implement the ability to fetch DataObjects from a store

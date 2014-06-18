@@ -6,7 +6,6 @@ import java.util.List;
 import com.sarality.app.common.collect.Lists;
 import com.sarality.app.datastore.Column;
 import com.sarality.app.datastore.DataStore;
-import com.sarality.app.datastore.Query;
 
 /**
  * Class used to build Query to either query or update a data store.
@@ -28,7 +27,9 @@ public class QueryBuilder {
   private final List<Operator> operatorList = new ArrayList<Operator>();
 
   // Indicates in what order should the rows be returned
-  private OrderBy orderBy;
+  private Column orderByCol;
+
+  private Boolean orderByDesc;
 
   /**
    * Constructor.
@@ -85,65 +86,70 @@ public class QueryBuilder {
   /**
    * Start generating a filter for the query that needs to be run.
    * <p>
-   * This must be followed by a call to one of the FilterTagert.operator(value)
-   * methods to add the filter to the QueryBuilder.
+   * This must be followed by a call to one of the FilterTagert.operator(value) methods to add the filter to the
+   * QueryBuilder.
    * 
    * @param column
    *          Column to define the filter on.
-   * @return The FilterTarget from which the resulting QueryBuilder can be
-   *         generated.
+   * @return The FilterTarget from which the resulting QueryBuilder can be generated.
    */
   public FilterTarget where(Column column) {
     return new FilterTarget(this, column, null);
   }
 
   /**
-   * Define another filter for the query by doing an intersection with the
-   * existing filters already defined for the query.
+   * Define another filter for the query by doing an intersection with the existing filters already defined for the
+   * query.
    * <p>
-   * This must followed by a call to one of the FilterTagert.operator(value)
-   * methods to add the filter to the QueryBuilder.
+   * This must followed by a call to one of the FilterTagert.operator(value) methods to add the filter to the
+   * QueryBuilder.
    * 
    * @param column
    *          Column to define the filter on.
-   * @return The FilterTarget from which the resulting QueryBuilder can be
-   *         generated.
+   * @return The FilterTarget from which the resulting QueryBuilder can be generated.
    */
   public FilterTarget and(Column column) {
     return new FilterTarget(this, column, Operator.AND);
   }
 
   /**
-   * Define another filter for the query by doing a union with the existing
-   * filters already defined for the query.
+   * Define another filter for the query by doing a union with the existing filters already defined for the query.
    * <p>
-   * This must followed by a call to one of the FilterTagert.operator(value)
-   * methods to add the filter to the QueryBuilder.
+   * This must followed by a call to one of the FilterTagert.operator(value) methods to add the filter to the
+   * QueryBuilder.
    * 
    * @param column
    *          Column to define the filter on.
-   * @return The FilterTarget from which the resulting QueryBuilder can be
-   *         generated.
+   * @return The FilterTarget from which the resulting QueryBuilder can be generated.
    */
   public FilterTarget or(Column column) {
     return new FilterTarget(this, column, Operator.OR);
   }
 
   /**
-   * Builds the query to allow rows to be returned in a order defined by a
-   * specific column
+   * Builds the query to allow rows to be returned in a order defined by a specific column
    * 
    * @param column
    *          Column to define the filter on.
+   * @return The current QueryBuilder
+   */
+  public QueryBuilder orderBy(Column column) {
+    orderByCol = column;
+    return this;
+  }
+
+  /**
+   * The order in which the sorting needs to be done
+   * 
    * @param order
    *          Ascending or descending order
    * @return The current QueryBuilder
    */
-  public QueryBuilder orderBy(Column column, OrderBy.Order order) {
-    orderBy = new OrderBy(column).setOrderBy(order);
+  public QueryBuilder orderByDesc(Boolean order) {
+    orderByDesc = order;
     return this;
   }
-
+  
   /**
    * @return Query object defined by the builder.
    */
@@ -183,12 +189,17 @@ public class QueryBuilder {
       whereClause = null;
     }
 
-    return new Query(columnList, whereClause, valueList, orderBy.toString());
+    String orderByStr = orderByCol.toString();
+    if(orderByDesc)
+      orderByStr = orderByStr.concat(" DESC");
+    else
+      orderByStr = orderByStr.concat(" ASC");
+
+    return new Query(columnList, whereClause, valueList, orderByStr);
   }
 
   /**
-   * Package protected Method called by FilterTarget to add an intersection
-   * Filter to the Builder
+   * Package protected Method called by FilterTarget to add an intersection Filter to the Builder
    * 
    * @param column
    *          Column to set the filter on
@@ -204,8 +215,7 @@ public class QueryBuilder {
   }
 
   /**
-   * Package protected Method called by FilterTarget to add a union Filter to
-   * the Builder
+   * Package protected Method called by FilterTarget to add a union Filter to the Builder
    * 
    * @param column
    *          Column to set the filter on
@@ -221,8 +231,7 @@ public class QueryBuilder {
   }
 
   /**
-   * Package protected Method called by FilterTarget to add a union Filter to
-   * the Builder
+   * Package protected Method called by FilterTarget to add a union Filter to the Builder
    * 
    * @param column
    *          Column to set the filter on
@@ -240,8 +249,7 @@ public class QueryBuilder {
   }
 
   /**
-   * Package protected Method called by FilterTarget to add an intersection
-   * Filter to the Builder
+   * Package protected Method called by FilterTarget to add an intersection Filter to the Builder
    * 
    * @param column
    *          Column to set the filter on

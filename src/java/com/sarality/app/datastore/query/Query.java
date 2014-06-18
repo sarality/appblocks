@@ -1,6 +1,8 @@
-package com.sarality.app.datastore;
+package com.sarality.app.datastore.query;
 
 import java.util.List;
+
+import com.sarality.app.datastore.Column;
 
 /**
  * Query to fetch data from a DataStore.
@@ -30,11 +32,8 @@ public class Query {
    * @param whereClauseValueList
    *          Query on specific columns with specific values
    */
-  public Query(List<Column> columns, String whereClause, List<String> whereClauseValueList) {
-    this.columns = columns;
-    this.whereClause = whereClause;
-    this.whereColumnValueList = whereClauseValueList;
-    this.orderBy = null;
+  protected Query(List<Column> columns, String whereClause, List<String> whereClauseValueList) {
+    this(columns,whereClause,whereClauseValueList, null);
   }
 
   /**
@@ -49,7 +48,7 @@ public class Query {
    * @param orderBy
    *          Return result in a specific order
    */
-  public Query(List<Column> columns, String whereClause, List<String> whereClauseValueList, String orderBy) {
+  protected Query(List<Column> columns, String whereClause, List<String> whereClauseValueList, String orderBy) {
     this.columns = columns;
     this.whereClause = whereClause;
     this.whereColumnValueList = whereClauseValueList;
@@ -59,7 +58,7 @@ public class Query {
   /**
    * Constructor Empty query
    */
-  public Query() {
+  protected Query() {
     this(null, null, null, null);
   }
 

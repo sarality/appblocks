@@ -11,13 +11,13 @@ import com.sarality.app.datastore.BaseFieldColumnConfigProvider;
 import com.sarality.app.datastore.ColumnDataType;
 import com.sarality.app.datastore.ColumnFormat;
 import com.sarality.app.datastore.ColumnSpec;
-import com.sarality.app.datastore.Query;
 import com.sarality.app.datastore.extractor.BooleanValueExtractor;
 import com.sarality.app.datastore.extractor.DateValueExtractor;
 import com.sarality.app.datastore.extractor.GenericCursorDataExtractor;
 import com.sarality.app.datastore.extractor.LongValueExtractor;
 import com.sarality.app.datastore.extractor.MappedEnumValueExtractor;
 import com.sarality.app.datastore.extractor.StringValueExtractor;
+import com.sarality.app.datastore.query.Query;
 import com.sarality.app.datastore.sms.SmsMessage.MessageType;
 
 public class SmsDataStore extends AbstractContentResolverDataStore<SmsMessage> {
