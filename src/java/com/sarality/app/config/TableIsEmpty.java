@@ -2,8 +2,8 @@ package com.sarality.app.config;
 
 import java.util.List;
 
-import com.sarality.app.datastore.Query;
 import com.sarality.app.datastore.db.Table;
+import com.sarality.app.datastore.query.Query;
 
 public class TableIsEmpty implements AppStateValue<Boolean> {
 
@@ -16,7 +16,7 @@ public class TableIsEmpty implements AppStateValue<Boolean> {
   @Override
   public Boolean getValue() {
     table.open();
-    List<?> dataList = table.query(new Query());
+    List<?> dataList = table.query(null);
     return dataList.isEmpty();
   }
 

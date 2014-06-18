@@ -2,6 +2,7 @@ package com.sarality.app.datastore;
 
 import com.sarality.app.data.DataObject;
 import com.sarality.app.datastore.populator.ContentValuesPopulator;
+import com.sarality.app.datastore.query.Query;
 
 /**
  * An interface for all classes that can not only read by insert and update items in a {@code DataStore}.

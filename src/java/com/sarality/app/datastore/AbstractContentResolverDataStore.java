@@ -11,6 +11,7 @@ import android.util.Log;
 
 import com.sarality.app.data.DataObject;
 import com.sarality.app.datastore.extractor.CursorDataExtractor;
+import com.sarality.app.datastore.query.Query;
 
 public abstract class AbstractContentResolverDataStore<T extends DataObject<T>>
     extends AbstractDataStore<T> implements DataStore<T> {

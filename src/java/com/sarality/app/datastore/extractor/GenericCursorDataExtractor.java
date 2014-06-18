@@ -10,7 +10,7 @@ import android.database.Cursor;
 import com.sarality.app.data.FieldBasedDataObject;
 import com.sarality.app.datastore.Column;
 import com.sarality.app.datastore.FieldColumnConfig;
-import com.sarality.app.datastore.Query;
+import com.sarality.app.datastore.query.Query;
 
 public abstract class GenericCursorDataExtractor<T extends FieldBasedDataObject<T>> implements CursorDataExtractor<T> {
 

@@ -14,9 +14,9 @@ import android.util.Log;
 import com.sarality.app.data.DataObject;
 import com.sarality.app.datastore.AbstractWritableDataStore;
 import com.sarality.app.datastore.Column;
-import com.sarality.app.datastore.Query;
 import com.sarality.app.datastore.extractor.CursorDataExtractor;
 import com.sarality.app.datastore.populator.ContentValuesPopulator;
+import com.sarality.app.datastore.query.Query;
 
 /**
  * Provides the ability to create and update a SqlLite table and then read and
@@ -167,7 +167,15 @@ public abstract class Table<T extends DataObject<T>> extends AbstractWritableDat
    * @return List of data that was returned for the query
    */
   public List<T> query(Query query) {
-    Cursor cursor = database.query(getName(), new String[] {}, null, null, null, null, null);
+    Cursor cursor = null;
+
+    if (query == null) {
+      cursor = database.query(getName(), new String[] {}, null, null, null, null, null);
+    } else {
+      cursor = database.query(getName(), query.getColumns(), query.getWhereClause(), query.getWhereClauseValues(),
+          null, null, query.getOrderBy());
+    }
+
     CursorDataExtractor<T> extractor = getCursorDataExtractor();
     List<T> dataList = new ArrayList<T>();
 
