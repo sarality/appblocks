@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.sarality.app.data.DataObject;
 import com.sarality.app.datastore.DataStore;
-import com.sarality.app.datastore.Query;
+import com.sarality.app.datastore.query.Query;
 
 public class DataStoreSource<T extends DataObject<T>> implements DataSource<T> {
 

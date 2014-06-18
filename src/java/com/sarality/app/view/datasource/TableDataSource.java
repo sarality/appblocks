@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sarality.app.data.DataObject;
-import com.sarality.app.datastore.Query;
 import com.sarality.app.datastore.db.Table;
+import com.sarality.app.datastore.query.Query;
 
 public class TableDataSource<T extends DataObject<T>> implements DataSource<T> {
   private final Table<T> table;

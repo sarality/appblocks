@@ -1,9 +1,9 @@
 package com.sarality.app.datastore.extractor;
 
-import com.sarality.app.data.DataObject;
-import com.sarality.app.datastore.Query;
-
 import android.database.Cursor;
+
+import com.sarality.app.data.DataObject;
+import com.sarality.app.datastore.query.Query;
 
 /**
  * Interface for all classes that extract a data object from a database cursor.
