@@ -32,7 +32,7 @@ import com.sarality.app.view.action.ViewAction;
 public class NavigationDrawer {
   private ListView drawerList;
   private List<String> labelList = Lists.of();
-  private List<ViewAction> actionList = Lists.of();
+  private List<ViewAction<?>> actionList = Lists.of();
 
   private final int drawerListViewId;
   private final int drawerListItemViewId;
@@ -62,7 +62,7 @@ public class NavigationDrawer {
     // drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
   }
 
-  public void registerListItem(String label, ViewAction action) {
+  public void registerListItem(String label, ViewAction<?> action) {
     labelList.add(label);
     actionList.add(action);
   }

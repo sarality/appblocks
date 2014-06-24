@@ -3,7 +3,6 @@ package com.sarality.app.config;
 import java.util.List;
 
 import com.sarality.app.datastore.db.Table;
-import com.sarality.app.datastore.query.Query;
 
 public class TableIsEmpty implements AppStateValue<Boolean> {
 
