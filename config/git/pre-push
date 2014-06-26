@@ -15,11 +15,9 @@ fi
 # Check if we are pushing to a protected branch
 
 protected_branch='master'
-echo $protected_branch
 
 # Look for last token after / in ref/head.master to get current branch
 current_branch=$(git symbolic-ref HEAD | sed -e 's,.*/\(.*\),\1,')
-echo $current_branch
 
 if [ "$current_branch" == "$protected_branch" ]
 then
