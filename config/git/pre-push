@@ -21,7 +21,7 @@ echo $protected_branch
 current_branch=$(git symbolic-ref HEAD | sed -e 's,.*/\(.*\),\1,')
 echo $current_branch
 
-if [ "$current_branch" == $protected_branch ]
+if [ "$current_branch" == "$protected_branch" ]
 then
     echo "WARNING!!!! You are trying to push to the master"
     echo "Please send a push request and then merge with master"
