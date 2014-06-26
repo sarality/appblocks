@@ -27,3 +27,6 @@ proguard/
 *.ipr
 *.iws
 .idea/
+
+#Mac auto-genetated files
+.DS_Store
