@@ -2,6 +2,8 @@ package com.sarality.app.datastore.query;
 
 import java.util.List;
 
+import android.util.Pair;
+
 import com.sarality.app.datastore.Column;
 
 /**
@@ -10,62 +12,45 @@ import com.sarality.app.datastore.Column;
  * @author abhideep@ (Abhideep Singh)
  */
 public class Query {
-  // List of columns of the datasource that will be returned from the query
+  // List of columns of the Data Source that will be returned from the query
   private final List<Column> columns;
 
-  // Where args
+  // List of filters for the query
+  private final List<QueryFilter> filterList;
+  // Where clause for the query
   private final String whereClause;
+  // Values to be used for parameters of where clause.
+  private final List<String> whereClauseValueList;
 
-  // where values
-  private final List<String> whereColumnValueList;
-
-  // ordering of the query result
-  private final String orderBy;
-
-  /**
-   * Constructor
-   * 
-   * @param columns
-   *          Specific columns to be returned
-   * @param whereClause
-   *          Query on specific columns
-   * @param whereClauseValueList
-   *          Query on specific columns with specific values
-   */
-  protected Query(List<Column> columns, String whereClause, List<String> whereClauseValueList) {
-    this(columns,whereClause,whereClauseValueList, null);
-  }
+  // List of filters for the query
+  private final List<Pair<Column, Boolean>> orderByColumnList;
+  // Order by clause for the query
+  private final String orderByClause;
 
   /**
-   * Constructor
+   * Constructor.
    * 
-   * @param columns
-   *          Specific columns to be returned
-   * @param whereClause
-   *          Query on specific columns
-   * @param whereClauseValueList
-   *          Query on specific columns with specific values
-   * @param orderBy
-   *          Return result in a specific order
+   * @param columns Specific columns to be returned
+   * @param filterList List of QueryFilters that needed to applied on the DataSource.
+   * @param orderByColumnList The List of Columns to sort the data by.
+   * @param whereClause SQL Where clause for the query
+   * @param whereClauseValueList List of String values for the parameters in the Where clause.
+   * @param orderByClause Order by Clause as a String.
    */
-  protected Query(List<Column> columns, String whereClause, List<String> whereClauseValueList, String orderBy) {
+  protected Query(List<Column> columns, List<QueryFilter> filterList, List<Pair<Column, Boolean>> orderByColumnList,
+      String whereClause, List<String> whereClauseValueList, String orderByClause) {
     this.columns = columns;
+    this.filterList = filterList;
+    this.orderByColumnList = orderByColumnList;
     this.whereClause = whereClause;
-    this.whereColumnValueList = whereClauseValueList;
-    this.orderBy = orderBy;
-  }
-
-  /**
-   * Constructor Empty query
-   */
-  protected Query() {
-    this(null, null, null, null);
+    this.whereClauseValueList = whereClauseValueList;
+    this.orderByClause = orderByClause;
   }
 
   /**
    * Returns the list of columns
    * 
-   * @return Return as String[] as required as sqldatabase
+   * @return Return as String[] as required by SQL Database
    */
   public String[] getColumns() {
     if (columns == null)
@@ -79,32 +64,41 @@ public class Query {
   }
 
   /**
-   * Returns the store whereclause
-   * 
-   * @return
+   * @return List of @ link QueryFilter} s that is used to generate the WhereClause and WhereClauseValues.
+   */
+  public List<QueryFilter> getFilterList() {
+    return filterList;
+  }
+
+  /**
+   * @return List of columns to order the results by and where the sorting needs to be done is ascending or descending
+   *         order.
+   */
+  public List<Pair<Column, Boolean>> getOrderByColumnList() {
+    return orderByColumnList;
+  }
+
+  /**
+   * @return The where clause for the query.
    */
   public String getWhereClause() {
     return whereClause;
   }
 
   /**
-   * Returns the values for the whereclause
-   * 
-   * @return
+   * @return Values for the parameters in the where clause.
    */
   public String[] getWhereClauseValues() {
-    if (whereColumnValueList == null || whereColumnValueList.size() < 1) {
+    if (whereClauseValueList == null || whereClauseValueList.size() < 1) {
       return null;
     }
-    return whereColumnValueList.toArray(new String[whereColumnValueList.size()]);
+    return whereClauseValueList.toArray(new String[whereClauseValueList.size()]);
   }
 
   /**
-   * Returns the orderBy value
-   * 
-   * @return
+   * @return The order by clause.
    */
   public String getOrderBy() {
-    return orderBy;
+    return orderByClause;
   }
 }
