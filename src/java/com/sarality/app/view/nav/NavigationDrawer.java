@@ -64,14 +64,14 @@ public class NavigationDrawer {
 
   public void registerListItem(String label, ViewAction<?> action) {
     labelList.add(label);
-    actionList.add(action);
+    actionList.add(action);       
   }
 
   // TODO(abhideep): Replace with ViewAction
   private class ItemClickListener implements ListView.OnItemClickListener {
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-      // TODO Auto-generated method stub
+      
     }
   }
 
