@@ -89,7 +89,7 @@ public class ComponentActionManager<T> {
     } else if (action.getTriggerType() == TriggerType.TOUCH || action.getTriggerType() == TriggerType.TOUCH_DOWN
         || action.getTriggerType() == TriggerType.TOUCH_UP) {
       new TouchActionPerformer<T>(action).setupListener(view);
-    } else if (action.getTriggerType() == TriggerType.ITEM_CLICK) {
+    } else if (action.getTriggerType() == TriggerType.CLICK_LIST_ITEM) {
       new ListItemClickActionPerformer<T>(action).setupListener(view);
     }
   }

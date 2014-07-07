@@ -7,7 +7,6 @@ import com.sarality.app.view.action.ViewActionTrigger;
 import com.sarality.app.view.action.ViewDetail;
 import com.sarality.app.view.dialog.AlertDialogComponent;
 
-import android.util.Log;
 import android.view.View;
 
 /**
@@ -17,7 +16,7 @@ import android.view.View;
  */
 public class DismissAlertDialogAction<T> extends BaseViewAction<T> implements ViewAction<T> {
 
-  private AlertDialogComponent<T> alertDialog;
+  private final AlertDialogComponent<T> alertDialog;
 
   /**
    * Constructor.
@@ -34,14 +33,12 @@ public class DismissAlertDialogAction<T> extends BaseViewAction<T> implements Vi
 
   @Override
   public boolean doAction(View view, ViewActionTrigger actionDetail, ViewDetail viewDetail) {
-    Log.d("DismissAlertDialogAction", "Dismiss AlertDialog");
     alertDialog.dismiss();
     return true;
   }
 
   @Override
   public void prepareView(View view, T input) {
-    Log.d("DismissAlertDialogAction", "Prepare View");
     // Do nothing
   }
 

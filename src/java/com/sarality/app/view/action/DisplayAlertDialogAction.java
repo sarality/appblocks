@@ -1,13 +1,10 @@
 package com.sarality.app.view.action;
 
-import com.sarality.app.view.action.BaseViewAction;
-import com.sarality.app.view.action.TriggerType;
-import com.sarality.app.view.action.ViewAction;
-import com.sarality.app.view.action.ViewActionTrigger;
-import com.sarality.app.view.action.ViewDetail;
-import com.sarality.app.view.dialog.AlertDialogComponent;
+import java.util.Map;
 
 import android.view.View;
+
+import com.sarality.app.view.dialog.AlertDialogComponent;
 
 /**
  * Action that would display an alert Dialog.
@@ -15,7 +12,7 @@ import android.view.View;
  * @author sunayna@ (Sunayna Uberoy)
  */
 public class DisplayAlertDialogAction<T> extends BaseViewAction<T> implements ViewAction<T> {
-  private T data;
+  private Map<String,?> data;
   private final AlertDialogComponent<T> alertDialog;
 
   /**
@@ -33,7 +30,7 @@ public class DisplayAlertDialogAction<T> extends BaseViewAction<T> implements Vi
 
   @Override
   public boolean doAction(View view, ViewActionTrigger actionDetail, ViewDetail viewDetail) {
-   // alertDialog.init(view, data);
+    alertDialog.init(data);
     return true;
   }
 
@@ -44,8 +41,9 @@ public class DisplayAlertDialogAction<T> extends BaseViewAction<T> implements Vi
     return action;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public void prepareView(View view, T input) {
-    this.data = input;
+    this.data =(Map<String, ?>) input;
   }
 }
