@@ -33,7 +33,6 @@ public class NavigationDrawer {
   private ListView drawerList;
   private List<String> labelList = Lists.of();
   private List<ViewAction<?>> actionList = Lists.of();
-   
 
   private final int drawerListViewId;
   private final int drawerListItemViewId;
@@ -43,7 +42,6 @@ public class NavigationDrawer {
    * 
    * @param drawerListViewId <code>int</code> id of the ListView in the DrawerLayout
    * @param drawerLayoutId <code>int</code> id of the DrawerLayout
-   * 
    */
   public NavigationDrawer(int drawerListViewId, int drawerListItemViewId) {
     this.drawerListViewId = drawerListViewId;
@@ -66,8 +64,7 @@ public class NavigationDrawer {
 
   public void registerListItem(String label, ViewAction<?> action) {
     labelList.add(label);
-    actionList.add(action);    
-    
+    actionList.add(action);       
   }
 
   // TODO(abhideep): Replace with ViewAction

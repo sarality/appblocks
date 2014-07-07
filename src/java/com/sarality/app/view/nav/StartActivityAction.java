@@ -15,8 +15,7 @@ import com.sarality.app.view.action.ViewDetail;
  * 
  * @author yogesh@ (Yogesh Kumar)
  * 
- *  @param <T>
- *          Type of data object needed to start the Activity.
+ * @param <T> Type of data object needed to start the Activity.
  */
 public class StartActivityAction<T> extends BaseViewAction<T> {
 
