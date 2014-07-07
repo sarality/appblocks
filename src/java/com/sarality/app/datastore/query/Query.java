@@ -15,15 +15,19 @@ public class Query {
   // List of columns of the Data Source that will be returned from the query
   private final List<Column> columns;
 
+  // The type of filter defined on this query. Indicates whether there are filter conditions
+  // and whether all (AND) or one (OR) of these conditions must be true for the filter to pass.
+  private final FilterType filterType;
   // List of filters for the query
   private final List<QueryFilter> filterList;
+  // List of filters for the query
+  private final List<Pair<Column, Boolean>> orderByColumnList;
+
   // Where clause for the query
   private final String whereClause;
   // Values to be used for parameters of where clause.
   private final List<String> whereClauseValueList;
 
-  // List of filters for the query
-  private final List<Pair<Column, Boolean>> orderByColumnList;
   // Order by clause for the query
   private final String orderByClause;
 
@@ -37,9 +41,11 @@ public class Query {
    * @param whereClauseValueList List of String values for the parameters in the Where clause.
    * @param orderByClause Order by Clause as a String.
    */
-  protected Query(List<Column> columns, List<QueryFilter> filterList, List<Pair<Column, Boolean>> orderByColumnList,
+  protected Query(List<Column> columns, FilterType filterType, 
+      List<QueryFilter> filterList, List<Pair<Column, Boolean>> orderByColumnList, 
       String whereClause, List<String> whereClauseValueList, String orderByClause) {
     this.columns = columns;
+    this.filterType = filterType;
     this.filterList = filterList;
     this.orderByColumnList = orderByColumnList;
     this.whereClause = whereClause;
@@ -64,15 +70,22 @@ public class Query {
   }
 
   /**
-   * @return List of @ link QueryFilter} s that is used to generate the WhereClause and WhereClauseValues.
+   * @return The Type of Filter defined by the Query i.e. AND, OR or NONE
+   */
+  public FilterType getFilterType() {
+    return filterType;
+  }
+
+  /**
+   * @return List of Filters that that need to evaluated for the Query.
    */
   public List<QueryFilter> getFilterList() {
     return filterList;
   }
 
   /**
-   * @return List of columns to order the results by and where the sorting needs to be done is ascending or descending
-   *         order.
+   * @return List of columns to order the results by and whether the sorting needs to be done is ascending or 
+   *         descending order.
    */
   public List<Pair<Column, Boolean>> getOrderByColumnList() {
     return orderByColumnList;
