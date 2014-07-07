@@ -52,15 +52,6 @@ public class AlertDialogComponent<T> {
   }
 
   /**
-   * Set the options in the dialog list
-   * 
-   * @param viewOptions
-   */
-  public void setViews(Map<String, ?> viewOptions) {
-    this.viewOptions = viewOptions;
-  }
-
-  /**
    * Set the title of the dialog
    * 
    * @param title
@@ -76,9 +67,9 @@ public class AlertDialogComponent<T> {
    * @param data Data to be passed to the action to act on
    * @param refreshListAction
    */
-  public void init(int layout, T data) {
-    View dialogView = setupList(data);
-    setDialog(dialogView);
+  public void init(Map<String, ?> viewOptions) {
+    this.viewOptions = viewOptions;
+    setDialog(setupListView());
   }
 
   /**
@@ -88,7 +79,7 @@ public class AlertDialogComponent<T> {
    * @param refreshListAction
    * @return
    */
-  private View setupList(T data) {
+  private View setupListView() {
     LayoutInflater factory = LayoutInflater.from(context);
     final View dialogView = factory.inflate(dialogRenderer.getDialogLayout(), null);
     ListView listView = (ListView) dialogView.findViewById(dialogRenderer.getListView());

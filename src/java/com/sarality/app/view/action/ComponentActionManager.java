@@ -90,7 +90,7 @@ public class ComponentActionManager<T> {
         || action.getTriggerType() == TriggerType.TOUCH_UP) {
       new TouchActionPerformer<T>(action).setupListener(view);
     } else if (action.getTriggerType() == TriggerType.ITEM_CLICK) {
-      new ItemClickActionPerformer<T>(action).setupListener(view);
+      new ListItemClickActionPerformer<T>(action).setupListener(view);
     }
   }
 }
