@@ -18,9 +18,8 @@ public class ComponentActionManager<T> {
   /**
    * Constructor
    * 
-   * @param actionList
-   *          Takes in the list of all the actions on a component and creates a
-   *          mapping between <View,Trigger> and <List of actions>
+   * @param actionList Takes in the list of all the actions on a component and creates a mapping between <View,Trigger>
+   *          and <List of actions>
    */
   public ComponentActionManager(List<ViewAction<T>> actionList) {
     this.viewMap = new HashMap<ViewTrigger, ViewAction<T>>();
@@ -30,16 +29,12 @@ public class ComponentActionManager<T> {
   }
 
   /**
-   * Creates a new entry into the Map. if an entry is already made then a
-   * composite action is created. If composite action is already present then
-   * only the action needs to be added to the compositeViewAction
+   * Creates a new entry into the Map. if an entry is already made then a composite action is created. If composite
+   * action is already present then only the action needs to be added to the compositeViewAction
    * 
-   * @param viewId
-   *          View Id
-   * @param trigger
-   *          Trigger Type for that view
-   * @param action
-   *          View action
+   * @param viewId View Id
+   * @param trigger Trigger Type for that view
+   * @param action View action
    */
   private void addViewAction(int viewId, TriggerType trigger, ViewAction<T> action) {
     ViewTrigger viewTrigger = new ViewTrigger(viewId, trigger);
@@ -62,12 +57,9 @@ public class ComponentActionManager<T> {
   /**
    * Sets up the actions for each of the views on the layout
    * 
-   * @param actionList
-   *          a comprehensive list of all the actions for the layout
-   * @param layout
-   *          the layout itself
-   * @param value
-   *          Custom data to be set for the action
+   * @param actionList a comprehensive list of all the actions for the layout
+   * @param layout the layout itself
+   * @param value Custom data to be set for the action
    */
   public void setupActions(View layout, T value) {
     for (ViewAction<T> action : viewMap.values()) {
@@ -85,10 +77,9 @@ public class ComponentActionManager<T> {
   }
 
   /**
-   * Sets up the Action performer for a particular kind of trigger 
+   * Sets up the Action performer for a particular kind of trigger
    * 
-   * @param layout
-   *          layout view on which the actions are set
+   * @param layout layout view on which the actions are set
    */
   private void setActionPerformer(View view, ViewAction<T> action) {
     if (action.getTriggerType() == TriggerType.CLICK) {
@@ -98,6 +89,8 @@ public class ComponentActionManager<T> {
     } else if (action.getTriggerType() == TriggerType.TOUCH || action.getTriggerType() == TriggerType.TOUCH_DOWN
         || action.getTriggerType() == TriggerType.TOUCH_UP) {
       new TouchActionPerformer<T>(action).setupListener(view);
+    } else if (action.getTriggerType() == TriggerType.ITEM_CLICK) {
+      new ItemClickActionPerformer<T>(action).setupListener(view);
     }
   }
 }

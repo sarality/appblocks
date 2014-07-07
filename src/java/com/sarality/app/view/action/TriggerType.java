@@ -13,5 +13,6 @@ public enum TriggerType {
   TOUCH_DOWN,
   ON_SUCCESS,
   ON_FAILURE,
-  BEFORE_EXECUTION
+  BEFORE_EXECUTION, 
+  ITEM_CLICK
 }
