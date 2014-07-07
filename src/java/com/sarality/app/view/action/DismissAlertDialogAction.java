@@ -15,6 +15,7 @@ import android.view.View;
  * @author sunayna@ (Sunayna Uberoy)
  */
 public class DismissAlertDialogAction<T> extends BaseViewAction<T> implements ViewAction<T> {
+
   private final AlertDialogComponent<T> alertDialog;
 
   /**
