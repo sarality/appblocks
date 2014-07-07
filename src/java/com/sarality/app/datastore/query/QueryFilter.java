@@ -3,33 +3,41 @@ package com.sarality.app.datastore.query;
 import com.sarality.app.datastore.Column;
 
 /**
- * Represents a filter for a Query to restrict the data returned
- * by a query on a data store.
+ * Represents a filter for a Query to restrict the data returned by a query on a data store.
  * 
  * @author abhideep@ (Abhideep Singh)
- *
- * @param <T> data type of the object 
+ * 
+ * @param <T> Type of value that we a filtering on.
  */
 public class QueryFilter {
   private Column column;
   private Operator operation;
-  private final String value;
+  private final FilterValue<?> value;
 
-  public QueryFilter(Column column, Operator operation, String value) {
+  public QueryFilter(Column column, Operator operation, FilterValue<?> value) {
     this.column = column;
     this.operation = operation;
     this.value = value;
   }
 
+  /**
+   * @return Column that this is a condition / filter on
+   */
   public Column getColumn() {
     return column;
   }
 
+  /**
+   * @return Conditional / Comparison operation to run on the column.
+   */
   public Operator getOperation() {
     return operation;
   }
 
-  public String getValue() {
+  /**
+   * @return Value for the condition / comparison operation.
+   */
+  public FilterValue<?> getValue() {
     return value;
   }
 }
