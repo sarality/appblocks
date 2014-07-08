@@ -64,6 +64,15 @@ public class NavigationDrawer {
     // Display a shadow next to drawer
     // drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
   }
+  
+  /**
+   * Returns the Drawer List Item View id
+   * @return
+   */
+  
+  protected final int getListItemViewId() {
+    return drawerListItemViewId;
+  }
 
   public void registerListItem(String label, ViewAction<?> action) {
     labelList.add(label);
@@ -74,7 +83,8 @@ public class NavigationDrawer {
   private class ItemClickListener implements ListView.OnItemClickListener {
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-      actionList.get(position).performAction(view, new ViewActionTrigger(view, TriggerType.CLICK, null), new ViewDetail(view, parent));
+      ViewAction<?> action = actionList.get(position);
+      action.performAction(view, new ViewActionTrigger(view, TriggerType.CLICK, null), new ViewDetail(view, parent));
     }
   }
 
