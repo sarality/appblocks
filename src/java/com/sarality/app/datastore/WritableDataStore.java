@@ -30,6 +30,14 @@ public interface WritableDataStore<T extends DataObject<T>, I> extends DataStore
   public void delete(Query query);
 
   /**
+   * Update the item(s) for the given query with the data provided in the given data object.
+   * 
+   * @param data The data with the updated values.
+   * @param query Query to define the set of items that need to be updated.
+   */
+  public void update(T data, Query query);
+  
+  /**
    * @return A class that populates values in the {@code ContentValues} needed to insert
    * or update data in a data store.
    */
