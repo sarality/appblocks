@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.app.Application;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.sarality.app.data.DataObject;
 import com.sarality.app.datastore.AbstractWritableDataStore;
@@ -31,6 +33,8 @@ import com.sarality.app.datastore.query.Query;
 public abstract class SqliteTable<T extends DataObject<T>> 
     extends AbstractWritableDataStore<T, Long> implements Table<T> {
 
+  private static final Logger logger = LoggerFactory.getLogger(SqliteTable.class);
+
   // Name of the database e.g. users.db.
   private final String dbName;
   // Name of the database e.g. Users.
@@ -38,10 +42,10 @@ public abstract class SqliteTable<T extends DataObject<T>>
   // The version of the database defined by the given set of columns
   private final int tableVersion;
 
-  // TODO(abhideep): See if it makes sense to move version to column itself but first need to see how we update 
+  // TODO(abhideep): See if it makes sense to move version to column itself but first need to see how we update
   // the table to change an existing column size.
 
-  // Metadata of the table, used mostly as a cache of properties of the table like whether it has a composite 
+  // Metadata of the table, used mostly as a cache of properties of the table like whether it has a composite
   // primary key etc.
   private final TableInfo tableInfo;
 
@@ -65,7 +69,6 @@ public abstract class SqliteTable<T extends DataObject<T>>
     this.dbProvider = new SqliteTableConnectionProvider(application.getApplicationContext(), this, null, schemaUpdter);
   }
 
-  
   @Override
   public final String getDatabaseName() {
     return dbName;
@@ -107,11 +110,11 @@ public abstract class SqliteTable<T extends DataObject<T>>
    */
   @Override
   public synchronized final void open() throws SQLException {
-    Log.d(getLoggerTag(), "Opening database for Table " + getName());
+    logger.debug("Opening database for Table {} ", getTableName());
     if (dbOpenCounter.incrementAndGet() == 1) {
       // This will automatically create or update the table as needed
       this.database = dbProvider.getWritableDatabase();
-      Log.i(getLoggerTag(), "Opened database for Table " + getName() + " Open Counter " + dbOpenCounter.get());
+      logger.info("Opened database for Table {} Open Counter {}", getTableName(), dbOpenCounter.get());
     }
   }
 
@@ -120,10 +123,10 @@ public abstract class SqliteTable<T extends DataObject<T>>
    */
   @Override
   public synchronized final void close() {
-    Log.d(getLoggerTag(), "Closing database for Table " + getName());
+    logger.debug("Closing database for Table {} ", getTableName());
     if (dbOpenCounter.decrementAndGet() == 0) {
       this.database.close();
-      Log.i(getLoggerTag(), "Closed database for Table " + getName());
+      logger.info("Closed database for Table {} ", getTableName());
     }
   }
 
@@ -142,11 +145,11 @@ public abstract class SqliteTable<T extends DataObject<T>>
    */
   @Override
   public Long create(T data) {
-    Log.d(getLoggerTag(), "Adding new row to table " + getName() + " for data object " + data);
+    logger.debug("Adding new row to table {} for data object {}", getTableName(), data);
     assertDatabaseOpen();
     ContentValues contentValues = new ContentValues();
     getContentValuesPopulator().populate(contentValues, data);
-    Log.d(getLoggerTag(), "Adding new row to table " + getName() + " with content values " + contentValues);
+    logger.debug("Adding new row to table {} with Content Values {}", getTableName(), contentValues);
 
     if (listenerRegistry != null)
       listenerRegistry.listener(data, this);
@@ -191,7 +194,7 @@ public abstract class SqliteTable<T extends DataObject<T>>
       dataList.add(data);
       cursor.moveToNext();
     }
-    Log.d(getLoggerTag(), "Query " + query + " on table " + getName() + " returned " + dataList.size() + " values");
+    logger.debug("Query {} on table {} return {} values", query, getTableName(), dataList.size());
     // make sure to close the cursor
     cursor.close();
     return dataList;
@@ -214,7 +217,6 @@ public abstract class SqliteTable<T extends DataObject<T>>
     ContentValues contentValues = new ContentValues();
     getContentValuesPopulator().populate(contentValues, data);
     int num = database.update(getName(), contentValues, query.getWhereClause(), query.getWhereClauseValues());
-    Log.d(getLoggerTag(), "Updated " + num + "number of cols");
+    logger.debug("Updated {} number of cols", num);
   }
-
 }
