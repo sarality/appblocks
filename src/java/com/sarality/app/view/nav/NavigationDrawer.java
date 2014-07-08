@@ -17,12 +17,11 @@ import com.sarality.app.view.action.ViewActionTrigger;
 import com.sarality.app.view.action.ViewDetail;
 
 /**
- * Class to render and manage the Navigation Drawer 
+ * Class to render and manage the Navigation Drawer
  * <p>
- * Example Layout, Content and Drawer List Item files are included in appblocks.
- * If you want to use the Navigation Drawer, simply copy the following files
- * to the res/layout folder of your android app and then edit them to 
- * suit your needs.
+ * Example Layout, Content and Drawer List Item files are included in appblocks. If you want to use the Navigation
+ * Drawer, simply copy the following files to the res/layout folder of your android app and then edit them to suit your
+ * needs.
  * <p>
  * <ul>
  * <li>appblocks/src/android/res/layout/navigation_drawer_layout.xml</li>
@@ -39,7 +38,7 @@ public class NavigationDrawer {
 
   private final int drawerListViewId;
   private final int drawerListItemViewId;
-  
+
   /**
    * Constructor
    * 
@@ -64,19 +63,20 @@ public class NavigationDrawer {
     // Display a shadow next to drawer
     // drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
   }
-  
+
   /**
    * Returns the Drawer List Item View id
+   * 
    * @return
    */
-  
+
   protected final int getListItemViewId() {
     return drawerListItemViewId;
   }
 
   public void registerListItem(String label, ViewAction<?> action) {
     labelList.add(label);
-    actionList.add(action);       
+    actionList.add(action);
   }
 
   // TODO(abhideep): Replace with ViewAction
