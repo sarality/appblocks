@@ -11,7 +11,10 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.sarality.app.common.collect.Lists;
+import com.sarality.app.view.action.TriggerType;
 import com.sarality.app.view.action.ViewAction;
+import com.sarality.app.view.action.ViewActionTrigger;
+import com.sarality.app.view.action.ViewDetail;
 
 /**
  * Class to render and manage the Navigation Drawer 
@@ -71,7 +74,7 @@ public class NavigationDrawer {
   private class ItemClickListener implements ListView.OnItemClickListener {
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-      
+      actionList.get(position).performAction(view, new ViewActionTrigger(view, TriggerType.CLICK, null), new ViewDetail(view, parent));
     }
   }
 
