@@ -3,11 +3,11 @@ package com.sarality.app.datastore.db;
 import android.database.sqlite.SQLiteDatabase;
 
 /**
- * Interface for all classes that update / upgrade the schema for a table.
+ * Interface for all classes that update / upgrade the schema for a sqlite table.
  * 
  * @author abhideep@ (Abhideep Singh)
  */
-public interface TableSchemaUpdater {
+public interface SqliteTableSchemaUpdater {
 
   /**
    * Update the schema for the given table in the given database

@@ -14,7 +14,7 @@ import com.sarality.app.error.ValidationException;
  * 
  * @author abhideep@ (Abhideep Singh)
  */
-public class TableSchemaValidator {
+public class SqliteTableSchemaValidator {
 
   /**
    * Validates the Schema for the given database table.

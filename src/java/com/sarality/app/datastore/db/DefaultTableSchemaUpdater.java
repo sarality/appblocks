@@ -10,13 +10,13 @@ import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
 /**
- * Default implementation of the {@link TableSchemaUpdater}
+ * Default implementation of the {@link SqliteTableSchemaUpdater}
  * <p>
  * DROPS the table and then creates a new one. ALL EXISTING DATA IS LOST.
  * 
  * @author abhideep@ (Abhideep Singh)
  */
-public class DefaultTableSchemaUpdater implements TableSchemaUpdater {
+public class DefaultTableSchemaUpdater implements SqliteTableSchemaUpdater {
   private static final String TAG = "DefaultTableSchemaUpdater";
 
   private final boolean dropTable;
@@ -35,7 +35,7 @@ public class DefaultTableSchemaUpdater implements TableSchemaUpdater {
 
     // First Validate the Schema
     try {
-      TableSchemaValidator validator = new TableSchemaValidator();
+      SqliteTableSchemaValidator validator = new SqliteTableSchemaValidator();
       validator.validate(table);
     } catch (ValidationException e) {
       Log.e(TAG, "Invalid Schema for Table " + table.getTableName() + ". " + e.getMessage());
