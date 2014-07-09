@@ -1,6 +1,7 @@
 package com.sarality.app.view.action;
 
-import java.util.Map;
+import java.util.List;
+import java.util.Map.Entry;
 
 import android.view.View;
 
@@ -11,10 +12,10 @@ import com.sarality.app.view.dialog.AlertDialogComponent;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class DisplayAlertDialogAction<T> extends BaseViewAction<T> implements ViewAction<T> {
-  private Map<String,?> data;
-  private final AlertDialogComponent<T> alertDialog;
-
+public class DisplayAlertDialogAction extends BaseViewAction implements ViewAction {
+  private List<Entry<String, Object>> data = null;
+  private final AlertDialogComponent alertDialog;
+ 
   /**
    * Constructor.
    * 
@@ -23,7 +24,7 @@ public class DisplayAlertDialogAction<T> extends BaseViewAction<T> implements Vi
    * @param triggerType
    *          Type of event that triggers the action.
    */
-  public DisplayAlertDialogAction(int viewId, TriggerType triggerType, AlertDialogComponent<T> alertDialog) {
+  public DisplayAlertDialogAction(int viewId, TriggerType triggerType, AlertDialogComponent alertDialog) {
     super(viewId, triggerType);
     this.alertDialog = alertDialog;
   }
@@ -33,17 +34,5 @@ public class DisplayAlertDialogAction<T> extends BaseViewAction<T> implements Vi
     alertDialog.init(data);
     return true;
   }
-
-  @Override
-  public DisplayAlertDialogAction<T> cloneInstance() {
-    DisplayAlertDialogAction<T> action = new DisplayAlertDialogAction<T>(this.getViewId(), this.getTriggerType(),
-        this.alertDialog);
-    return action;
-  }
-
-  @SuppressWarnings("unchecked")
-  @Override
-  public void prepareView(View view, T input) {
-    this.data =(Map<String, ?>) input;
-  }
 }
+

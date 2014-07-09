@@ -10,14 +10,14 @@ import android.view.View.OnLongClickListener;
  * 
  * @param <T> The type of data that is used to setup the view on which the long click action is being performed.
  */
-public class LongClickActionPerformer<T> extends BaseActionPerformer<T> implements OnLongClickListener {
+public class LongClickActionPerformer extends BaseActionPerformer implements OnLongClickListener {
 
   /**
    * Constructor.
    * 
    * @param action Action that needs to be performed on a long click.
    */
-  public LongClickActionPerformer(ViewAction<T> action) {
+  public LongClickActionPerformer(ViewAction action) {
     super(action);
   }
 

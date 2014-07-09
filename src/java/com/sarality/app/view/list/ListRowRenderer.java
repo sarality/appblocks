@@ -57,5 +57,12 @@ public interface ListRowRenderer<T> {
    *          List of Actions to be setup on the row and it's elements.
    */
   public void
-      setupActions(View rowView, ListRowViewCache rowViewCache, T value, ComponentActionManager<T> actionManager);
+      setupActions(View rowView, ListRowViewCache rowViewCache, T value, ComponentActionManager actionManager);
+  
+  /**
+   * Set the list of tags that will be set on a particular view
+   * @param viewId
+   * @param value
+   */
+  public void setTagList(int viewId, Object value);
 }

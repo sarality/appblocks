@@ -20,15 +20,15 @@ import com.sarality.app.view.action.ComponentActionManager;
  *
  * @param <T> The data/model for each row in the list
  */
-class ListComponentAdapter<T> extends ArrayAdapter<T> {
+public class ListComponentAdapter<T> extends ArrayAdapter<T> {
   private static final String TAG = "ListComponentAdapter";
   private final Activity context;
   private final ListRowRenderer<T> rowRenderer;
   private List<T> rowValueList;
-  private final ComponentActionManager<T> componentManager;
+  private final ComponentActionManager componentManager;
 
-  ListComponentAdapter(Activity context, ListRowRenderer<T> rowRenderer, List<T> rowValueList, 
-      ComponentActionManager<T> componentManager) {
+  public ListComponentAdapter(Activity context, ListRowRenderer<T> rowRenderer, List<T> rowValueList, 
+      ComponentActionManager componentManager) {
     super(context, 0, rowValueList);
     this.context = context;
     this.rowRenderer = rowRenderer;
@@ -58,7 +58,6 @@ class ListComponentAdapter<T> extends ArrayAdapter<T> {
 
     ListRowViewCache viewCache = (ListRowViewCache) rowView.getTag();
     rowRenderer.render(rowView, viewCache, rowValue);
-
     // Setup actions on the new row
     rowRenderer.setupActions(rowView, viewCache, rowValue, componentManager);
     return rowView;

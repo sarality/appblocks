@@ -11,14 +11,14 @@ import android.widget.ListView;
  * 
  * @param <T> The type of data that is used to setup the item view on which the click action is being performed.
  */
-public class ListItemClickActionPerformer<T> extends BaseActionPerformer<T> implements AdapterView.OnItemClickListener {
+public class ListItemClickActionPerformer extends BaseActionPerformer implements AdapterView.OnItemClickListener {
   
   /**
    * Constructor.
    * 
    * @param action Action that needs to be performed on ListView item click.
    */  
-  public ListItemClickActionPerformer(ViewAction<T> action) {
+  public ListItemClickActionPerformer(ViewAction action) {
     super(action);
   }
 

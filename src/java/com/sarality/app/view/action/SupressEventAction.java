@@ -9,7 +9,7 @@ import android.view.View;
  *
  * @param <T> The type of data that is used to setup the view on which the event is supressed.
  */
-public class SupressEventAction<T> extends BaseViewAction<T> {
+public class SupressEventAction extends BaseViewAction {
 
   public SupressEventAction(int viewId, TriggerType event) {
     super(viewId, event);
@@ -19,14 +19,5 @@ public class SupressEventAction<T> extends BaseViewAction<T> {
   public boolean doAction(View view, ViewActionTrigger actionDetail, ViewDetail viewDetail) {
     // Do nothing. Just eat up the event
     return true;
-  }
-
-  @Override
-  public void prepareView(View view, T value) {
-    // No Setup required
-  }
-
-  public ViewAction<T> cloneInstance() {
-    return new SupressEventAction<T>(getViewId(), getTriggerType());
   }
 }

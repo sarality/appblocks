@@ -19,7 +19,7 @@ import com.sarality.app.common.collect.Lists;
  *          The type of data that is used to setup the view which triggers the
  *          action.
  */
-public abstract class BaseViewAction<T> implements ViewAction<T> {
+public abstract class BaseViewAction implements ViewAction {
 
   // The Id of the view that triggers the action
   private final int viewId;
@@ -28,13 +28,13 @@ public abstract class BaseViewAction<T> implements ViewAction<T> {
   private final TriggerType triggerType;
 
   // List of actions to be performed after this action is complete
-  private List<ViewAction<?>> successActionList = Lists.of();
+  private List<ViewAction> successActionList = Lists.of();
 
   // List of actions to be performed after this action is a failure
-  private List<ViewAction<?>> failureActionList = Lists.of();
+  private List<ViewAction> failureActionList = Lists.of();
 
   // List of actions to be performed before the action is started
-  private List<ViewAction<?>> beforeActionList = Lists.of();
+  private List<ViewAction> beforeActionList = Lists.of();
 
   /**
    * Constructor.
@@ -60,23 +60,23 @@ public abstract class BaseViewAction<T> implements ViewAction<T> {
   }
 
   @Override
-  public void registerBeforeExecutionAction(ViewAction<?> action) {
+  public void registerBeforeExecutionAction(ViewAction action) {
     beforeActionList.add(action);
   }
   
   @Override
-  public void registerOnSuccessAction(ViewAction<?> action) {
+  public void registerOnSuccessAction(ViewAction action) {
     successActionList.add(action);
   }
   
   @Override
-  public void registerOnFailureAction(ViewAction<?> action) {
+  public void registerOnFailureAction(ViewAction action) {
     failureActionList.add(action);
   }
 
   @Override
-  public List<ViewAction<?>> getActions() {
-    List<ViewAction<?>> completeActionList = new ArrayList<ViewAction<?>>();
+  public List<ViewAction> getActions() {
+    List<ViewAction> completeActionList = new ArrayList<ViewAction>();
     completeActionList.addAll(successActionList);
     completeActionList.addAll(failureActionList);
     completeActionList.addAll(beforeActionList);
@@ -111,23 +111,23 @@ public abstract class BaseViewAction<T> implements ViewAction<T> {
    *          Details about the view that triggered the action
    * @return
    */
-  private void runAction(List<ViewAction<?>> actionList, View view, ViewActionTrigger actionDetail,
+  private void runAction(List<ViewAction> actionList, View view, ViewActionTrigger actionDetail,
       ViewDetail viewDetail) {
-    for (ViewAction<?> action : actionList) {
+    for (ViewAction action : actionList) {
       ViewActionTrigger detail = new ViewActionTrigger(view, action.getTriggerType(),
           actionDetail.getMotionEvent());
       action.performAction(view, detail, viewDetail);
     }
   }
   
-  public void cloneActions(ViewAction<?> action){
-    for(ViewAction<?> successAction: successActionList){
+  public void cloneActions(ViewAction action){
+    for(ViewAction successAction: successActionList){
       action.registerOnSuccessAction(successAction);
     }
-    for(ViewAction<?> failureAction: failureActionList){
+    for(ViewAction failureAction: failureActionList){
       action.registerOnFailureAction(failureAction);
     }
-    for(ViewAction<?> beforeAction: beforeActionList){
+    for(ViewAction beforeAction: beforeActionList){
       action.registerBeforeExecutionAction(beforeAction);
     }
   }
