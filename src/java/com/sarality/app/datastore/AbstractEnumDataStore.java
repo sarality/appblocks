@@ -17,6 +17,9 @@ public abstract class AbstractEnumDataStore<E extends EnumData> implements EnumD
   // Map between Enum name and data for the Enum.
   private final Map<String, E> dataStore = new HashMap<String, E>();
 
+  // Predefines values coming from enums
+  private final EnumDataProvider<E>[] predefinedValues;
+
   // Name of the data store.
   private final String storeName;
 
@@ -30,9 +33,7 @@ public abstract class AbstractEnumDataStore<E extends EnumData> implements EnumD
    */
   public AbstractEnumDataStore(String storeName, EnumDataProvider<E>[] predefinedValues) {
     this.storeName = storeName;
-    for (EnumDataProvider<E> predefinedValue : predefinedValues) {
-      addData(predefinedValue.getEnumData());
-    }
+    this.predefinedValues = predefinedValues;
   }
 
   @Override
@@ -50,6 +51,11 @@ public abstract class AbstractEnumDataStore<E extends EnumData> implements EnumD
     // Avoids running the initialization twice in case of a race condition.
     synchronized (this) {
       if (!isInitialized) {
+        if (predefinedValues != null) {
+          for (EnumDataProvider<E> predefinedValue : predefinedValues) {
+            addData(predefinedValue.getEnumData());
+          }
+        }
         loadData();
         isInitialized = true;
       }
