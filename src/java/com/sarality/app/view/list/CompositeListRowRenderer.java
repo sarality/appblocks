@@ -50,7 +50,8 @@ public class CompositeListRowRenderer<T> implements ListRowRenderer<T> {
   }
 
   @Override
-  public void setTagList(int viewId, Object value){
-    // Do nothing
+  public void setAdditionalTagList(int viewId, Object data, T value){
+    ListRowRenderer<T> renderer = selector.select(value);
+    renderer.setAdditionalTagList(viewId, data, value);
   }
 }

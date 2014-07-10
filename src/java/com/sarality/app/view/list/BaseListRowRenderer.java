@@ -22,7 +22,11 @@ public abstract class BaseListRowRenderer<T> implements ListRowRenderer<T> {
   }
 
   @Override
-  public void setTagList(int viewId, Object value) {
+  public void setAdditionalTagList(int viewId, Object data, T value) {
+    setTagList(viewId, data);
+  }
+  
+  protected void setTagList(int viewId, Object value) {
     this.tagList.put(viewId, value);
   }
 
