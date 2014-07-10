@@ -63,6 +63,14 @@ public class NavigationDrawer {
     // Display a shadow next to drawer
     // drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
   }
+  
+  /**
+   * 
+   * Method to add list items to the navigation drawer
+   * 
+   * @param label Name of the list item
+   * @param action Action associated with the item
+   */
 
   /**
    * Returns the Drawer List Item View id
