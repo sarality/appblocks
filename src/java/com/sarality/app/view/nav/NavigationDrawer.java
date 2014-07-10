@@ -11,15 +11,17 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.sarality.app.common.collect.Lists;
+import com.sarality.app.view.action.TriggerType;
 import com.sarality.app.view.action.ViewAction;
+import com.sarality.app.view.action.ViewActionTrigger;
+import com.sarality.app.view.action.ViewDetail;
 
 /**
- * Class to render and manage the Navigation Drawer 
+ * Class to render and manage the Navigation Drawer
  * <p>
- * Example Layout, Content and Drawer List Item files are included in appblocks.
- * If you want to use the Navigation Drawer, simply copy the following files
- * to the res/layout folder of your android app and then edit them to 
- * suit your needs.
+ * Example Layout, Content and Drawer List Item files are included in appblocks. If you want to use the Navigation
+ * Drawer, simply copy the following files to the res/layout folder of your android app and then edit them to suit your
+ * needs.
  * <p>
  * <ul>
  * <li>appblocks/src/android/res/layout/navigation_drawer_layout.xml</li>
@@ -32,11 +34,11 @@ import com.sarality.app.view.action.ViewAction;
 public class NavigationDrawer {
   private ListView drawerList;
   private List<String> labelList = Lists.of();
-  private List<ViewAction<?>> actionList = Lists.of();
+  private List<ViewAction> actionList = Lists.of();
 
   private final int drawerListViewId;
   private final int drawerListItemViewId;
-  
+
   /**
    * Constructor
    * 
@@ -61,16 +63,23 @@ public class NavigationDrawer {
     // Display a shadow next to drawer
     // drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
   }
-  
-  /**
-   * 
-   * Method to add list items to the navigation drawer
-   * 
-   * @param label Name of the list item
-   * @param action Action associated with the item
-   */
 
-  public void registerListItem(String label, ViewAction<?> action) {
+  /**
+   * Returns the drawer List View Item id
+   * 
+   * @return Drawer List Item View id
+   */
+  protected final int getListItemViewId() {
+    return drawerListItemViewId;
+  }
+
+  /**
+   * Adds item to the Navigation Drawer
+   * 
+   * @param label String label for the drawer item.
+   * @param action Action associated with the drawer item.
+   */
+  public void registerListItem(String label, ViewAction action) {
     labelList.add(label);
     actionList.add(action);
   }
@@ -79,7 +88,8 @@ public class NavigationDrawer {
   private class ItemClickListener implements ListView.OnItemClickListener {
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-      // TODO Auto-generated method stub
+      ViewAction action = actionList.get(position);
+      action.performAction(view, new ViewActionTrigger(view, TriggerType.CLICK, null), new ViewDetail(view, parent));
     }
   }
 
