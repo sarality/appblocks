@@ -119,16 +119,4 @@ public abstract class BaseViewAction implements ViewAction {
       action.performAction(view, detail, viewDetail);
     }
   }
-  
-  public void cloneActions(ViewAction action){
-    for(ViewAction successAction: successActionList){
-      action.registerOnSuccessAction(successAction);
-    }
-    for(ViewAction failureAction: failureActionList){
-      action.registerOnFailureAction(failureAction);
-    }
-    for(ViewAction beforeAction: beforeActionList){
-      action.registerBeforeExecutionAction(beforeAction);
-    }
-  }
 }

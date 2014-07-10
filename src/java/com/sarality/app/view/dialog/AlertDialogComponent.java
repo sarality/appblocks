@@ -2,7 +2,6 @@ package com.sarality.app.view.dialog;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -21,18 +20,19 @@ import com.sarality.app.view.list.ListRowRenderer;
  * @author sunayna@ (Sunayna Uberoy)
  * @param <T>
  */
-public class AlertDialogComponent {
+public class AlertDialogComponent<T> {
   private static List<ViewAction> rowActionList = new ArrayList<ViewAction>();
   private final Activity context;
   private AlertDialog dialog;
 
   // List of actions to be setup on each row in the List.
   private List<ViewAction> actionList = new ArrayList<ViewAction>();
-  private ListRowRenderer<Entry<String, Object>> dialogRenderer;
-  private List<Entry<String, Object>> viewOptions;
+  private ListRowRenderer<T> dialogRenderer;
+  private List<T> viewOptions;
   private String title;
   private final int listViewId;
   private final int dialogLayout;
+
   /**
    * Constructor.
    * 
@@ -46,9 +46,10 @@ public class AlertDialogComponent {
     this.listViewId = listViewId;
   }
 
-  public void setRenderer(ListRowRenderer<Entry<String, Object>> dialogRenderer){
+  public void setRenderer(ListRowRenderer<T> dialogRenderer) {
     this.dialogRenderer = dialogRenderer;
   }
+
   /**
    * Registers the actions that would be setup on individual items within the Dialog
    * 
@@ -66,7 +67,7 @@ public class AlertDialogComponent {
   public void registerRowAction(ViewAction action) {
     rowActionList.add(action);
   }
-  
+
   /**
    * Set the title of the dialog
    * 
@@ -83,7 +84,7 @@ public class AlertDialogComponent {
    * @param data Data to be passed to the action to act on
    * @param refreshListAction
    */
-  public void init(List<Entry<String, Object>> viewOptions) {
+  public void init(List<T> viewOptions) {
     this.viewOptions = viewOptions;
     setDialog(setupListView());
   }
@@ -95,17 +96,18 @@ public class AlertDialogComponent {
    * @param refreshListAction
    * @return
    */
-  private View setupListView(){
+  private View setupListView() {
     LayoutInflater factory = LayoutInflater.from(context);
     final View dialogView = factory.inflate(dialogLayout, null);
-    ListView listView = (ListView)dialogView.findViewById(listViewId);
+    ListView listView = (ListView) dialogView.findViewById(listViewId);
     ComponentActionManager componentActionManager = new ComponentActionManager(rowActionList);
-    
-    ListComponentAdapter<?> adapter = new ListComponentAdapter<Entry<String, Object>>(context, 
-        dialogRenderer, viewOptions, componentActionManager);
+
+    ListComponentAdapter<T> adapter = new ListComponentAdapter<T>(context, dialogRenderer,
+        viewOptions, componentActionManager);
     listView.setAdapter(adapter);
     return dialogView;
   }
+
   /**
    * 
    * @param dialogView
@@ -128,5 +130,3 @@ public class AlertDialogComponent {
     dialog.dismiss();
   }
 }
-
-

@@ -27,8 +27,8 @@ public abstract class BaseListRowRenderer<T> implements ListRowRenderer<T> {
   }
 
   protected void setTags(View view) {
-    for(int i=0;i<tagList.size();i++){
+    for (int i = 0; i < tagList.size(); i++) {
       view.setTag(tagList.keyAt(i), tagList.valueAt(i));
-   }
+    }
   }
 }
