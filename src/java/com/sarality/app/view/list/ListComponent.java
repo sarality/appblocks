@@ -27,10 +27,10 @@ public class ListComponent<T> {
   private final ListRowRenderer<T> rowRenderer;
   
   // List of actions to be setup on the List.
-  private List<ViewAction<T>> actionList = new ArrayList<ViewAction<T>>();
+  private List<ViewAction> actionList = new ArrayList<ViewAction>();
   
   // List of actions to be setup on each row in the List.
-  private List<ViewAction<T>> rowActionList = new ArrayList<ViewAction<T>>();
+  private List<ViewAction> rowActionList = new ArrayList<ViewAction>();
   
   //Adapter used to render the List.
   private ListComponentAdapter<T> adapter;
@@ -57,7 +57,7 @@ public class ListComponent<T> {
    * 
    * @param action Action to be setup for each row of the List.
    */
-  public void registerRowAction(ViewAction<T> action) {
+  public void registerRowAction(ViewAction action) {
     rowActionList.add(action);
   }
 
@@ -68,14 +68,14 @@ public class ListComponent<T> {
    * 
    * @param action Action to be setup for the List.
    */
-  public void registerAction(ViewAction<T> action) {
+  public void registerAction(ViewAction action) {
     actionList.add(action);
   }
   
   /**
    * @return List of Actions that are associated with each row in the List.
    */
-  public List<ViewAction<T>> getRowActions() {
+  public List<ViewAction> getRowActions() {
     return rowActionList;
   }
 
@@ -106,7 +106,7 @@ public class ListComponent<T> {
     * @param data
     */
   public void render(List<T> data){
-    ComponentActionManager<T> componentActionManager = new ComponentActionManager<T>(getRowActions());
+    ComponentActionManager componentActionManager = new ComponentActionManager(getRowActions());
     adapter = new ListComponentAdapter<T>(activity, rowRenderer, data, componentActionManager);
     view.setAdapter(adapter);
   }

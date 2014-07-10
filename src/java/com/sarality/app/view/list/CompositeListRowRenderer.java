@@ -44,8 +44,14 @@ public class CompositeListRowRenderer<T> implements ListRowRenderer<T> {
   }
 
   @Override
-  public void setupActions(View rowView, ListRowViewCache rowViewCache, T value, ComponentActionManager<T> componentManager) {
+  public void setupActions(View rowView, ListRowViewCache rowViewCache, T value, ComponentActionManager componentManager) {
     ListRowRenderer<T> renderer = selector.select(value);
     renderer.setupActions(rowView, rowViewCache, value, componentManager);
+  }
+
+  @Override
+  public void setAdditionalTagList(int viewId, Object data, T value){
+    ListRowRenderer<T> renderer = selector.select(value);
+    renderer.setAdditionalTagList(viewId, data, value);
   }
 }

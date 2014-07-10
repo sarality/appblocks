@@ -14,7 +14,7 @@ import android.view.View;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class DismissAlertDialogAction<T> extends BaseViewAction<T> implements ViewAction<T> {
+public class DismissAlertDialogAction<T> extends BaseViewAction implements ViewAction {
 
   private final AlertDialogComponent<T> alertDialog;
 
@@ -35,15 +35,5 @@ public class DismissAlertDialogAction<T> extends BaseViewAction<T> implements Vi
   public boolean doAction(View view, ViewActionTrigger actionDetail, ViewDetail viewDetail) {
     alertDialog.dismiss();
     return true;
-  }
-
-  @Override
-  public void prepareView(View view, T input) {
-    // Do nothing
-  }
-
-  @Override
-  public ViewAction<T> cloneInstance() {
-    return new DismissAlertDialogAction<T>(getViewId(), getTriggerType(), alertDialog);
   }
 }

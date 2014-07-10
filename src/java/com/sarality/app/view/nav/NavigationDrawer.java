@@ -34,7 +34,7 @@ import com.sarality.app.view.action.ViewDetail;
 public class NavigationDrawer {
   private ListView drawerList;
   private List<String> labelList = Lists.of();
-  private List<ViewAction<?>> actionList = Lists.of();
+  private List<ViewAction> actionList = Lists.of();
 
   private final int drawerListViewId;
   private final int drawerListItemViewId;
@@ -83,7 +83,7 @@ public class NavigationDrawer {
   private class ItemClickListener implements ListView.OnItemClickListener {
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-      ViewAction<?> action = actionList.get(position);
+      ViewAction action = actionList.get(position);
       action.performAction(view, new ViewActionTrigger(view, TriggerType.CLICK, null), new ViewDetail(view, parent));
     }
   }

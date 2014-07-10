@@ -11,14 +11,14 @@ import android.view.View.OnTouchListener;
  * 
  * @param <T> The type of data that is used to setup the view on which the touch based action is being performed.
  */
-public class TouchActionPerformer<T> extends BaseActionPerformer<T> implements OnTouchListener {
+public class TouchActionPerformer extends BaseActionPerformer implements OnTouchListener {
 
   /**
    * Constructor 
    * 
    * @param action ViewAction that needs to be performed on touch.
    */
-  public TouchActionPerformer(ViewAction<T> action) {
+  public TouchActionPerformer(ViewAction action) {
     super(action);
   }
 

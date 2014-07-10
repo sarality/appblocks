@@ -17,7 +17,7 @@ import com.sarality.app.view.action.ViewDetail;
  * 
  * @param <T> Type of data object needed to start the Activity.
  */
-public class StartActivityAction<T> extends BaseViewAction<T> {
+public class StartActivityAction extends BaseViewAction {
 
   // The context of the class that is calling the action
   private final Context context;
@@ -38,18 +38,6 @@ public class StartActivityAction<T> extends BaseViewAction<T> {
     super(viewId, triggerType);
     this.context = context;
     this.newActivityClass = newActivityClass;
-  }
-
-  @Override
-  public void prepareView(View view, T value) {
-    // No need to do anything here
-  }
-
-  @Override
-  public StartActivityAction<T> cloneInstance() {
-    StartActivityAction<T> activityAction = new StartActivityAction<T>(this.getViewId(), this.getTriggerType(),
-        context, newActivityClass);
-    return activityAction;
   }
 
   @Override
