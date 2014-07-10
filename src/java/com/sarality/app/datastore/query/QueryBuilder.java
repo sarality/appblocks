@@ -198,13 +198,13 @@ public class QueryBuilder {
     boolean processedFirstColumn = false;
     for (Pair<Column, Boolean> orderByColumn : orderByColumnList) {
       if (processedFirstColumn) {
-        whereClauseBuilder.append(", ");
+        orderByClause.append(", ");
       }
-      whereClauseBuilder.append(orderByColumn.first.getName()).append(" ");
+      orderByClause.append(orderByColumn.first.getName()).append(" ");
       if (orderByColumn.second) {
-        whereClauseBuilder.append(" ASC");
+        orderByClause.append(" ASC");
       } else {
-        whereClauseBuilder.append(" DESC");
+        orderByClause.append(" DESC");
       }
       processedFirstColumn = true;
     } // Order By Column
