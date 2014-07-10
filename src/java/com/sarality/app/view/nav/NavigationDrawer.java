@@ -74,7 +74,7 @@ public class NavigationDrawer {
     return drawerListItemViewId;
   }
 
-  public void registerListItem(String label, ViewAction<?> action) {
+  public void registerListItem(String label, ViewAction action) {
     labelList.add(label);
     actionList.add(action);
   }
