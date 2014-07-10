@@ -48,11 +48,6 @@ public abstract class AbstractDataStore<T extends DataObject<T>> implements Data
     this.extractor = extractor;
   }
 
-  /**
-   * @return The String TAG to be used to logging messages.
-   */
-  public abstract String getLoggerTag();
-
   @Override
   public final Context getApplicationContext() {
     return applicationContext;

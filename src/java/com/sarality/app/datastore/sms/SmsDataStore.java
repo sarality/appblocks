@@ -22,9 +22,8 @@ import com.sarality.app.datastore.sms.SmsMessage.MessageType;
 
 public class SmsDataStore extends AbstractContentResolverDataStore<SmsMessage> {
 
-  private static final String TAG = "SmsDataStore";
+  public static final String DATASTORE_NAME = "SmsDataStore";
 
-  private static final String DATASTORE_NAME = "SmsDataStore";
   private final Uri baseUri = Uri.parse("content://sms/");
 
   public SmsDataStore(Context context) {
@@ -66,11 +65,6 @@ public class SmsDataStore extends AbstractContentResolverDataStore<SmsMessage> {
     return baseUri;
   }
 
-  @Override
-  public String getLoggerTag() {
-    return TAG;
-  }
-
   /**
    * Providing a list of configuration objects that define the relationship
    * between SmsDataStore columns and fields in the SmsMessage data object.
@@ -104,10 +98,5 @@ public class SmsDataStore extends AbstractContentResolverDataStore<SmsMessage> {
     protected Builder<SmsMessage> newBuilder() {
       return new SmsMessage.Builder();
     }
-
-    @Override
-    protected String getDataStoreName() {
-      return SmsDataStore.DATASTORE_NAME;
-    }    
   }
 }

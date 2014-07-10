@@ -89,9 +89,6 @@ public abstract class SqliteTable<T extends DataObject<T>>
     return tableInfo;
   }
 
-  @Override
-  public abstract String getLoggerTag();
-
   /**
    * Returns the order of the columns in the primary key.
    * <p>
