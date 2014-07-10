@@ -14,9 +14,9 @@ import android.view.View;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class DismissAlertDialogAction extends BaseViewAction implements ViewAction {
+public class DismissAlertDialogAction<T> extends BaseViewAction implements ViewAction {
 
-  private final AlertDialogComponent alertDialog;
+  private final AlertDialogComponent<T> alertDialog;
 
   /**
    * Constructor.
@@ -26,7 +26,7 @@ public class DismissAlertDialogAction extends BaseViewAction implements ViewActi
    * @param triggerType
    *          Type of event that triggers the action.
    */
-  public DismissAlertDialogAction(int viewId, TriggerType triggerType, AlertDialogComponent alertDialog) {
+  public DismissAlertDialogAction(int viewId, TriggerType triggerType, AlertDialogComponent<T> alertDialog) {
     super(viewId, triggerType);
     this.alertDialog = alertDialog;
   }
