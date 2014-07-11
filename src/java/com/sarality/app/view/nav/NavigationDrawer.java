@@ -67,13 +67,18 @@ public class NavigationDrawer {
   /**
    * Returns the Drawer List Item View id
    * 
-   * @return
+   * @return Drawer list view item id
    */
-
   protected final int getListItemViewId() {
     return drawerListItemViewId;
   }
 
+  /**
+   * Adds item to the Navigation Drawer
+   * 
+   * @param label String label for the drawer item
+   * @param action Action associated with the drawer item
+   */
   public void registerListItem(String label, ViewAction action) {
     labelList.add(label);
     actionList.add(action);
