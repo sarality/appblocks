@@ -64,7 +64,6 @@ public class NavigationDrawer {
     // drawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
   }
 
-  /**
    * Returns the drawer List View Item id
    * 
    * @return Drawer List Item View id

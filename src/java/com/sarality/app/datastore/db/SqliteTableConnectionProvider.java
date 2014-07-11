@@ -15,14 +15,14 @@ import android.database.sqlite.SQLiteOpenHelper;
  *
  * @author abhideep@ (Abhideep Singh)
  */
-class TableConnectionProvider extends SQLiteOpenHelper {
+class SqliteTableConnectionProvider extends SQLiteOpenHelper {
 
   private final Table<?> table;
-  private final TableSchemaUpdater schemaUpdater;
+  private final SqliteTableSchemaUpdater schemaUpdater;
 
-  TableConnectionProvider(Context context, Table<?> table, CursorFactory factory,
-      TableSchemaUpdater schemaUpdater) {
-    super(context, table.getDbName(), factory, table.getTableVersion());
+  SqliteTableConnectionProvider(Context context, Table<?> table, CursorFactory factory,
+      SqliteTableSchemaUpdater schemaUpdater) {
+    super(context, table.getDatabaseName(), factory, table.getTableVersion());
     this.table = table;
     if (schemaUpdater != null) {
       this.schemaUpdater = schemaUpdater;

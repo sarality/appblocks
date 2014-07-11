@@ -13,7 +13,7 @@ import android.view.View;
  *          The type of data that is used to setup the View that triggers the
  *          action.
  */
-public interface ViewAction<T> {
+public interface ViewAction {
 
   /**
    * @return Id of the view that triggers the action
@@ -25,16 +25,6 @@ public interface ViewAction<T> {
    */
   public TriggerType getTriggerType();
 
-  /**
-   * Prepare the View so that the Action can be performed on it later.
-   * 
-   * @param view
-   *          The View that would trigger the action.
-   * @param value
-   *          The actual contents of the data on which the action would need to
-   *          be performed.
-   */
-  public void prepareView(View view, T value);
 
   /**
    * Perform the action
@@ -49,13 +39,6 @@ public interface ViewAction<T> {
   public boolean performAction(View view, ViewActionTrigger trigger, ViewDetail viewDetail);
 
   /**
-   * Clones the instance of the Action
-   * 
-   * @return ViewAction a new instance should be created
-   */
-  public ViewAction<T> cloneInstance();
-
-  /**
    * Register the set of actions that need to be performed before this action is
    * started
    * 
@@ -63,7 +46,7 @@ public interface ViewAction<T> {
    *          The new action that will be need to be performed before current acion is 
    *          executed. 
    */
-  public void registerBeforeExecutionAction(ViewAction<?> triggeredAction);
+  public void registerBeforeExecutionAction(ViewAction triggeredAction);
 
   /**
    * Register the set of actions that need to be performed after this action is
@@ -73,7 +56,7 @@ public interface ViewAction<T> {
    *          The new action that will be performed once this action is
    *          complete.
    */
-  public void registerOnSuccessAction(ViewAction<?> triggeredAction);
+  public void registerOnSuccessAction(ViewAction triggeredAction);
 
   /**
    * Register the set of actions that need to be performed after this action if the action
@@ -83,13 +66,13 @@ public interface ViewAction<T> {
    *          The new action that will be performed once this action is
    *          complete.
    */
-  public void registerOnFailureAction(ViewAction<?> triggeredAction);
+  public void registerOnFailureAction(ViewAction triggeredAction);
 
   /**
    * Returns the list of actions
    * 
    * @return List of actions
    */
-  public List<ViewAction<?>> getActions();
+  public List<ViewAction> getActions();
 
 }

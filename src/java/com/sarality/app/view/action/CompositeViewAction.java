@@ -11,10 +11,10 @@ import android.view.View;
  * @author sunayna@dothat.in sunayna
  * 
  */
-public class CompositeViewAction<T> extends BaseViewAction<T> implements ViewAction<T> {
+public class CompositeViewAction extends BaseViewAction implements ViewAction {
 
   // Complete list of actions
-  private List<ViewAction<T>> actionList;
+  private List<ViewAction> actionList;
 
   /**
    * Constructor.
@@ -27,7 +27,7 @@ public class CompositeViewAction<T> extends BaseViewAction<T> implements ViewAct
    */
   public CompositeViewAction(int viewId, TriggerType trigger) {
     super(viewId, trigger);
-    actionList = new ArrayList<ViewAction<T>>();
+    actionList = new ArrayList<ViewAction>();
   }
 
   /**
@@ -38,31 +38,15 @@ public class CompositeViewAction<T> extends BaseViewAction<T> implements ViewAct
    *          The new action that will be need to be performed before current
    *          action is executed.
    */
-  public void registerAction(ViewAction<T> action) {
+  public void registerAction(ViewAction action) {
     actionList.add(action);
   }
 
   @Override
   public boolean doAction(View view, ViewActionTrigger trigger, ViewDetail viewDetail) {
-    for (ViewAction<T> action : actionList) {
+    for (ViewAction action : actionList) {
       action.performAction(view, trigger, viewDetail);
     }
     return true;
-  }
-
-  @Override
-  public ViewAction<T> cloneInstance() {
-    CompositeViewAction<T> newCompositeAction =  new CompositeViewAction<T>(getViewId(), getTriggerType());
-    for (ViewAction<T> action : actionList) {
-      newCompositeAction.registerAction(action.cloneInstance());
-    }
-    return newCompositeAction;
-  }
-
-  @Override
-  public void prepareView(View view, T value) {
-    for (ViewAction<T> action : actionList) {
-      action.prepareView(view, value);
-    }
   }
 }

@@ -2,11 +2,6 @@ package com.sarality.app.view.action;
 
 import android.view.View;
 
-import com.sarality.app.view.action.BaseViewAction;
-import com.sarality.app.view.action.TriggerType;
-import com.sarality.app.view.action.ViewAction;
-import com.sarality.app.view.action.ViewActionTrigger;
-import com.sarality.app.view.action.ViewDetail;
 import com.sarality.app.view.list.ListComponent;
 
 /**
@@ -14,7 +9,7 @@ import com.sarality.app.view.list.ListComponent;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class RefreshListAction<T> extends BaseViewAction<T> {
+public class RefreshListAction<T> extends BaseViewAction {
 
   private final ListComponent<T> component;
 
@@ -38,15 +33,4 @@ public class RefreshListAction<T> extends BaseViewAction<T> {
     component.refresh();
     return true;
   }
-
-  @Override
-  public void prepareView(View view, T value) {
-    // Do nothing
-  }
-
-  @Override
-  public ViewAction<T> cloneInstance() {
-    return new RefreshListAction<T>(getViewId(), getTriggerType(), component);
-  }
-
 }

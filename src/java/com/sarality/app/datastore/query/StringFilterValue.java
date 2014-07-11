@@ -32,4 +32,9 @@ class StringFilterValue extends FilterValue<String> {
           + dataType);
     }
   }
+
+  @Override
+  public int compareTo(String value) {
+    return getValue().compareTo(value);
+  }
 }
