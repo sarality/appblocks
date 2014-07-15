@@ -23,6 +23,9 @@ public abstract class AbstractEnumDataStore<E extends EnumData> implements EnumD
   // Name of the data store.
   private final String storeName;
 
+  // Class of the enum data stored in the data stored.
+  private final Class<E> enumClass;
+  
   // Indicates whether the data store has been initialized or not
   private boolean isInitialized = false;
 
@@ -31,14 +34,20 @@ public abstract class AbstractEnumDataStore<E extends EnumData> implements EnumD
    * 
    * @param storeName String name of the DataStore.
    */
-  public AbstractEnumDataStore(String storeName, EnumDataProvider<E>[] predefinedValues) {
+  public AbstractEnumDataStore(String storeName, Class<E> enumClass, EnumDataProvider<E>[] predefinedValues) {
     this.storeName = storeName;
+    this.enumClass = enumClass;
     this.predefinedValues = predefinedValues;
   }
 
   @Override
   public String getDataStoreName() {
     return storeName;
+  }
+
+  @Override
+  public Class<E> getEnumClass() {
+    return enumClass;
   }
 
   @Override

@@ -17,6 +17,11 @@ public interface EnumDataStore<E extends EnumData> {
   public String getDataStoreName();
 
   /**
+   * @return Class of the Enum stored by the DataStore.
+   */
+  public Class<E> getEnumClass();
+  
+  /**
    * Initialize the DataStore.
    */
   public void init();
@@ -33,4 +38,5 @@ public interface EnumDataStore<E extends EnumData> {
    * @return Enum value with given name.
    */
   public E lookupByName(String name);
+  
 }
