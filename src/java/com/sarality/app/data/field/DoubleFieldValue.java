@@ -42,7 +42,7 @@ class DoubleFieldValue extends BaseFieldValue<Double> {
     return Double.toString(getValue());
   }
 
-  static class Factory implements FieldValueFactory {
+  static class Factory implements FieldValueFactory<Double> {
 
     @Override
     public FieldValue<Double> createFieldValue(Field field) {

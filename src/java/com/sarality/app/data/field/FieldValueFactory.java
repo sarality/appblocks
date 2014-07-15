@@ -5,7 +5,7 @@ package com.sarality.app.data.field;
  * 
  * @author abhideep@ (Abhideep Singh)
  */
-public interface FieldValueFactory {
+public interface FieldValueFactory<T> {
 
   /**
    * Create an instance of a FieldValue for the given Field with no data in it.
@@ -13,5 +13,5 @@ public interface FieldValueFactory {
    * @param field Field to create the FieldValue for.
    * @return Empty FieldValue for the given Field.
    */
-  public FieldValue<?> createFieldValue(Field field);
+  public FieldValue<T> createFieldValue(Field field);
 }
