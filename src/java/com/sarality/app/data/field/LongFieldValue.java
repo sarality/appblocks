@@ -44,7 +44,7 @@ class LongFieldValue extends BaseFieldValue<Long> {
     return Long.toString(getValue());
   }
 
-  static class Factory implements FieldValueFactory {
+  static class Factory implements FieldValueFactory<Long> {
 
     @Override
     public LongFieldValue createFieldValue(Field field) {

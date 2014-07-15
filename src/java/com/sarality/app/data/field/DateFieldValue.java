@@ -53,7 +53,7 @@ class DateFieldValue extends BaseFieldValue<Date> {
     return DATE_FORMAT.format(getValue());
   }
 
-  static class Factory implements FieldValueFactory {
+  static class Factory implements FieldValueFactory<Date> {
 
     @Override
     public FieldValue<Date> createFieldValue(Field field) {

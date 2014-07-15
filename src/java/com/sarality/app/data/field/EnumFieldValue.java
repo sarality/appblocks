@@ -48,7 +48,7 @@ public class EnumFieldValue<E extends Enum<E>> extends BaseFieldValue<E> {
     return getValue().name();
   }
 
-  static class Factory<E extends Enum<E>> implements FieldValueFactory {
+  static class Factory<E extends Enum<E>> implements FieldValueFactory<E> {
 
     private final Class<E> enumClass;
 

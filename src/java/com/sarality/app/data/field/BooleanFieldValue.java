@@ -42,7 +42,7 @@ class BooleanFieldValue extends BaseFieldValue<Boolean> {
     return getValue().toString();
   }
 
-  static class Factory implements FieldValueFactory {
+  static class Factory implements FieldValueFactory<Boolean> {
 
     @Override
     public FieldValue<Boolean> createFieldValue(Field field) {

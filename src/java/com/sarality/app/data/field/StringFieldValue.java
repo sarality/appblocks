@@ -42,7 +42,7 @@ class StringFieldValue extends BaseFieldValue<String> {
     return getValue();
   }
 
-  static class Factory implements FieldValueFactory {
+  static class Factory implements FieldValueFactory<String> {
 
     @Override
     public FieldValue<String> createFieldValue(Field field) {
