@@ -2,8 +2,10 @@ package com.sarality.app.data.field;
 
 import android.content.Context;
 
+import com.sarality.app.BaseApplication;
 import com.sarality.app.data.EnumData;
 import com.sarality.app.data.field.Field.DataType;
+import com.sarality.app.datastore.EnumDataStore;
 
 public class EnumDataFieldValue<E extends EnumData> extends BaseFieldValue<E> {
 
@@ -23,7 +25,11 @@ public class EnumDataFieldValue<E extends EnumData> extends BaseFieldValue<E> {
 
   @Override
   public void parseFrom(String stringValue) {
-    context.getApplicationInfo();
+    BaseApplication app = BaseApplication.getApp(context);
+    EnumDataStore<E> store = app.getEnumDataStore(getValueClass());
+    if (store != null) {
+      setValue(store.lookupByName(stringValue));
+    }
   }
 
   @Override
