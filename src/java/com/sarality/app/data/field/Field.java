@@ -16,6 +16,7 @@ public interface Field {
   public enum DataType {
     BOOLEAN,
     DATE,
+    DATETIME,
     DOUBLE,
     ENUM,
     INT,
