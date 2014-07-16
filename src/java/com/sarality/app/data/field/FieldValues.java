@@ -1,9 +1,10 @@
 package com.sarality.app.data.field;
 
+import hirondelle.date4j.DateTime;
+
 import java.util.Date;
 import java.util.Map;
 
-import com.dothat.app.module.flight.data.FlightDataField;
 import com.sarality.app.common.collect.Maps;
 import com.sarality.app.data.DataObject.Builder;
 
@@ -17,11 +18,15 @@ import com.sarality.app.data.DataObject.Builder;
 public abstract class FieldValues<T> {
 
   // Statically defined global Factories that can be used to create FieldValue instance.
-  private static final BooleanFieldValue.Factory BOOLEAN_FIELD_VALUE_FACTORY = new BooleanFieldValue.Factory();
-  private static final DateFieldValue.Factory DATE_FIELD_VALUE_FACTORY = new DateFieldValue.Factory();
-  private static final DoubleFieldValue.Factory DOUBLE_FIELD_VALUE_FACTORY = new DoubleFieldValue.Factory();
-  private static final LongFieldValue.Factory LONG_FIELD_VALUE_FACTORY = new LongFieldValue.Factory();
-  private static final StringFieldValue.Factory STRING_FIELD_VALUE_FACTORY = new StringFieldValue.Factory();
+  protected static final FieldValueFactory<Boolean> BOOLEAN_FIELD_VALUE_FACTORY = new BooleanFieldValue.Factory();
+  protected static final FieldValueFactory<Date> DATE_FIELD_VALUE_FACTORY = new DateFieldValue.Factory();
+  protected static final FieldValueFactory<DateTime> DATE_ONLY_FIELD_VALUE_FACTORY = 
+      new DateTimeFieldValue.DateOnlyFactory();
+  protected static final FieldValueFactory<DateTime> TIME_ONLY_FIELD_VALUE_FACTORY = 
+      new DateTimeFieldValue.TimeOnlyFactory();
+  protected static final FieldValueFactory<Double> DOUBLE_FIELD_VALUE_FACTORY = new DoubleFieldValue.Factory();
+  protected static final FieldValueFactory<Long> LONG_FIELD_VALUE_FACTORY = new LongFieldValue.Factory();
+  protected static final FieldValueFactory<String> STRING_FIELD_VALUE_FACTORY = new StringFieldValue.Factory();
 
   // Map between Field and FieldValue. A Map makes for an easy O(1) lookup.
   private Map<Field, FieldValue<?>> fieldValueMap = Maps.empty();
@@ -85,155 +90,45 @@ public abstract class FieldValues<T> {
   public abstract Builder<T> createBuilder();
 
   /**
-   * Sets the Field's value to bet the given Boolean object.
+   * Extract the value stored in the field.
    * 
-   * @param field Field that we are setting the value for.
-   * @param value Boolean value being set for the field.
+   * @param field Field to extract value from.
+   * @param fieldClass The class of the data to be retreived from the field.
+   * @return value stored for the field, null if the Field does not exist or has no value.
    */
-  protected void setFieldValue(Field field, Boolean value) {
-    FieldValue<Boolean> fieldValue = BOOLEAN_FIELD_VALUE_FACTORY.createFieldValue(field);
+  protected <V> V getValue(Field field, Class<V> fieldClass) {
+    if (hasValue(field)) {
+      FieldValue<?> fieldValue = getFieldValue(field);
+      assertValidDataType(field, fieldValue, fieldClass);
+      @SuppressWarnings("unchecked")
+      FieldValue<V> value = (FieldValue<V>) fieldValue;
+      return value.getValue();
+    }
+    return null;    
+  }
+
+  /**
+   * Set the value of the field to be the given data object.
+   * 
+   * @param field Field whose value needs to be set.
+   * @param value The data for the field value.
+   * @param factory Factory to create an instance of FieldValue that stores field, value association.
+   */
+  protected <V> void setFieldValue(Field field, V value, FieldValueFactory<V> factory) {
+    FieldValue<V> fieldValue = factory.createFieldValue(field);
     fieldValue.setValue(value);
     fieldValueMap.put(field, fieldValue);
   }
 
   /**
-   * Extract the Boolean value stored in the Field.
+   * Validates that the FieldValue stored for the given field does in fact have a data of the given Class.
+   * <p>
+   * Validation is persformed before we extract data from the FieldValue.
    * 
-   * @param field Field to extract value from.
-   * @return Boolean value stored for the field, null if the Field does not exist or has no value.
-   * @throws IllegalArgumentException If the Field does not store a Boolean value.
+   * @param field Field that is being validated.
+   * @param fieldValue The value for the given field.
+   * @param valueClass The class of data that this field must have.
    */
-  protected Boolean getBooleanValue(FlightDataField field) {
-    if (hasValue(field)) {
-      FieldValue<?> fieldValue = getFieldValue(field);
-      assertValidDataType(field, fieldValue, Boolean.class);
-      @SuppressWarnings("unchecked")
-      FieldValue<Boolean> value = (FieldValue<Boolean>) fieldValue;
-      return value.getValue();
-    }
-    return null;
-  }
-
-  /**
-   * Sets the Field's value to bet the given Date object.
-   * 
-   * @param field Field that we are setting the value for.
-   * @param value Date value being set for the field.
-   */
-  protected void setFieldValue(Field field, Date value) {
-    FieldValue<Date> fieldValue = DATE_FIELD_VALUE_FACTORY.createFieldValue(field);
-    fieldValue.setValue(value);
-    fieldValueMap.put(field, fieldValue);
-  }
-
-  /**
-   * Extract the Date value stored in the Field.
-   * 
-   * @param field Field to extract value from.
-   * @return Date value stored for the field, null if the Field does not exist or has no value.
-   * @throws IllegalArgumentException If the Field does not store a Date value.
-   */
-  protected Date getDateValue(FlightDataField field) {
-    if (hasValue(field)) {
-      FieldValue<?> fieldValue = getFieldValue(field);
-      assertValidDataType(field, fieldValue, Date.class);
-      @SuppressWarnings("unchecked")
-      FieldValue<Date> value = (FieldValue<Date>) fieldValue;
-      return value.getValue();
-    }
-    return null;
-  }
-
-  /**
-   * Sets the Field's value to bet the given Double object.
-   * 
-   * @param field Field that we are setting the value for.
-   * @param value Double value being set for the field.
-   */
-  protected void setFieldValue(Field field, Double value) {
-    FieldValue<Double> fieldValue = DOUBLE_FIELD_VALUE_FACTORY.createFieldValue(field);
-    fieldValue.setValue(value);
-    fieldValueMap.put(field, fieldValue);
-  }
-
-  /**
-   * Extract the Double value stored in the Field.
-   * 
-   * @param field Field to extract value from.
-   * @return Double value stored for the field, null if the Field does not exist or has no value.
-   * @throws IllegalArgumentException If the Field does not store a Double value.
-   */
-  protected Double getDoubleValue(FlightDataField field) {
-    if (hasValue(field)) {
-      FieldValue<?> fieldValue = getFieldValue(field);
-      assertValidDataType(field, fieldValue, Double.class);
-      @SuppressWarnings("unchecked")
-      FieldValue<Double> value = (FieldValue<Double>) fieldValue;
-      return value.getValue();
-    }
-    return null;
-  }
-
-  /**
-   * Sets the Field's value to bet the given Long object.
-   * 
-   * @param field Field that we are setting the value for.
-   * @param value Long value being set for the field.
-   */
-  protected void setFieldValue(Field field, Long value) {
-    FieldValue<Long> fieldValue = LONG_FIELD_VALUE_FACTORY.createFieldValue(field);
-    fieldValue.setValue(value);
-    fieldValueMap.put(field, fieldValue);
-  }
-
-  /**
-   * Extract the Long value stored in the Field.
-   * 
-   * @param field Field to extract value from.
-   * @return Long value stored for the field, null if the Field does not exist or has no value.
-   * @throws IllegalArgumentException If the Field does not store a Long value.
-   */
-  protected Long getLongValue(FlightDataField field) {
-    if (hasValue(field)) {
-      FieldValue<?> fieldValue = getFieldValue(field);
-      assertValidDataType(field, fieldValue, Long.class);
-      @SuppressWarnings("unchecked")
-      FieldValue<Long> value = (FieldValue<Long>) fieldValue;
-      return value.getValue();
-    }
-    return null;
-  }
-
-  /**
-   * Sets the Field's value to bet the given String object.
-   * 
-   * @param field Field that we are setting the value for.
-   * @param value String value being set for the field.
-   */
-  protected void setFieldValue(Field field, String value) {
-    FieldValue<String> fieldValue = STRING_FIELD_VALUE_FACTORY.createFieldValue(field);
-    fieldValue.setValue(value);
-    fieldValueMap.put(field, fieldValue);
-  }
-
-  /**
-   * Extract the String value stored in the Field.
-   * 
-   * @param field Field to extract value from.
-   * @return String value stored for the field, null if the Field does not exist or has no value.
-   * @throws IllegalArgumentException If the Field does not store a Long value.
-   */
-  protected String getStringValue(FlightDataField field) {
-    if (hasValue(field)) {
-      FieldValue<?> fieldValue = getFieldValue(field);
-      assertValidDataType(field, fieldValue, String.class);
-      @SuppressWarnings("unchecked")
-      FieldValue<String> value = (FieldValue<String>) fieldValue;
-      return value.getValue();
-    }
-    return null;
-  }
-
   protected void assertValidDataType(Field field, FieldValue<?> fieldValue, Class<?> valueClass) {
     if (fieldValue.getValueClass() != valueClass) {
       throw new IllegalArgumentException("Field " + field.getName() + " has the Data Type " + field.getDataType()
@@ -241,5 +136,4 @@ public abstract class FieldValues<T> {
           + fieldValue.getClass() + "values");
     }
   }
-
 }
