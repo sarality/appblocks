@@ -8,7 +8,7 @@ import java.util.Map;
 public class Registry<K, V> {
   private final Map<K, V> registry = new HashMap<K, V>();
 
-  protected Registry() {
+  public Registry() {
     // Empty registry
   }
 
