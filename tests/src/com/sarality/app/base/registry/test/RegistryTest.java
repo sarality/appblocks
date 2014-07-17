@@ -4,58 +4,97 @@ import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.TestCase;
+import android.test.MoreAsserts;
 
 import com.sarality.app.base.registry.Registry;
 import com.sarality.app.base.registry.Registry.Entry;
 import com.sarality.app.base.registry.Registry.EntryProvider;
 
+/**
+ * Tests for {@link Registry}.
+ * 
+ * @author abhideep@ (Abhideep Singh)
+ * @author sunayna@ (Sunayna Uberoy)
+ */
 public class RegistryTest extends TestCase {
-  Registry<String,String> registry;
+  private Registry<String, String> registry;
 
-  public RegistryTest() {
-    super();
+  public RegistryTest(String name) {
+    super(name);
   }
 
   @Override
   public void setUp() {
-    registry = new Registry<String,String>();
+    registry = new Registry<String, String>();
     assertNotNull(registry);
   }
 
-  public void testLookup_List() {
-    Entry<String, String> entry = new Entry<String, String>("Name", "Registry");
+  public void testRegisterAndLookup_RegisterUsingList() {
     List<Entry<String, String>> list = new ArrayList<Entry<String, String>>();
-    list.add(entry);
+    list.add(createEntry("key1", "value1"));
+    list.add(createEntry("key2", "value2"));
     registry.register(list);
-    assertEquals(registry.lookup("Name"), "Registry");
+    assertEquals(registry.lookup("key1"), "value1");
+    assertEquals(registry.lookup("key2"), "value2");
+    assertNull(registry.lookup("key3"));
   }
 
-  public void testLookup_EntryProvider() {
-    TestDummyRegistryEntryProvider entry = new TestDummyRegistryEntryProvider();
-    entry.addEntry();
-    registry.register(entry);
-    assertEquals(registry.lookup("Key"), "Value");
+  public void testRegisterAndLookup_RegisterUsingEmptyList() {
+    List<Entry<String, String>> list = new ArrayList<Entry<String, String>>();
+    registry.register(list);
+    assertNull(registry.lookup("key1"));
   }
 
-  public void testEntryProvider_Provide() {
-    TestDummyRegistryEntryProvider entry = new TestDummyRegistryEntryProvider();
-    entry.addEntry();
-    assertNotNull(entry.provide());
+  public void testRegisterAndLookup_RegisterUsingProvider() {
+    TestDummyRegistryEntryProvider provider = new TestDummyRegistryEntryProvider();
+    provider.addEntry("key1", "value1");
+    provider.addEntry("key2", "value2");
+    registry.register(provider);
+    assertEquals(registry.lookup("key1"), "value1");
+    assertEquals(registry.lookup("key2"), "value2");
+    assertNull(registry.lookup("key3"));
+  }
+
+  public void testRegisterAndLookup_RegisterUsingEmptyProvider() {
+    TestDummyRegistryEntryProvider provider = new TestDummyRegistryEntryProvider();
+    registry.register(provider);
+    assertNull(registry.lookup("key1"));
   }
 
   public void testRegistryEntry() {
-    Entry<String, String> entry = new Entry<String, String>("Name", "Registry");
-    assertEquals(entry.getKey(), "Name");
-    assertEquals(entry.getValue(), "Registry");
+    Entry<String, String> entry = new Entry<String, String>("key", "value");
+    assertEquals(entry.getKey(), "key");
+    assertEquals(entry.getValue(), "value");
+  }
+
+  public void testRegistryEntryProvider_EmptyProvide() {
+    TestDummyRegistryEntryProvider provider = new TestDummyRegistryEntryProvider();
+    List<Entry<String, String>> list = provider.provide();
+    assertNotNull(list);
+    assertTrue(list.isEmpty());
+  }
+
+  public void testRegistryEntryProvider_ProvideWithMultipleEntries() {
+    TestDummyRegistryEntryProvider provider = new TestDummyRegistryEntryProvider();
+    provider.addEntry("key1", "value1");
+    provider.addEntry("key2", "value2");
+    provider.addEntry("key3", "value3");
+    List<Entry<String, String>> list = provider.provide();
+    assertNotNull(list);
+    assertFalse(list.isEmpty());
+    assertEquals(3, list.size());
+    MoreAsserts.assertContentsInAnyOrder(list, createEntry("key1", "value1"), createEntry("key2", "value2"),
+        createEntry("key3", "value3"));
+  }
+
+  private Entry<String, String> createEntry(String key, String value) {
+    return new Entry<String, String>(key, value);
   }
 
   private class TestDummyRegistryEntryProvider extends EntryProvider<String, String> {
-    public TestDummyRegistryEntryProvider() {
-      super();
-    }
 
-    public void addEntry() {
-      addEntry("Key", "Value");
+    public void addEntry(String key, String value) {
+      super.addEntry(key, value);
     }
   }
 }
