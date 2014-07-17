@@ -24,6 +24,15 @@ public abstract class BaseApplication extends Application {
 
   private final List<ModuleInitializer> moduleInitializerList = Lists.of();
 
+  public BaseApplication(Context context){
+    super();
+    attachBaseContext(context);
+  }
+  
+  public BaseApplication() {
+    super();
+  }
+  
   public static BaseApplication getApp(Context context) {
     return (BaseApplication) context.getApplicationContext();
   }
