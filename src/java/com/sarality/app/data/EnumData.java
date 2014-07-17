@@ -8,10 +8,16 @@ package com.sarality.app.data;
  * 
  * @author abhideep@ (Abhideep Singh)
  */
-public interface EnumData {
+public interface EnumData<T> {
+
+  /**
+   * @return The Data associated with the Enum
+   */
+  T getEnumData();
 
   /**
    * @return String name of Enum.
    */
   public String getEnumName();
+
 }
