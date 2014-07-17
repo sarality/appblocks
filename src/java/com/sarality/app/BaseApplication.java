@@ -7,10 +7,6 @@ import android.app.Application;
 import android.content.Context;
 
 import com.sarality.app.common.collect.Lists;
-import com.sarality.app.config.ModuleInitializer;
-import com.sarality.app.data.EnumData;
-import com.sarality.app.datastore.EnumDataStore;
-import com.sarality.app.datastore.EnumDataStoreRegistry;
 import com.sarality.app.datastore.db.Table;
 import com.sarality.app.datastore.db.TableRegistry;
 
@@ -25,8 +21,6 @@ import com.sarality.app.datastore.db.TableRegistry;
 public abstract class BaseApplication extends Application {
 
   private final TableRegistry tableRegistry = new TableRegistry();
-
-  private final EnumDataStoreRegistry enumStoreRegistry = new EnumDataStoreRegistry();
 
   private final List<ModuleInitializer> moduleInitializerList = Lists.of();
 
@@ -98,13 +92,7 @@ public abstract class BaseApplication extends Application {
    */
   private void initEnumDataStores() {
     for (ModuleInitializer module : moduleInitializerList) {
-      List<EnumDataStore<?>> storeList = module.getEnumDataStores(this);
-      if (storeList != null) {
-        for (EnumDataStore<?> store : storeList) {
-          store.init();
-          enumStoreRegistry.register(store);
-        }
-      }
+      module.initEnumDatas(this);
     }
   }
 
@@ -116,27 +104,5 @@ public abstract class BaseApplication extends Application {
    */
   public Table<?> getTable(String name) {
     return tableRegistry.getTable(name);
-  }
-
-  /**
-   * Retrieve the EnumDataStore with the given name that has been registered with the Application.
-   * 
-   * @param name Name of the EnumDataStore being retrieved.
-   * @return EnumDataStore with the given name.
-   */
-  public EnumDataStore<?> getEnumDataStore(String name) {
-    return enumStoreRegistry.getEnumDataStore(name);
-  }
-
-  /**
-   * Retrieve the EnumDataStore that stores EnumData of the given Class.
-   * 
-   * @param enumClass Class of the EnumData that is stored by the EnumDataStore being retrieved.
-   * @return EnumDataStore that stores EnumData of the given class.
-   */
-  public <E extends EnumData> EnumDataStore<E> getEnumDataStore(Class<E> enumClass) {
-    @SuppressWarnings("unchecked")
-    EnumDataStore<E> store = (EnumDataStore<E>) enumStoreRegistry.getEnumDataStore(enumClass);
-    return store;
   }
 }
