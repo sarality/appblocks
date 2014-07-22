@@ -6,6 +6,11 @@ import junit.framework.TestCase;
 
 import com.sarality.app.common.collect.Lists;
 
+/**
+ * Tests for {@link Lists}.
+ * 
+ * @author sunayna@ (Sunayna Uberoy)
+ */
 public class ListsTest extends TestCase {
 
   public void testNullEntry() {
