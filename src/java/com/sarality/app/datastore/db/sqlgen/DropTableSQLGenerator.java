@@ -12,6 +12,6 @@ public class DropTableSQLGenerator implements SQLGenerator<Table<?>> {
 
   @Override
   public void appendSQL(StringBuilder builder, Table<?> table, TableInfo metadata) {
-    builder.append("DROP TABLE ").append(table.getTableName()).append(";");    
+    builder.append("DROP TABLE IF EXISTS ").append(table.getTableName()).append(";");
   }
 }
