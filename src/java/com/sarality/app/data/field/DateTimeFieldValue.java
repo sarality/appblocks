@@ -9,7 +9,7 @@ import java.util.Locale;
  * 
  * @author abhideep@ (Abhideep Singh)
  */
-public class DateTimeFieldValue extends BaseFieldValue<DateTime> {
+class DateTimeFieldValue extends BaseFieldValue<DateTime> {
 
   private final String dateTimeFormat;
 
@@ -18,8 +18,8 @@ public class DateTimeFieldValue extends BaseFieldValue<DateTime> {
    * 
    * @param field Field that this is a value for.
    */
-  private DateTimeFieldValue(Field field, String dateTimeFormat) {
-    super(field, Field.DataType.DATETIME, DateTime.class);
+  private DateTimeFieldValue(Field field, Field.DataType dataType, String dateTimeFormat) {
+    super(field, dataType, DateTime.class);
     this.dateTimeFormat = dateTimeFormat;
   }
 
@@ -62,7 +62,7 @@ public class DateTimeFieldValue extends BaseFieldValue<DateTime> {
 
     @Override
     public FieldValue<DateTime> createFieldValue(Field field) {
-      return new DateTimeFieldValue(field, DATE_TIME_FORMAT);
+      return new DateTimeFieldValue(field, Field.DataType.DATETIME, DATE_TIME_FORMAT);
     }
   }
 
@@ -77,7 +77,7 @@ public class DateTimeFieldValue extends BaseFieldValue<DateTime> {
 
     @Override
     public FieldValue<DateTime> createFieldValue(Field field) {
-      return new DateTimeFieldValue(field, TIME_FORMAT);
+      return new DateTimeFieldValue(field, Field.DataType.TIME_ONLY, TIME_FORMAT);
     }
   }
 
@@ -86,13 +86,13 @@ public class DateTimeFieldValue extends BaseFieldValue<DateTime> {
    * 
    * @author abhideep@ (Abhideep Singh)
    */
-  public static class DateOnlyFactory implements FieldValueFactory<DateTime> {
+  static class DateOnlyFactory implements FieldValueFactory<DateTime> {
 
     private static final String DATE_FORMAT = "yyyy-MM-dd";
 
     @Override
     public FieldValue<DateTime> createFieldValue(Field field) {
-      return new DateTimeFieldValue(field, DATE_FORMAT);
+      return new DateTimeFieldValue(field, Field.DataType.DATE_ONLY, DATE_FORMAT);
     }
   }
 }

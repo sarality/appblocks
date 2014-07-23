@@ -15,14 +15,17 @@ public interface Field {
    */
   public enum DataType {
     BOOLEAN,
+    DATA_OBJECT,
     DATE,
     DATETIME,
+    DATE_ONLY,
     DOUBLE,
     ENUM,
-    INT,
+    ENUM_DATA,
+    INTEGER,
     LONG,
     STRING,
-    COMPLEX,
+    TIME_ONLY,
   }
 
   /**
