@@ -35,7 +35,7 @@ public class TableIsEmptyTest extends ActivityUnitTestCase<ReminderListActivity>
 
     Table<ReminderData> table = new RemindersTable(app);
     TableIsEmpty emptyTable = new TableIsEmpty(table);
-    assertSame(false, emptyTable.getValue());
+    assertSame(true, emptyTable.getValue());
 
     // Making sure that the table is not empty
     table.open();

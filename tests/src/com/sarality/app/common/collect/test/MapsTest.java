@@ -27,7 +27,7 @@ public class MapsTest extends TestCase {
 
   public void testBuilderClass_Build() {
     Builder<String, Long> builder = Maps.builder();
-    Long longValue = Long.valueOf("12345678901234567890");
+    Long longValue = Long.valueOf("1234567890");
     Map<String, Long> map = builder.with("test", longValue).build();
     assertNotNull(map);
     MoreAsserts.assertNotEmpty(map);
