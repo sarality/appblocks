@@ -1,56 +1,49 @@
 package com.sarality.app.config.test;
 
-import android.test.ActivityUnitTestCase;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-import com.dothat.app.assistant.AssistantApp;
-import com.dothat.app.common.data.ServiceProvider;
-import com.dothat.app.common.data.ServiceType;
-import com.dothat.app.module.reminder.ReminderListActivity;
-import com.dothat.app.module.reminder.data.ActivityType;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.dothat.app.module.reminder.data.ReminderData;
-import com.dothat.app.module.reminder.data.ReminderType;
-import com.dothat.app.module.reminder.db.RemindersTable;
 import com.sarality.app.config.TableIsEmpty;
 import com.sarality.app.datastore.db.Table;
+import com.sarality.app.view.action.test.BaseUnitTest;
 
 /**
  * Tests for {@link TableIsEmpty}.
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class TableIsEmptyTest extends ActivityUnitTestCase<ReminderListActivity> {
+public class TableIsEmptyTest extends BaseUnitTest {
 
-  public TableIsEmptyTest() {
-    super(ReminderListActivity.class);
-  }
+  @SuppressWarnings("unchecked")
+  private Table<ReminderData> testTable = (Table<ReminderData>) mock(Table.class);
 
   public void testConstructor() {
-    RemindersTable reminderTable = null;
-    TableIsEmpty emptyTable = new TableIsEmpty(reminderTable);
+    TableIsEmpty emptyTable = new TableIsEmpty(testTable);
     assertNotNull(emptyTable);
   }
 
+  @SuppressWarnings("unchecked")
   public void testGetValue() {
-    AssistantApp app = new AssistantApp(getInstrumentation().getTargetContext().getApplicationContext());
+    TableIsEmpty emptyTable = new TableIsEmpty(testTable);
 
-    Table<ReminderData> table = new RemindersTable(app);
-    TableIsEmpty emptyTable = new TableIsEmpty(table);
+    List<ReminderData> dataList = new ArrayList<ReminderData>();
+    when(testTable.query(null)).thenReturn((List<ReminderData>) dataList);
+
+    // Check for Empty Table
     assertSame(true, emptyTable.getValue());
 
-    // Making sure that the table is not empty
-    table.open();
-    ReminderData reminderData = new ReminderData.Builder().setReminderType(ReminderType.PAY_BILL)
-        .setActivityType(ActivityType.BILL).setServiceType(ServiceType.WATER).setServiceProvider(ServiceProvider.BSES)
-        .build();
-    table.create(reminderData);
-    table.close();
-
+    // Add Entry into list and check for non emptytable
+    ReminderData data = mock(ReminderData.class);
+    dataList.add(data);
     assertSame(false, emptyTable.getValue());
   }
 
   public void testIsEditable() {
-    RemindersTable table = null;
-    TableIsEmpty emptyTable = new TableIsEmpty(table);
+    TableIsEmpty emptyTable = new TableIsEmpty(testTable);
     assertSame(false, emptyTable.isEditable());
   }
 }
