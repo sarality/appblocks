@@ -12,8 +12,10 @@ import com.sarality.app.common.collect.Maps;
  */
 public class EnumDataRegistry {
 
+  private static final EnumDataRegistry GLOBAL_INSTANCE = new EnumDataRegistry();
+  
   // Global static map that stores a Class wise Map of Maps. The inner map has Name and DataEnum Entries.
-  private static final Map<Class<? extends EnumData<?>>, Map<String, EnumData<?>>> enumDataMap = Maps.empty();
+  private final Map<Class<? extends EnumData<?>>, Map<String, EnumData<?>>> enumDataMap = Maps.empty();
 
   /**
    * Register a EnumData instance.
@@ -37,7 +39,7 @@ public class EnumDataRegistry {
    * @param name String name for the EnumData.
    * @return EnumData instance with given Class and name.
    */
-  public static <E extends EnumData<E>> E valueOf(Class<E> enumClass, String name) {
+  public <E extends EnumData<E>> E valueOf(Class<E> enumClass, String name) {
     Map<String, EnumData<?>> dataMap = enumDataMap.get(enumClass);
     if (dataMap != null) {
       @SuppressWarnings("unchecked")
@@ -45,5 +47,9 @@ public class EnumDataRegistry {
       return value;
     }
     return null;
-  }  
+  }
+  
+  public static final EnumDataRegistry getGlobalInstance() {
+    return GLOBAL_INSTANCE;
+  }
 }

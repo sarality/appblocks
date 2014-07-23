@@ -11,19 +11,28 @@ package com.sarality.app.data;
  */
 public abstract class BaseEnumData<T extends EnumData<T>> implements EnumData<T> {
 
-  // Global registry for all Enums in the system
-  private static final EnumDataRegistry registry = new EnumDataRegistry();
-
   // Unique name for the enum - name is unique with the class
   private final String enumName;
-  
+  private final EnumDataRegistry registry;
+
   /**
    * Constructor.
    * 
    * @param enumName Unique string name for the EnumData
    */
   public BaseEnumData(String enumName) {
+    this(enumName, EnumDataRegistry.getGlobalInstance());
+  }
+
+  /**
+   * Constructor for testing.
+   * 
+   * @param enumName Unique string name for the EnumData
+   * @param registry Registry to use for testing purposes. By default a global registry is used.
+   */
+  public BaseEnumData(String enumName, EnumDataRegistry registry) {
     this.enumName = enumName;
+    this.registry = registry;
   }
 
   /**
@@ -51,6 +60,6 @@ public abstract class BaseEnumData<T extends EnumData<T>> implements EnumData<T>
    * @return EnumData instance with given Class and name.
    */
   public static <T extends EnumData<T>> T valueOf(Class<T> enumClass, String name) {
-    return EnumDataRegistry.valueOf(enumClass, name);
+    return EnumDataRegistry.getGlobalInstance().valueOf(enumClass, name);
   }
 }

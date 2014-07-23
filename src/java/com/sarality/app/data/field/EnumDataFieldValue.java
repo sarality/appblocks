@@ -6,9 +6,11 @@ import com.sarality.app.data.field.Field.DataType;
 
 public class EnumDataFieldValue<E extends EnumData<E>> extends BaseFieldValue<E> {
 
+  private final EnumDataRegistry registry;
 
-  public EnumDataFieldValue(Field field, DataType fieldType, Class<E> valueClass) {
-    super(field, DataType.ENUM, valueClass);
+  public EnumDataFieldValue(Field field, DataType fieldType, Class<E> valueClass, EnumDataRegistry registry) {
+    super(field, DataType.ENUM_DATA, valueClass);
+    this.registry = registry;
   }
 
   @Override
@@ -20,7 +22,7 @@ public class EnumDataFieldValue<E extends EnumData<E>> extends BaseFieldValue<E>
 
   @Override
   public void parseFrom(String stringValue) {
-    E value = EnumDataRegistry.valueOf(getValueClass(), stringValue);
+    E value = registry.valueOf(getValueClass(), stringValue);
     setValue(value);
   }
 
@@ -29,16 +31,22 @@ public class EnumDataFieldValue<E extends EnumData<E>> extends BaseFieldValue<E>
     return getValue().getEnumName();
   }
 
-  public static class Factory<E extends EnumData<E>> implements FieldValueFactory<E> { 
+  public static class Factory<E extends EnumData<E>> implements FieldValueFactory<E> {
     private final Class<E> valueClass;
-    
-    public Factory(Class<E> valueClass) {
+    private final EnumDataRegistry registry;
+
+    public Factory(Class<E> valueClass, EnumDataRegistry registry) {
       this.valueClass = valueClass;
+      this.registry = registry;
+    }
+
+    public Factory(Class<E> valueClass) {
+      this(valueClass, EnumDataRegistry.getGlobalInstance());
     }
 
     @Override
     public FieldValue<E> createFieldValue(Field field) {
-      return new EnumDataFieldValue<E>(field, DataType.ENUM, valueClass);
+      return new EnumDataFieldValue<E>(field, DataType.ENUM_DATA, valueClass, registry);
     }
   }
 }
