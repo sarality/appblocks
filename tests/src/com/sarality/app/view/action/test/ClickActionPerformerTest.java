@@ -17,7 +17,7 @@ import com.sarality.app.view.action.ViewDetail;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class ClickActionPerformerTest extends AppblockActivityTest {
+public class ClickActionPerformerTest extends BaseUnitTest {
 
   public void testSetupListener() {
     ViewAction action = mock(ViewAction.class);

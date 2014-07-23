@@ -5,13 +5,12 @@ import java.util.List;
 
 import android.app.Application;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.test.ActivityUnitTestCase;
 
 import com.dothat.app.assistant.AssistantApp;
-import com.dothat.app.module.reminder.ReminderListActivity;
 import com.dothat.app.module.reminder.db.RemindersTable.Column;
 import com.sarality.app.datastore.db.DefaultTableSchemaUpdater;
 import com.sarality.app.datastore.db.SqliteTable;
@@ -19,27 +18,24 @@ import com.sarality.app.datastore.db.SqliteTableSchemaUpdater;
 import com.sarality.app.datastore.extractor.CursorDataExtractor;
 import com.sarality.app.datastore.populator.ContentValuesPopulator;
 import com.sarality.app.datastore.sms.SmsMessage;
+import com.sarality.app.view.action.test.BaseUnitTest;
 
 /**
  * Tests for {@link DefaultTableSchemaUpdater}.
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class DefaultTableSchemaUpdaterTest extends ActivityUnitTestCase<ReminderListActivity> {
+public class DefaultTableSchemaUpdaterTest extends BaseUnitTest {
 
   public static final String TABLE_NAME = "test";
   private static final String DATABASE_NAME = "test.db";
   private static final int TABLE_VERSION = 1;
 
-  public DefaultTableSchemaUpdaterTest() {
-    super(ReminderListActivity.class);
-  }
-
   public void testDefaultTableSchemaUpdater() {
     DefaultTableSchemaUpdater schemaUpdater = new DefaultTableSchemaUpdater();
     assertNotNull(schemaUpdater);
   }
-  
+
   public void testUpdateSchema() {
     DefaultTableSchemaUpdater schemaUpdater = new DefaultTableSchemaUpdater();
     AssistantApp app = new AssistantApp(getInstrumentation().getTargetContext().getApplicationContext());
@@ -47,12 +43,23 @@ public class DefaultTableSchemaUpdaterTest extends ActivityUnitTestCase<Reminder
     TestTable testTable = new TestTable(app, DATABASE_NAME, TABLE_NAME, TABLE_VERSION,
         Arrays.<com.sarality.app.datastore.Column> asList(Column.values()), null, null, schemaUpdater);
 
-    TestOnlineHelper onlineHelper = new TestOnlineHelper(getInstrumentation().getTargetContext().getApplicationContext(), null, null,
-        TABLE_VERSION);
+    TestOnlineHelper onlineHelper = new TestOnlineHelper(getInstrumentation().getTargetContext()
+        .getApplicationContext(), null, null, TABLE_VERSION);
 
     SQLiteDatabase db = onlineHelper.getWritableDatabase();
-
     schemaUpdater.updateSchema(db, testTable);
+    assertEquals(true, TableExists(db));
+  }
+
+  public boolean TableExists(SQLiteDatabase db) {
+    Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM sqlite_master WHERE type = ? AND name = ?", new String[] {
+        "table", TABLE_NAME });
+    if (!cursor.moveToFirst()) {
+      return false;
+    }
+    int count = cursor.getInt(0);
+    cursor.close();
+    return count > 0;
   }
 }
 

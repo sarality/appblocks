@@ -12,41 +12,40 @@ import com.sarality.app.view.action.ViewAction;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class BaseActionPerformerTest extends AppblockActivityTest {
+public class BaseActionPerformerTest extends BaseUnitTest {
 
   public void testBaseActionPerformer() {
     ViewAction action = mock(ViewAction.class);
-    BaseActionPerformer performer = new TestDummyBaseActionPerformer(action);
+    BaseActionPerformer performer = new TestActionPerformer(action);
     assertNotNull(performer);
   }
 
   public void testIsValidListenerView() {
     ViewAction action = mock(ViewAction.class);
-    BaseActionPerformer performer = new TestDummyBaseActionPerformer(action);
+    BaseActionPerformer performer = new TestActionPerformer(action);
     View view = mock(View.class);
 
     // stubbing
     when(action.getViewId()).thenReturn(1234);
     when(view.getId()).thenReturn(1234);
 
-    assertEquals(performer.isValidListenerView(view),true);
+    assertEquals(performer.isValidListenerView(view), true);
 
     // stubbing
     when(action.getViewId()).thenReturn(1234);
     when(view.getId()).thenReturn(5678);
 
-    try{
-       performer.isValidListenerView(view);
-    }
-    catch(Exception e){
-      assertEquals(e.getClass(), IllegalArgumentException.class);
+    try {
+      performer.isValidListenerView(view);
+    } catch (IllegalArgumentException e) {
+      // Do nothing
     }
   }
 }
 
-class TestDummyBaseActionPerformer extends BaseActionPerformer {
+class TestActionPerformer extends BaseActionPerformer {
 
-  public TestDummyBaseActionPerformer(ViewAction action) {
+  public TestActionPerformer(ViewAction action) {
     super(action);
   }
 

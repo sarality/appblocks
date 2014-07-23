@@ -20,7 +20,7 @@ import com.sarality.app.view.action.ViewDetail;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class BaseViewActionTest extends AppblockActivityTest {
+public class BaseViewActionTest extends BaseUnitTest {
 
   public void testBaseViewAction() {
     TestDummyBaseViewAction action = new TestDummyBaseViewAction(1234, TriggerType.CLICK);

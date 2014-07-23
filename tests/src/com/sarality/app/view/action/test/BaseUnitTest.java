@@ -4,9 +4,14 @@ import android.test.ActivityUnitTestCase;
 
 import com.dothat.app.module.reminder.ReminderListActivity;
 
-public class AppblockActivityTest extends ActivityUnitTestCase<ReminderListActivity> {
+/**
+ * Base Test that should be extended by all test cases that want to use mockito.
+ * 
+ * @author sunayna@ (Sunayna Uberoy)
+ */
+public class BaseUnitTest extends ActivityUnitTestCase<ReminderListActivity> {
 
-  public AppblockActivityTest() {
+  public BaseUnitTest() {
     super(ReminderListActivity.class);
   }
 
