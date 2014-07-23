@@ -49,10 +49,6 @@ public class SmsMessage extends BaseFieldBasedDataObject<SmsMessage> implements 
     super();
   }
 
-  public void registerAllFields() {
-//    registerFields(messageId, threadId, address, body , messageType, isRead, sentDate, receivedDate, recipient);    
-  }
-
   public final Long getMessageId() {
     return messageId.getValue();
   }
@@ -179,7 +175,7 @@ public class SmsMessage extends BaseFieldBasedDataObject<SmsMessage> implements 
       return this;
     }
 
-    public Builder setRead(boolean isRead) {
+    public Builder setRead(Boolean isRead) {
       data.isRead.setValue(isRead);
       return this;
     }
