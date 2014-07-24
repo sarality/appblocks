@@ -7,16 +7,20 @@ import com.sarality.app.datastore.db.Table;
 public class TableIsEmpty implements AppStateValue<Boolean> {
 
   private final Table<?> table;
-  
+
   public TableIsEmpty(Table<?> table) {
     this.table = table;
   }
 
   @Override
   public Boolean getValue() {
-    table.open();
-    List<?> dataList = table.query(null);
-    return dataList.isEmpty();
+    try {
+      table.open();
+      List<?> dataList = table.query(null);
+      return dataList.isEmpty();
+    } finally {
+      table.close();
+    }
   }
 
   @Override
