@@ -2,13 +2,12 @@ package com.sarality.app.view.list;
 
 import java.util.List;
 
-import com.sarality.app.view.datasource.DataSource;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.util.Log;
+
+import com.sarality.app.view.datasource.DataSource;
 
 /**
  * Async Loader that will load the data from the database in the background and not on the 
@@ -18,7 +17,6 @@ import android.util.Log;
  */
 public class ListComponentLoaderCallback<T> implements LoaderManager.LoaderCallbacks<List<T>>{
 
-  private static final String TAG = "ListAsyncLoaderManager";
   private final DataSource<T> dataSource;
   private final Activity context;
   private ListComponentLoader<T> loader;
@@ -32,7 +30,6 @@ public class ListComponentLoaderCallback<T> implements LoaderManager.LoaderCallb
   
   @Override
   public Loader<List<T>> onCreateLoader(int id, Bundle args) {
-    Log.d(TAG, "LoaderCreated");
     loader = new ListComponentLoader<T>(context, dataSource);
     return loader;
   }
