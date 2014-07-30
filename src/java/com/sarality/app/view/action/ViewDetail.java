@@ -21,6 +21,7 @@ public class ViewDetail {
    * @param parentView
    */
   public ViewDetail(View view, View parentView) {
+    this.view = view;
     this.parentView = parentView;
   }
 

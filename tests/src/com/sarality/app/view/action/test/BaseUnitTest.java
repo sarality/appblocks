@@ -15,8 +15,13 @@ public class BaseUnitTest extends ActivityUnitTestCase<ReminderListActivity> {
     super(ReminderListActivity.class);
   }
 
-  protected void setUp() throws Exception {
-    super.setUp();
-    System.setProperty("dexmaker.dexcache", getInstrumentation().getTargetContext().getCacheDir().getPath());
+  protected void setUp(){
+    try{
+      super.setUp();
+      System.setProperty("dexmaker.dexcache", getInstrumentation().getTargetContext().getCacheDir().getPath());
+    }
+    catch(Exception e){
+      e.printStackTrace();
+    }
   }
 }

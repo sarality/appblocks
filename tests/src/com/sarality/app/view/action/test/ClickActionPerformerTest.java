@@ -29,6 +29,25 @@ public class ClickActionPerformerTest extends BaseUnitTest {
 
     ClickActionPerformer clickAction = new ClickActionPerformer(action);
     clickAction.setupListener(view);
+
+    Mockito.verify(view, Mockito.times(1)).setOnClickListener(clickAction);
+  }
+
+  public void testSetupListener_InvalidArguments() {
+    ViewAction action = mock(ViewAction.class);
+    View view = mock(View.class);
+
+    // stubbing
+    when(action.getViewId()).thenReturn(1234);
+    when(view.getId()).thenReturn(5678);
+
+    ClickActionPerformer clickAction = new ClickActionPerformer(action);
+    try {
+      clickAction.setupListener(view);
+    } catch (IllegalArgumentException e) {
+      // Do nothing
+    }
+    Mockito.verify(view, Mockito.times(0)).setOnClickListener(clickAction);
   }
 
   public void testClickActionPerformer() {
@@ -46,6 +65,8 @@ public class ClickActionPerformerTest extends BaseUnitTest {
 
     ClickActionPerformer clickAction = new ClickActionPerformer(action);
     clickAction.onClick(view);
+    Mockito.verify(action, Mockito.times(1)).performAction(Mockito.eq(view), Mockito.any(ViewActionTrigger.class),
+        Mockito.any(ViewDetail.class));
   }
 
 }
