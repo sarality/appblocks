@@ -3,7 +3,6 @@ package com.sarality.app.view.list;
 import java.util.List;
 
 import android.app.Activity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,6 @@ import com.sarality.app.view.action.ComponentActionManager;
  * @param <T> The data/model for each row in the list
  */
 public class ListComponentAdapter<T> extends ArrayAdapter<T> {
-  private static final String TAG = "ListComponentAdapter";
   private final Activity context;
   private final ListRowRenderer<T> rowRenderer;
   private List<T> rowValueList;
@@ -65,7 +63,6 @@ public class ListComponentAdapter<T> extends ArrayAdapter<T> {
 
   @Override
   public int getCount() {
-    Log.d(TAG, "Count is " + rowValueList.size());
     return rowValueList.size();
   }
 }
