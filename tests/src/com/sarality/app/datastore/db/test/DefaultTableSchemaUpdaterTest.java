@@ -1,7 +1,10 @@
 package com.sarality.app.datastore.db.test;
 
+import static org.mockito.Mockito.mock;
+
 import java.util.Arrays;
-import java.util.List;
+
+import org.mockito.Mockito;
 
 import android.app.Application;
 import android.content.Context;
@@ -10,14 +13,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.dothat.app.assistant.AssistantApp;
-import com.dothat.app.module.reminder.db.RemindersTable.Column;
+import com.sarality.app.datastore.Column;
+import com.sarality.app.datastore.ColumnDataType;
+import com.sarality.app.datastore.ColumnSpec;
 import com.sarality.app.datastore.db.DefaultTableSchemaUpdater;
-import com.sarality.app.datastore.db.SqliteTable;
-import com.sarality.app.datastore.db.SqliteTableSchemaUpdater;
-import com.sarality.app.datastore.extractor.CursorDataExtractor;
-import com.sarality.app.datastore.populator.ContentValuesPopulator;
-import com.sarality.app.datastore.sms.SmsMessage;
+import com.sarality.app.datastore.db.TableColumnProperty;
 import com.sarality.app.view.action.test.BaseUnitTest;
 
 /**
@@ -36,15 +36,27 @@ public class DefaultTableSchemaUpdaterTest extends BaseUnitTest {
     assertNotNull(schemaUpdater);
   }
 
+  private Column createColumn() {
+    Column column = mock(Column.class);
+    ColumnSpec spec;
+    String name;
+    spec = new ColumnSpec(ColumnDataType.INTEGER, true, TableColumnProperty.PRIMARY_KEY,
+        TableColumnProperty.AUTO_INCREMENT);
+    name = "Primary_Key";
+    Mockito.when(column.getSpec()).thenReturn(spec);
+    Mockito.when(column.getName()).thenReturn(name);
+    return column;
+  }
+
   public void testUpdateSchema() {
     DefaultTableSchemaUpdater schemaUpdater = new DefaultTableSchemaUpdater();
-    AssistantApp app = new AssistantApp(getInstrumentation().getTargetContext().getApplicationContext());
+    Application app = mock(Application.class);
+    Mockito.when(app.getApplicationContext()).thenReturn(context);
 
-    TestTable testTable = new TestTable(app, DATABASE_NAME, TABLE_NAME, TABLE_VERSION,
-        Arrays.<com.sarality.app.datastore.Column> asList(Column.values()), null, null, schemaUpdater);
+    TestTable testTable = new TestTable(app, DATABASE_NAME, TABLE_NAME, TABLE_VERSION, Arrays.asList(createColumn()),
+        null, null, schemaUpdater);
 
-    TestOnlineHelper onlineHelper = new TestOnlineHelper(getInstrumentation().getTargetContext()
-        .getApplicationContext(), null, null, TABLE_VERSION);
+    TestOnlineHelper onlineHelper = new TestOnlineHelper(context, null, null, TABLE_VERSION);
 
     SQLiteDatabase db = onlineHelper.getWritableDatabase();
     schemaUpdater.updateSchema(db, testTable);
@@ -60,15 +72,6 @@ public class DefaultTableSchemaUpdaterTest extends BaseUnitTest {
     int count = cursor.getInt(0);
     cursor.close();
     return count > 0;
-  }
-}
-
-class TestTable extends SqliteTable<SmsMessage> {
-
-  protected TestTable(Application application, String dbName, String tableName, int tableVersion,
-      List<com.sarality.app.datastore.Column> columnList, CursorDataExtractor<SmsMessage> extractor,
-      ContentValuesPopulator<SmsMessage> populator, SqliteTableSchemaUpdater schemaUpdter) {
-    super(application, dbName, tableName, tableVersion, columnList, extractor, populator, schemaUpdter);
   }
 }
 
