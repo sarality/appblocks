@@ -40,6 +40,18 @@ public class DoubleColumnProcessorTest extends TestCase {
     assertEquals(1D, value);
   }
 
+  public void testExtract_InvalidColumnName() {
+    cursor.addRow(new Object[] { "Row 1", 1000D });
+    cursor.moveToNext();
+    column = new TestColumn("Column3", new ColumnSpec(ColumnDataType.DOUBLE, null, false));
+    try {
+      processor.extract(cursor, column);
+      fail("Extract should throw exception if Column with given name does not exist");
+    } catch (IllegalArgumentException e) {
+      assertEquals("Column with name Column3 not found.", e.getMessage());
+    }
+  }
+
   public void testExtract_NullValue() {
     cursor.addRow(new Object[] { "Row 1", null });
     cursor.moveToNext();
@@ -48,7 +60,7 @@ public class DoubleColumnProcessorTest extends TestCase {
   }
 
   public void testExtract_InvalidValue() {
-    cursor.addRow(new Object[] { "Row 1", "Invalid"});
+    cursor.addRow(new Object[] { "Row 1", "Invalid" });
     cursor.moveToNext();
     try {
       processor.extract(cursor, column);
@@ -108,7 +120,7 @@ public class DoubleColumnProcessorTest extends TestCase {
       processor.populate(contentValues, column, value);
       fail("Passing in a Long field value to a Double column should throw an exception");
     } catch (IllegalArgumentException e) {
-      assertEquals("Cannot convert data for type STRING to Double while adding value for column Column2", 
+      assertEquals("Cannot convert data for type STRING to Double while adding value for column Column2",
           e.getMessage());
     }
   }

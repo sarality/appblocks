@@ -31,6 +31,9 @@ public class EnumDataColumnProcessor<T extends EnumData<T>> implements ColumnPro
   @Override
   public T extract(Cursor cursor, Column column) {
     int columnIndex = cursor.getColumnIndex(column.getName());
+    if (columnIndex < 0) {
+      throw new IllegalArgumentException("Column with name " + column.getName() + " not found.");
+    }
     if (cursor.isNull(columnIndex)) {
       return null;
     }

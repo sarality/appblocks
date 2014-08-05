@@ -17,6 +17,9 @@ public class BooleanColumnProcessor implements ColumnProcessor<Boolean> {
   @Override
   public Boolean extract(Cursor cursor, Column column) {
     int columnIndex = cursor.getColumnIndex(column.getName());
+    if (columnIndex < 0) {
+      throw new IllegalArgumentException("Column with name " + column.getName() + " not found.");
+    }
     if (cursor.isNull(columnIndex)) {
       return null;
     }

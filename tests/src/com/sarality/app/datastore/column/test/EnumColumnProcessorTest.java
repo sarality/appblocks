@@ -41,6 +41,18 @@ public class EnumColumnProcessorTest extends TestCase {
     assertEquals(TestEnum.VALUE_1, value);
   }
 
+  public void testExtract_InvalidColumnName() {
+    cursor.addRow(new Object[] { "Row 1", TestEnum.VALUE_1.name() });
+    cursor.moveToNext();
+    column = new TestColumn("Column3", new ColumnSpec(ColumnDataType.ENUM, null, false));
+    try {
+      processor.extract(cursor, column);
+      fail("Extract should throw exception if Column with given name does not exist");
+    } catch (IllegalArgumentException e) {
+      assertEquals("Column with name Column3 not found.", e.getMessage());
+    }
+  }
+
   public void testExtract_NullValue() {
     cursor.addRow(new Object[] { "Row 2", null });
     cursor.moveToNext();
@@ -88,7 +100,7 @@ public class EnumColumnProcessorTest extends TestCase {
     assertTrue(contentValues.containsKey(column.getName()));
     assertNull(contentValues.get(column.getName()));
   }
-  
+
   private static enum TestEnum {
     VALUE_1,
     VALUE_2

@@ -42,6 +42,18 @@ public class IntegerColumnProcessorTest extends TestCase {
     assertEquals(Integer.valueOf(1), value);
   }
 
+  public void testExtract_InvalidColumnName() {
+    cursor.addRow(new Object[] { "Row 1", Integer.valueOf(1) });
+    cursor.moveToNext();
+    column = new TestColumn("Column3", new ColumnSpec(ColumnDataType.INTEGER, null, false));
+    try {
+      processor.extract(cursor, column);
+      fail("Extract should throw exception if Column with given name does not exist");
+    } catch (IllegalArgumentException e) {
+      assertEquals("Column with name Column3 not found.", e.getMessage());
+    }
+  }
+
   public void testExtract_NullValue() {
     cursor.addRow(new Object[] { "Row 1", null });
     cursor.moveToNext();
@@ -110,8 +122,7 @@ public class IntegerColumnProcessorTest extends TestCase {
       processor.populate(contentValues, column, value);
       fail("Passing in a String field value to a Integer column should throw an exception");
     } catch (IllegalArgumentException e) {
-      assertEquals("Cannot convert data for type DATE to Integer while adding value for column Column2",
-          e.getMessage());
+      assertEquals("Cannot convert data for type DATE to Integer while adding value for column Column2", e.getMessage());
     }
   }
 }

@@ -48,6 +48,18 @@ public class BooleanColumnProcessorTest extends TestCase {
     assertFalse(value);
   }
 
+  public void testExtract_InvalidColumnName() {
+    cursor.addRow(new Object[] { "Row 1", 0 });
+    cursor.moveToNext();
+    column = new TestColumn("Column3", new ColumnSpec(ColumnDataType.BOOLEAN, null, false));
+    try {
+      processor.extract(cursor, column);
+      fail("Extract should throw exception if Column with given name does not exist");
+    } catch (IllegalArgumentException e) {
+      assertEquals("Column with name Column3 not found.", e.getMessage());
+    }
+  }
+
   public void testExtract_NullValue() {
     cursor.addRow(new Object[] { "Row 1", null });
     cursor.moveToNext();
@@ -78,7 +90,7 @@ public class BooleanColumnProcessorTest extends TestCase {
           + "column to a Boolean : Invalid", e.getMessage());
     }
   }
-  
+
   public void testPopulate_TrueValue() {
     ContentValues contentValues = new ContentValues();
     processor.populate(contentValues, column, Boolean.TRUE);
@@ -147,8 +159,7 @@ public class BooleanColumnProcessorTest extends TestCase {
       processor.populate(contentValues, column, value);
       fail("Passing in a Long field value to a Boolean column should throw an exception");
     } catch (IllegalArgumentException e) {
-      assertEquals("Cannot convert data for type LONG to Boolean while adding value for column Column2", 
-          e.getMessage());
+      assertEquals("Cannot convert data for type LONG to Boolean while adding value for column Column2", e.getMessage());
     }
   }
 }

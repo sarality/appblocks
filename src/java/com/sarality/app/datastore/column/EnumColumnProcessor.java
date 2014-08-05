@@ -23,6 +23,9 @@ public class EnumColumnProcessor<T extends Enum<T>> implements ColumnProcessor<T
   @Override
   public T extract(Cursor cursor, Column column) {
     int columnIndex = cursor.getColumnIndex(column.getName());
+    if (columnIndex < 0) {
+      throw new IllegalArgumentException("Column with name " + column.getName() + " not found.");
+    }
     if (cursor.isNull(columnIndex)) {
       return null;
     }

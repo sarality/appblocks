@@ -17,6 +17,9 @@ public class LongColumnProcessor implements ColumnProcessor<Long> {
   @Override
   public Long extract(Cursor cursor, Column column) {
     int columnIndex = cursor.getColumnIndex(column.getName());
+    if (columnIndex < 0) {
+      throw new IllegalArgumentException("Column with name " + column.getName() + " not found.");
+    }
     if (cursor.isNull(columnIndex)) {
       return null;
     }

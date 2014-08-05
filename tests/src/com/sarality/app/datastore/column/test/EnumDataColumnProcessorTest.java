@@ -47,6 +47,18 @@ public class EnumDataColumnProcessorTest extends TestCase {
     assertEquals(enumData, value);
   }
 
+  public void testExtract_InvalidColumnName() {
+    cursor.addRow(new Object[] { "Row 1", "VALUE_1" });
+    cursor.moveToNext();
+    column = new TestColumn("Column3", new ColumnSpec(ColumnDataType.ENUM, null, false));
+    try {
+      processor.extract(cursor, column);
+      fail("Extract should throw exception if Column with given name does not exist");
+    } catch (IllegalArgumentException e) {
+      assertEquals("Column with name Column3 not found.", e.getMessage());
+    }
+  }
+
   public void testExtract_NullValue() {
     cursor.addRow(new Object[] { "Row 2", null });
     cursor.moveToNext();
@@ -73,8 +85,8 @@ public class EnumDataColumnProcessorTest extends TestCase {
   public void testPopulate_FieldValue() {
     ContentValues contentValues = new ContentValues();
     TestFieldValues fieldValues = new TestFieldValues();
-    fieldValues.registerFieldValueFactory(TestField.ENUM_DATA_FIELD, 
-        new EnumDataFieldValue.Factory<TestEnum>(TestEnum.class, registry));
+    fieldValues.registerFieldValueFactory(TestField.ENUM_DATA_FIELD, new EnumDataFieldValue.Factory<TestEnum>(
+        TestEnum.class, registry));
     FieldValue<?> value = fieldValues.createFieldValue(TestField.ENUM_DATA_FIELD, new TestEnum("VALUE_1", registry));
 
     processor.populate(contentValues, column, value);
@@ -96,7 +108,7 @@ public class EnumDataColumnProcessorTest extends TestCase {
     assertTrue(contentValues.containsKey(column.getName()));
     assertNull(contentValues.get(column.getName()));
   }
-  
+
   private static class TestEnum extends BaseEnumData<TestEnum> {
 
     public TestEnum(String enumName, EnumDataRegistry registry) {

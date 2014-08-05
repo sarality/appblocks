@@ -109,6 +109,18 @@ public class DateTimeColumnProcessorTest extends TestCase {
     assertEquals(dateTime, value);
   }
 
+  public void testExtract_InvalidColumnName() {
+    cursor.addRow(new Object[] { "Row 1", "2013-12-25 13:11:45" });
+    cursor.moveToNext();
+    column = new TestColumn("Column3", new ColumnSpec(ColumnDataType.DATETIME, null, false));
+    try {
+      processor.extract(cursor, column);
+      fail("Extract should throw exception if Column with given name does not exist");
+    } catch (IllegalArgumentException e) {
+      assertEquals("Column with name Column3 not found.", e.getMessage());
+    }
+  }
+
   public void testExtract_NullValue() {
     cursor.addRow(new Object[] { "Row 1", null });
     cursor.moveToNext();
@@ -279,5 +291,5 @@ public class DateTimeColumnProcessorTest extends TestCase {
       assertEquals("Cannot convert data for type STRING to a DateTime while adding value for column Column2",
           e.getMessage());
     }
-  }  
+  }
 }

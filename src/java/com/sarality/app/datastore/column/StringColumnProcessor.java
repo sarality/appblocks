@@ -17,6 +17,9 @@ public class StringColumnProcessor implements ColumnProcessor<String> {
   @Override
   public String extract(Cursor cursor, Column column) {
     int columnIndex = cursor.getColumnIndex(column.getName());
+    if (columnIndex < 0) {
+      throw new IllegalArgumentException("Column with name " + column.getName() + " not found.");
+    }
     if (cursor.isNull(columnIndex)) {
       return null;
     }
