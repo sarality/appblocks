@@ -3,6 +3,11 @@ package com.sarality.app.datastore.column.test;
 import com.sarality.app.datastore.Column;
 import com.sarality.app.datastore.ColumnSpec;
 
+/**
+ * Simple Column used for testing purposes.
+ * 
+ * @author abhideep@ (Abhideep Singh)
+ */
 class TestColumn implements Column {
 
   private final String name;
