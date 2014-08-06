@@ -12,7 +12,7 @@ import com.sarality.app.datastore.query.Query;
  * @param <T> The type of {@link DataObject} needed to create the item in the store.
  * @param <I> The type of ID returned when creating the item in the store.
  */
-public interface WritableDataStore<T extends DataObject<T>, I> extends DataStore<T> {
+public interface WritableDataStore<T, I> extends DataStore<T> {
 
   /**
    * Create an item in the {@code DataStore}.
