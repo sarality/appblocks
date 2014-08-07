@@ -1,8 +1,8 @@
 package com.sarality.app.view.list.test;
 
 import static org.mockito.Mockito.mock;
+import junit.framework.TestCase;
 
-import com.sarality.app.view.action.test.BaseUnitTest;
 import com.sarality.app.view.list.ClassBasedRendererSelector;
 import com.sarality.app.view.list.ListRowRenderer;
 
@@ -11,7 +11,7 @@ import com.sarality.app.view.list.ListRowRenderer;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class ClassBasedRendererSelectorTest extends BaseUnitTest {
+public class ClassBasedRendererSelectorTest extends TestCase {
 
   public void testRegister_StringClass() {
     ClassBasedRendererSelector<String> selector = new ClassBasedRendererSelector<String>();

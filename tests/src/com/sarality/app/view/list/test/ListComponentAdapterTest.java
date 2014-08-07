@@ -4,11 +4,11 @@ import static org.mockito.Mockito.mock;
 
 import java.util.List;
 
+import junit.framework.TestCase;
 import android.app.Activity;
 import android.view.View;
 
 import com.sarality.app.common.collect.Lists;
-import com.sarality.app.view.action.test.BaseUnitTest;
 import com.sarality.app.view.list.ListComponentAdapter;
 import com.sarality.app.view.list.ListRowRenderer;
 
@@ -17,7 +17,7 @@ import com.sarality.app.view.list.ListRowRenderer;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class ListComponentAdapterTest extends BaseUnitTest {
+public class ListComponentAdapterTest extends TestCase {
 
   public void testGetCount_NullList() {
     List<String> rowValueList = Lists.of();

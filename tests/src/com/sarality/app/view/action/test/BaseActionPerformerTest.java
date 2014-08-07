@@ -2,6 +2,7 @@ package com.sarality.app.view.action.test;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import junit.framework.TestCase;
 import android.view.View;
 
 import com.sarality.app.view.action.BaseActionPerformer;
@@ -12,7 +13,7 @@ import com.sarality.app.view.action.ViewAction;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class BaseActionPerformerTest extends BaseUnitTest {
+public class BaseActionPerformerTest extends TestCase {
 
   public void testBaseActionPerformer() {
     ViewAction action = mock(ViewAction.class);
@@ -37,8 +38,9 @@ public class BaseActionPerformerTest extends BaseUnitTest {
 
     try {
       performer.isValidListenerView(view);
+      fail("Exception should be thrown");
     } catch (IllegalArgumentException e) {
-      // Do nothing
+      assertEquals("Trying to setup listener on view with Id 5678 while the action specifies the view id 1234", e.getMessage());
     }
   }
 }

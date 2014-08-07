@@ -2,6 +2,7 @@ package com.sarality.app.view.action.test;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import junit.framework.TestCase;
 
 import org.mockito.Mockito;
 
@@ -16,7 +17,7 @@ import com.sarality.app.view.list.ListComponent;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class RefreshListActionTest extends BaseUnitTest {
+public class RefreshListActionTest extends TestCase {
 
   public void testDoAction() {
     View view = mock(View.class);

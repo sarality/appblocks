@@ -1,6 +1,7 @@
 package com.sarality.app.view.action.test;
 
 import static org.mockito.Mockito.mock;
+import junit.framework.TestCase;
 
 import org.mockito.Mockito;
 
@@ -13,7 +14,7 @@ import com.sarality.app.view.dialog.AlertDialogComponent;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class DismissAlertDialogActionTest extends BaseUnitTest {
+public class DismissAlertDialogActionTest extends TestCase {
 
   public void testDoAction() {
     @SuppressWarnings("unchecked")

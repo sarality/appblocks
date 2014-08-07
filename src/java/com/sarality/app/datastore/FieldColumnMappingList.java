@@ -11,7 +11,7 @@ import com.sarality.app.datastore.column.ColumnProcessor;
  * 
  * @author abhideep@ (Abhideep Singh)
  */
-public class FieldColumnMappings {
+public class FieldColumnMappingList {
 
   // List of Configuration that define a mapping between a DataObject field and a Database Column
   private final List<FieldColumnMapping> mappingList = Lists.of();

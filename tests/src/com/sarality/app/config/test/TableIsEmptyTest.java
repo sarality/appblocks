@@ -6,17 +6,18 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.List;
 
+import junit.framework.TestCase;
+
 import com.sarality.app.config.TableIsEmpty;
 import com.sarality.app.data.BaseFieldBasedDataObject;
 import com.sarality.app.datastore.db.Table;
-import com.sarality.app.view.action.test.BaseUnitTest;
 
 /**
  * Tests for {@link TableIsEmpty}.
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class TableIsEmptyTest extends BaseUnitTest {
+public class TableIsEmptyTest extends TestCase {
 
   @SuppressWarnings("unchecked")
   private Table<TestDataObject> testTable = (Table<TestDataObject>) mock(Table.class);

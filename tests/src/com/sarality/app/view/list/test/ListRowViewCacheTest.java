@@ -1,10 +1,8 @@
 package com.sarality.app.view.list.test;
 
-import static org.mockito.Mockito.mock;
-
-import org.mockito.Mockito;
-
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.sarality.app.view.action.test.BaseUnitTest;
 import com.sarality.app.view.list.ListRowViewCache;
@@ -19,10 +17,11 @@ public class ListRowViewCacheTest extends BaseUnitTest {
   public void testViewCache() {
     int viewId = 1234;
     ListRowViewCache rowViewCache = new ListRowViewCache();
-    View rowView = mock(View.class);
-    View view = mock(View.class);
+    LinearLayout rowView = new LinearLayout(context);
+    View view = new View(context);
+    view.setId(viewId);
+    ((ViewGroup) rowView).addView(view);
 
-    Mockito.when(rowView.findViewById(viewId)).thenReturn(view);
     rowViewCache.cacheViewWithId(rowView, viewId);
     assertEquals(view, rowViewCache.getViewById(rowView, viewId));
   }
@@ -31,16 +30,15 @@ public class ListRowViewCacheTest extends BaseUnitTest {
     int viewIdCached = 1234;
     int viewIdNotCached = 5678;
     ListRowViewCache rowViewCache = new ListRowViewCache();
-    View rowView = mock(View.class);
-    View view = mock(View.class);
+    LinearLayout rowView = new LinearLayout(context);
+    View view = new View(context);
+    view.setId(viewIdCached);
+    ((ViewGroup) rowView).addView(view);
 
-    Mockito.when(rowView.findViewById(viewIdCached)).thenReturn(view);
-    Mockito.when(rowView.findViewById(viewIdNotCached)).thenReturn(view);
     // Cache only one vieId-View
     rowViewCache.cacheViewWithId(rowView, viewIdCached);
 
     // Should return view from rowView rather than cache
-    rowViewCache.getViewById(rowView, viewIdNotCached);
-    assertEquals(view, rowView.findViewById(viewIdNotCached));
+    assertEquals(null, rowViewCache.getViewById(view, viewIdNotCached));
   }
 }
