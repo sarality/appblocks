@@ -1,5 +1,6 @@
 package com.sarality.app.view.action.test;
 
+import android.content.Context;
 import android.test.ActivityUnitTestCase;
 
 import com.dothat.app.module.reminder.ReminderListActivity;
@@ -10,18 +11,23 @@ import com.dothat.app.module.reminder.ReminderListActivity;
  * @author sunayna@ (Sunayna Uberoy)
  */
 public class BaseUnitTest extends ActivityUnitTestCase<ReminderListActivity> {
+  protected Context context;
 
   public BaseUnitTest() {
     super(ReminderListActivity.class);
   }
 
-  protected void setUp(){
-    try{
+  protected void setUp() {
+    try {
       super.setUp();
       System.setProperty("dexmaker.dexcache", getInstrumentation().getTargetContext().getCacheDir().getPath());
-    }
-    catch(Exception e){
+      context = getInstrumentation().getTargetContext().getApplicationContext();
+    } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+  
+  public Context getContext(){
+    return context;
   }
 }

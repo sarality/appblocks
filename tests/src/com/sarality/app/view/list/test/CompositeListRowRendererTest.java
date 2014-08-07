@@ -1,12 +1,12 @@
 package com.sarality.app.view.list.test;
 
 import static org.mockito.Mockito.mock;
+import junit.framework.TestCase;
 
 import org.mockito.Mockito;
 
 import android.view.View;
 
-import com.sarality.app.view.action.test.BaseUnitTest;
 import com.sarality.app.view.list.CompositeListRowRenderer;
 import com.sarality.app.view.list.ListRowRenderer;
 import com.sarality.app.view.list.ListRowRendererSelector;
@@ -16,7 +16,7 @@ import com.sarality.app.view.list.ListRowRendererSelector;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class CompositeListRowRendererTest extends BaseUnitTest {
+public class CompositeListRowRendererTest extends TestCase {
 
   public void testCompositeListRowRenderer() {
     CompositeListRowRenderer<String> rowRenderer = new CompositeListRowRenderer<String>(null);

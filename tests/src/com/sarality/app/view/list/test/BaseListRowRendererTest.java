@@ -1,6 +1,7 @@
 package com.sarality.app.view.list.test;
 
 import static org.mockito.Mockito.mock;
+import junit.framework.TestCase;
 
 import org.mockito.Mockito;
 
@@ -8,7 +9,6 @@ import android.util.SparseArray;
 import android.view.View;
 
 import com.sarality.app.view.action.ComponentActionManager;
-import com.sarality.app.view.action.test.BaseUnitTest;
 import com.sarality.app.view.list.BaseListRowRenderer;
 import com.sarality.app.view.list.ListRowViewCache;
 
@@ -17,7 +17,7 @@ import com.sarality.app.view.list.ListRowViewCache;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class BaseListRowRendererTest extends BaseUnitTest {
+public class BaseListRowRendererTest extends TestCase {
 
   public void testSetAdditionalTagList() {
     TestBaseListRowRenderer rowRenderer = new TestBaseListRowRenderer();

@@ -1,6 +1,7 @@
 package com.sarality.app.view.action.test;
 
 import static org.mockito.Mockito.mock;
+import junit.framework.TestCase;
 
 import org.mockito.Mockito;
 
@@ -14,7 +15,7 @@ import com.sarality.app.view.action.TriggerType;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class SupressEventActionTest extends BaseUnitTest {
+public class SupressEventActionTest extends TestCase {
 
   public void testDoAction() {
     View view = mock(View.class);

@@ -2,6 +2,7 @@ package com.sarality.app.view.action.test;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import junit.framework.TestCase;
 
 import org.mockito.InOrder;
 import org.mockito.Mockito;
@@ -20,7 +21,7 @@ import com.sarality.app.view.action.ViewDetail;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class BaseViewActionTest extends BaseUnitTest {
+public class BaseViewActionTest extends TestCase {
 
   public void testBaseViewAction() {
     TestDummyBaseViewAction action = new TestDummyBaseViewAction(1234, TriggerType.CLICK);
