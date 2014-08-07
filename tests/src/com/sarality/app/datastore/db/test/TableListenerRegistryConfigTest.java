@@ -1,6 +1,7 @@
 package com.sarality.app.datastore.db.test;
 
 import static org.mockito.Mockito.mock;
+import junit.framework.TestCase;
 
 import org.mockito.Mockito;
 
@@ -8,14 +9,13 @@ import com.sarality.app.datastore.db.Table;
 import com.sarality.app.datastore.db.TableListener;
 import com.sarality.app.datastore.db.TableListenerRegistryConfig;
 import com.sarality.app.datastore.test.TestObject;
-import com.sarality.app.view.action.test.BaseUnitTest;
 
 /**
  * Tests for {@link TableListenerRegistryConfig}.
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class TableListenerRegistryConfigTest extends BaseUnitTest {
+public class TableListenerRegistryConfigTest extends TestCase {
 
   @SuppressWarnings("unchecked")
   public final void testListener() {

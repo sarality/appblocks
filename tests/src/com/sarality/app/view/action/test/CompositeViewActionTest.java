@@ -2,6 +2,7 @@ package com.sarality.app.view.action.test;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import junit.framework.TestCase;
 
 import org.mockito.InOrder;
 import org.mockito.Mockito;
@@ -15,7 +16,7 @@ import com.sarality.app.view.action.ViewAction;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class CompositeViewActionTest extends BaseUnitTest {
+public class CompositeViewActionTest extends TestCase {
 
   public void testCompositeViewAction() {
     CompositeViewAction viewAction = new CompositeViewAction(1, TriggerType.CLICK);
@@ -58,12 +59,14 @@ public class CompositeViewActionTest extends BaseUnitTest {
 
     try {
       viewAction.registerAction(clickActionView2);
+      fail("Exception should be thrown");
       viewAction.registerAction(touchActionView1);
     } catch (IllegalArgumentException e) {
-      // Do nothing
+      assertEquals(
+          "Invalid Action , cannot add TriggerType=CLICK for CompositeView with Trigger Type= CLICK and View Id =2 CompositeView viewId= 1",
+          e.getMessage());
     } catch (Exception e) {
       fail("Exception other than expected IllegalArgumentException thrown");
-      e.printStackTrace();
     }
 
     // clickActionView2 should not get registered as the compositeAction View and action view do not match
@@ -76,11 +79,13 @@ public class CompositeViewActionTest extends BaseUnitTest {
     try {
       viewAction.registerAction(clickActionView1);
       viewAction.registerAction(touchActionView1);
+      fail("Exception should not be thrown");
     } catch (IllegalArgumentException e) {
-      // do nothing
+      assertEquals(
+          "Invalid Action , cannot add TriggerType=TOUCH for CompositeView with Trigger Type= CLICK and View Id =1 CompositeView viewId= 1",
+          e.getMessage());
     } catch (Exception e) {
       fail("Exception other than expected IllegalArgumentException thrown");
-      e.printStackTrace();
     }
     // clickActionView1 gets registered
     // touchActionView1 should not get registered

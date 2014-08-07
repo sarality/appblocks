@@ -25,7 +25,6 @@ public class AbstractContentResolverDataStoreTest extends BaseUnitTest {
   public void testAbstractContentResolverDataStore() {
     List<Column> columnList = Lists.of();
     String storeName = "Test Store";
-    Context context = getInstrumentation().getTargetContext().getApplicationContext();
     CursorDataExtractor<TestObject> extractor = mock(CursorDataExtractor.class);
     TestStore store = new TestStore(context, storeName, columnList, extractor);
     assertEquals(0, store.getColumns().size());

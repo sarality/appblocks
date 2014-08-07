@@ -7,7 +7,6 @@ import java.util.List;
 import org.mockito.Mockito;
 
 import android.app.Application;
-import android.content.Context;
 
 import com.sarality.app.common.collect.Lists;
 import com.sarality.app.datastore.Column;
@@ -100,24 +99,20 @@ public class SqliteTableTest extends BaseUnitTest {
     assertEquals(true, table.create(data) < 0);
     table.close();
   }
-
-  public final void atestCreate() {
+ 
+  public final void testDelete() {
     fail("Not yet implemented"); // TODO
   }
 
-  public final void atestDelete() {
+  public final void testQuery() {
     fail("Not yet implemented"); // TODO
   }
 
-  public final void atestQuery() {
+  public final void testSetListener() {
     fail("Not yet implemented"); // TODO
   }
 
-  public final void atestSetListener() {
-    fail("Not yet implemented"); // TODO
-  }
-
-  public final void atestUpdate() {
+  public final void testUpdate() {
     fail("Not yet implemented"); // TODO
   }
 }

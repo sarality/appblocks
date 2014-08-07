@@ -1,6 +1,7 @@
 package com.sarality.app.view.action.test;
 
 import static org.mockito.Mockito.mock;
+import junit.framework.TestCase;
 import android.view.View;
 
 import com.sarality.app.view.action.ViewDetail;
@@ -10,7 +11,7 @@ import com.sarality.app.view.action.ViewDetail;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class ViewDetailTest extends BaseUnitTest {
+public class ViewDetailTest extends TestCase {
 
   public void testViewDetail() {
     View view = mock(View.class);

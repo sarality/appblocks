@@ -2,6 +2,7 @@ package com.sarality.app.view.action.test;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import junit.framework.TestCase;
 
 import org.mockito.Mockito;
 
@@ -17,7 +18,7 @@ import com.sarality.app.view.action.ViewDetail;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class LongClickActionPerformerTest extends BaseUnitTest {
+public class LongClickActionPerformerTest extends TestCase {
 
   public void testSetupListener() {
     ViewAction action = mock(ViewAction.class);
@@ -44,8 +45,10 @@ public class LongClickActionPerformerTest extends BaseUnitTest {
     LongClickActionPerformer clickAction = new LongClickActionPerformer(action);
     try {
       clickAction.setupListener(view);
+      fail("Exception should be thrown");
     } catch (IllegalArgumentException e) {
-      // Do nothing
+      assertEquals("Trying to setup listener on view with Id 5678 while the action specifies the view id 1234",
+          e.getMessage());
     }
     Mockito.verify(view, Mockito.times(0)).setOnLongClickListener(clickAction);
   }

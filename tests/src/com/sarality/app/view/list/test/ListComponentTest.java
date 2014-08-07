@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.mockito.Mockito;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
@@ -29,7 +28,6 @@ import com.sarality.app.view.list.ListComponentLoaderCallback;
 public class ListComponentTest extends BaseUnitTest {
 
   public void testGetView() {
-    Context context = getInstrumentation().getTargetContext().getApplicationContext();
     ListView view = new ListView(context);
     ListComponent<String> component = new ListComponent<String>(null, view, null);
     assertNotNull(component);
@@ -67,7 +65,6 @@ public class ListComponentTest extends BaseUnitTest {
   @SuppressWarnings("unchecked")
   public void testInit() {
     FragmentActivity activity = mock(FragmentActivity.class);
-    Context context = getInstrumentation().getTargetContext().getApplicationContext();
     ListView view = new ListView(context);
     ListComponent<String> component = new ListComponent<String>(activity, view, null);
     DataSource<String> source = mock(DataSource.class);
@@ -96,7 +93,6 @@ public class ListComponentTest extends BaseUnitTest {
   }
 
   public void testRender() {
-    Context context = getInstrumentation().getTargetContext().getApplicationContext();
     FragmentActivity activity = mock(FragmentActivity.class);
     ListView view = new ListView(context);
     ListComponent<String> component = new ListComponent<String>(activity, view, null);

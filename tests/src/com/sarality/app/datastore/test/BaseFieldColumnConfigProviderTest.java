@@ -4,20 +4,21 @@ import static org.mockito.Mockito.mock;
 
 import java.util.List;
 
+import junit.framework.TestCase;
+
 import com.sarality.app.data.Field;
 import com.sarality.app.datastore.BaseFieldColumnConfigProvider;
 import com.sarality.app.datastore.Column;
 import com.sarality.app.datastore.FieldColumnConfig;
 import com.sarality.app.datastore.extractor.ColumnValueExtractor;
 import com.sarality.app.datastore.populator.FieldDataValuePopulator;
-import com.sarality.app.view.action.test.BaseUnitTest;
 
 /**
  * Tests for {@link BaseFieldColumnConfigProvider}.
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class BaseFieldColumnConfigProviderTest extends BaseUnitTest {
+public class BaseFieldColumnConfigProviderTest extends TestCase {
 
   public final void testProvide_NullEntry() {
     BaseFieldColumnConfigProvider provider = new BaseFieldColumnConfigProvider();

@@ -5,19 +5,20 @@ import static org.mockito.Mockito.mock;
 import java.util.HashSet;
 import java.util.Set;
 
+import junit.framework.TestCase;
+
 import com.sarality.app.datastore.BaseFieldColumnConfigProvider;
 import com.sarality.app.datastore.ColumnDataType;
 import com.sarality.app.datastore.ColumnFormat;
 import com.sarality.app.datastore.ColumnProperty;
 import com.sarality.app.datastore.ColumnSpec;
-import com.sarality.app.view.action.test.BaseUnitTest;
 
 /**
  * Tests for {@link BaseFieldColumnConfigProvider}.
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class ColumnSpecTest extends BaseUnitTest {
+public class ColumnSpecTest extends TestCase {
 
   ColumnDataType dataType = ColumnDataType.INTEGER;
   ColumnFormat format = ColumnFormat.ENUM_AS_INT;
@@ -26,7 +27,7 @@ public class ColumnSpecTest extends BaseUnitTest {
   Set<ColumnProperty> propertySet = new HashSet<ColumnProperty>();
   
   public void setUp(){
-    super.setUp();
+ //   super.setUp();
     propertySet.add(property1);
     propertySet.add(property2);
   }

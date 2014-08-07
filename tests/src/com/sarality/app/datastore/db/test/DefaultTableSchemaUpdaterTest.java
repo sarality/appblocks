@@ -4,6 +4,8 @@ import static org.mockito.Mockito.mock;
 
 import java.util.Arrays;
 
+import junit.framework.TestCase;
+
 import org.mockito.Mockito;
 
 import android.app.Application;
@@ -18,14 +20,13 @@ import com.sarality.app.datastore.ColumnDataType;
 import com.sarality.app.datastore.ColumnSpec;
 import com.sarality.app.datastore.db.DefaultTableSchemaUpdater;
 import com.sarality.app.datastore.db.TableColumnProperty;
-import com.sarality.app.view.action.test.BaseUnitTest;
 
 /**
  * Tests for {@link DefaultTableSchemaUpdater}.
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class DefaultTableSchemaUpdaterTest extends BaseUnitTest {
+public class DefaultTableSchemaUpdaterTest extends TestCase {
 
   public static final String TABLE_NAME = "test";
   private static final String DATABASE_NAME = "test.db";
@@ -51,6 +52,7 @@ public class DefaultTableSchemaUpdaterTest extends BaseUnitTest {
   public void testUpdateSchema() {
     DefaultTableSchemaUpdater schemaUpdater = new DefaultTableSchemaUpdater();
     Application app = mock(Application.class);
+    Context context = mock(Context.class);
     Mockito.when(app.getApplicationContext()).thenReturn(context);
 
     TestTable testTable = new TestTable(app, DATABASE_NAME, TABLE_NAME, TABLE_VERSION, Arrays.asList(createColumn()),

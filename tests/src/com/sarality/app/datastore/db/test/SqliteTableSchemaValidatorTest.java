@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import junit.framework.TestCase;
+
 import org.mockito.Mockito;
 
 import com.sarality.app.common.collect.Lists;
@@ -20,14 +22,13 @@ import com.sarality.app.datastore.db.TableColumnProperty;
 import com.sarality.app.datastore.db.TableInfo;
 import com.sarality.app.datastore.test.TestObject;
 import com.sarality.app.error.ValidationException;
-import com.sarality.app.view.action.test.BaseUnitTest;
 
 /**
  * Tests for {@link SqliteTableSchemaValidator}.
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class SqliteTableSchemaValidatorTest extends BaseUnitTest {
+public class SqliteTableSchemaValidatorTest extends TestCase {
 
   @SuppressWarnings("unchecked")
   public final void testValidate() {
@@ -37,9 +38,9 @@ public class SqliteTableSchemaValidatorTest extends BaseUnitTest {
     Table<TestObject> table = mock(Table.class);
     Mockito.when(table.getTableInfo()).thenReturn(metaData);
     try {
-      assertEquals(true, validator.validate(table));
+      assertTrue(validator.validate(table));
     } catch (ValidationException e) {
-      e.printStackTrace();
+      fail("Validation should not fail");
     }
   }
 

@@ -25,7 +25,6 @@ public class AbstractWritableDataStoreTest extends BaseUnitTest {
   public void testAbstractWritableDataStore() {
     List<Column> columnList = Lists.of();
     String storeName = "Test Store";
-    Context context = getInstrumentation().getTargetContext().getApplicationContext();
     CursorDataExtractor<TestObject> extractor = mock(CursorDataExtractor.class);
     ContentValuesPopulator<TestObject> populator = mock(ContentValuesPopulator.class);
     TestStore store = new TestStore(context, storeName, columnList, extractor,populator);
