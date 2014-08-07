@@ -2,7 +2,6 @@ package com.sarality.app.datastore.extractor;
 
 import android.database.Cursor;
 
-import com.sarality.app.data.DataObject;
 import com.sarality.app.datastore.query.Query;
 
 /**
@@ -12,7 +11,7 @@ import com.sarality.app.datastore.query.Query;
  *
  * @param <T> The type of data to extract
  */
-public interface CursorDataExtractor<T extends DataObject<T>> {
+public interface CursorDataExtractor<T> {
 
   /**
    * Extract an object of the given type from the cursor that was returned by running the given query.

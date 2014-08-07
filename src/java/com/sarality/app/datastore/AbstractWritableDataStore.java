@@ -4,7 +4,6 @@ import java.util.List;
 
 import android.content.Context;
 
-import com.sarality.app.data.DataObject;
 import com.sarality.app.datastore.extractor.CursorDataExtractor;
 import com.sarality.app.datastore.populator.ContentValuesPopulator;
 
@@ -17,7 +16,7 @@ import com.sarality.app.datastore.populator.ContentValuesPopulator;
  * @param <T> The DataType returned by the DataStore.
  * @param <I> The type for the ID generated when creating an item.
  */
-public abstract class AbstractWritableDataStore<T extends DataObject<T>, I> extends AbstractDataStore<T> 
+public abstract class AbstractWritableDataStore<T, I> extends AbstractDataStore<T> 
     implements WritableDataStore<T, I> {
 
   private final ContentValuesPopulator<T> populator;
