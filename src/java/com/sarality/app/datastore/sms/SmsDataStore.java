@@ -2,6 +2,7 @@ package com.sarality.app.datastore.sms;
 
 import java.util.Arrays;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.net.Uri;
 
@@ -20,17 +21,33 @@ import com.sarality.app.datastore.extractor.StringValueExtractor;
 import com.sarality.app.datastore.query.Query;
 import com.sarality.app.datastore.sms.SmsMessage.MessageType;
 
+/**
+ * DataStore to store all the relevant SMSMessages
+ * 
+ * @author abhideep@ (Abhideep Singh)
+ */
 public class SmsDataStore extends AbstractContentResolverDataStore<SmsMessage> {
 
   public static final String DATASTORE_NAME = "SmsDataStore";
+  private final Context context;
 
   private final Uri baseUri = Uri.parse("content://sms/");
 
+  /**
+   * Constructor
+   * 
+   * @param context : Application context
+   */
   public SmsDataStore(Context context) {
-    super(context.getApplicationContext(), DATASTORE_NAME,
-        Arrays.<com.sarality.app.datastore.Column>asList(Column.values()), new SmsMessageExtractor());
+    super(DATASTORE_NAME, Arrays.<com.sarality.app.datastore.Column> asList(Column.values()), new SmsMessageExtractor());
+    this.context = context;
   }
 
+  /**
+   * Defines the list of columns specific to the SMSDataStore
+   * 
+   * @author abhideep@ (Abhideep Singh)
+   */
   public enum Column implements com.sarality.app.datastore.Column {
     _ID(new ColumnSpec(ColumnDataType.INTEGER, false, null, null)),
     THREAD_ID(new ColumnSpec(ColumnDataType.INTEGER, false)),
@@ -66,8 +83,8 @@ public class SmsDataStore extends AbstractContentResolverDataStore<SmsMessage> {
   }
 
   /**
-   * Providing a list of configuration objects that define the relationship
-   * between SmsDataStore columns and fields in the SmsMessage data object.
+   * Providing a list of configuration objects that define the relationship between SmsDataStore columns and fields in
+   * the SmsMessage data object.
    * 
    * @author abhideep@ (Abhideep Singh)
    */
@@ -82,10 +99,15 @@ public class SmsDataStore extends AbstractContentResolverDataStore<SmsMessage> {
       addEntry(SmsMessageField.RECEIVED_DATE, Column.DATE, new DateValueExtractor(), null);
       addEntry(SmsMessageField.SENT_DATE, Column.DATE_SENT, new DateValueExtractor(), null);
       addEntry(SmsMessageField.IS_READ, Column.READ, new BooleanValueExtractor(), null);
-      addEntry(SmsMessageField.MESSAGE_TYPE, Column.TYPE,
-          new MappedEnumValueExtractor<Integer, MessageType>(MessageType.values()), null);
+      addEntry(SmsMessageField.MESSAGE_TYPE, Column.TYPE, new MappedEnumValueExtractor<Integer, MessageType>(
+          MessageType.values()), null);
       // TODO(abhideep): Add config for Status and Person
     }
+  }
+
+  @Override
+  public ContentResolver getContentResolver() {
+    return context.getApplicationContext().getContentResolver();
   }
 
   public static class SmsMessageExtractor extends GenericCursorDataExtractor<SmsMessage> {

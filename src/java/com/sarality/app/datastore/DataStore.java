@@ -2,8 +2,6 @@ package com.sarality.app.datastore;
 
 import java.util.List;
 
-import android.content.Context;
-
 import com.sarality.app.datastore.extractor.CursorDataExtractor;
 import com.sarality.app.datastore.query.Query;
 
@@ -20,11 +18,6 @@ import com.sarality.app.datastore.query.Query;
  */
 public interface DataStore<T> {
 
-  /**
-   * @return The Context that provides access to the DataStore's application environment
-   */
-  public Context getApplicationContext();
-  
   /**
    * @return String name for the data store.
    */
