@@ -100,19 +100,19 @@ public class SqliteTableTest extends BaseUnitTest {
     table.close();
   }
  
-  public final void testDelete() {
+  public final void atestDelete() {
     fail("Not yet implemented"); // TODO
   }
 
-  public final void testQuery() {
+  public final void atestQuery() {
     fail("Not yet implemented"); // TODO
   }
 
-  public final void testSetListener() {
+  public final void atestSetListener() {
     fail("Not yet implemented"); // TODO
   }
 
-  public final void testUpdate() {
+  public final void atestUpdate() {
     fail("Not yet implemented"); // TODO
   }
 }
