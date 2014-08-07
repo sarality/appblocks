@@ -5,7 +5,6 @@ import java.util.List;
 
 import android.content.Context;
 
-import com.sarality.app.data.DataObject;
 import com.sarality.app.datastore.extractor.CursorDataExtractor;
 
 /**
@@ -18,7 +17,7 @@ import com.sarality.app.datastore.extractor.CursorDataExtractor;
  *
  * @param <T> The type of DataObject returned by the DataStore.
  */
-public abstract class AbstractDataStore<T extends DataObject<T>> implements DataStore<T> {
+public abstract class AbstractDataStore<T> implements DataStore<T> {
 
   // The application context for the data store. 
   private final Context applicationContext;

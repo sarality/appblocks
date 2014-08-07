@@ -9,16 +9,15 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
 
-import com.sarality.app.data.DataObject;
 import com.sarality.app.datastore.extractor.CursorDataExtractor;
 import com.sarality.app.datastore.query.Query;
 
-public abstract class AbstractContentResolverDataStore<T extends DataObject<T>>
-    extends AbstractDataStore<T> implements DataStore<T> {
+public abstract class AbstractContentResolverDataStore<T> extends AbstractDataStore<T> implements DataStore<T> {
 
   private static final String TAG = "AbstractContentResolverDataStore";
-  
-  public AbstractContentResolverDataStore(Context context, String name, List<Column> columnList, CursorDataExtractor<T> extractor) {
+
+  public AbstractContentResolverDataStore(Context context, String name, List<Column> columnList,
+      CursorDataExtractor<T> extractor) {
     super(context, name, columnList, extractor);
   }
 
@@ -35,7 +34,7 @@ public abstract class AbstractContentResolverDataStore<T extends DataObject<T>>
       // TODO(abhideep): Add Query support here
       cursor = contentResolver.query(uri, null, null, null, null);
       CursorDataExtractor<T> extractor = getCursorDataExtractor();
-  
+
       cursor.moveToFirst();
       while (!cursor.isAfterLast()) {
         T data = extractor.extract(cursor, query);
