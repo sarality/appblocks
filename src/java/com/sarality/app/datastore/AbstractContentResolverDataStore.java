@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.ContentResolver;
-import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.util.Log;
@@ -16,17 +15,18 @@ public abstract class AbstractContentResolverDataStore<T> extends AbstractDataSt
 
   private static final String TAG = "AbstractContentResolverDataStore";
 
-  public AbstractContentResolverDataStore(Context context, String name, List<Column> columnList,
-      CursorDataExtractor<T> extractor) {
-    super(context, name, columnList, extractor);
+  public AbstractContentResolverDataStore(String name, List<Column> columnList, CursorDataExtractor<T> extractor) {
+    super(name, columnList, extractor);
   }
 
   public abstract Uri getQueryUri(Query query);
 
+  public abstract ContentResolver getContentResolver();
+
   @Override
   public List<T> query(Query query) {
     Uri uri = getQueryUri(query);
-    ContentResolver contentResolver = getApplicationContext().getContentResolver();
+    ContentResolver contentResolver = getContentResolver();
 
     Cursor cursor = null;
     List<T> dataList = new ArrayList<T>();
