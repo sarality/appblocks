@@ -4,8 +4,8 @@ import junit.framework.TestCase;
 import android.content.ContentValues;
 import android.database.MatrixCursor;
 
-import com.sarality.app.data.field.EnumFieldValue;
 import com.sarality.app.data.field.FieldValue;
+import com.sarality.app.data.field.GenericFieldValueFactory;
 import com.sarality.app.datastore.Column;
 import com.sarality.app.datastore.ColumnDataType;
 import com.sarality.app.datastore.ColumnSpec;
@@ -20,6 +20,7 @@ public class EnumColumnProcessorTest extends TestCase {
   private EnumColumnProcessor<TestEnum> processor;
   private MatrixCursor cursor;
   private Column column;
+  private GenericFieldValueFactory factory;
 
   public EnumColumnProcessorTest(String name) {
     super(name);
@@ -30,6 +31,7 @@ public class EnumColumnProcessorTest extends TestCase {
     cursor = new MatrixCursor(new String[] { "Column1", "Column2" });
     processor = new EnumColumnProcessor<TestEnum>(TestEnum.class);
     column = new TestColumn("Column2", new ColumnSpec(ColumnDataType.ENUM, null, false));
+    factory = new GenericFieldValueFactory();
     assertNotNull(processor);
   }
 
@@ -77,9 +79,8 @@ public class EnumColumnProcessorTest extends TestCase {
 
   public void testPopulate_FieldValue() {
     ContentValues contentValues = new ContentValues();
-    TestFieldValues fieldValues = new TestFieldValues();
-    fieldValues.registerFieldValueFactory(TestField.ENUM_FIELD, new EnumFieldValue.Factory<TestEnum>(TestEnum.class));
-    FieldValue<?> value = fieldValues.createFieldValue(TestField.ENUM_FIELD, TestEnum.VALUE_1);
+    FieldValue<TestEnum> value = factory.enumValue(TestField.ENUM_FIELD, TestEnum.class);
+    value.setValue(TestEnum.VALUE_1);
 
     processor.populate(contentValues, column, value);
     assertTrue(contentValues.containsKey(column.getName()));
@@ -89,8 +90,8 @@ public class EnumColumnProcessorTest extends TestCase {
 
   public void testPopulate_NullFieldValue() {
     ContentValues contentValues = new ContentValues();
-    TestFieldValues fieldValues = new TestFieldValues();
-    FieldValue<?> value = fieldValues.createFieldValue(TestField.STRING_FIELD, null);
+    FieldValue<TestEnum> value = factory.enumValue(TestField.ENUM_FIELD, TestEnum.class);
+    value.setValue(null);
 
     processor.populate(contentValues, column, value);
     assertTrue(contentValues.containsKey(column.getName()));
