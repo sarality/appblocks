@@ -7,14 +7,14 @@ import com.sarality.app.data.field.Field.DataType;
  * 
  * @author abhideep@ (Abhideep Singh)
  */
-class IntegerFieldValue extends BaseFieldValue<Integer> {
+public class IntegerFieldValue extends BaseFieldValue<Integer> {
 
   /**
    * Constructor.
    * 
    * @param field Field that this is a value for.
    */
-  private IntegerFieldValue(Field field) {
+  public IntegerFieldValue(Field field) {
     super(field, DataType.INTEGER, Integer.class);
   }
 

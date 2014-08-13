@@ -1,19 +1,22 @@
 package com.sarality.app.data.field;
 
+import com.sarality.app.data.field.Field.DataType;
+
+
 /**
  * Stores a Field with a Boolean Value.
  * 
  * @author abhideep@ (Abhideep Singh)
  */
-class BooleanFieldValue extends BaseFieldValue<Boolean> {
+public class BooleanFieldValue extends BaseFieldValue<Boolean> {
 
   /**
    * Constructor.
    * 
    * @param field Field that this is a value for.
    */
-  private BooleanFieldValue(Field field) {
-    super(field, Field.DataType.BOOLEAN, Boolean.class);
+  public BooleanFieldValue(Field field) {
+    super(field, DataType.BOOLEAN, Boolean.class);
   }
 
   @Override

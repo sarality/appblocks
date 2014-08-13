@@ -7,14 +7,14 @@ import com.sarality.app.data.field.Field.DataType;
  * 
  * @author abhideep@ (Abhideep Singh)
  */
-class LongFieldValue extends BaseFieldValue<Long> {
+public class LongFieldValue extends BaseFieldValue<Long> {
 
   /**
    * Constructor.
    * 
    * @param field Field that this is a value for.
    */
-  private LongFieldValue(Field field) {
+  public LongFieldValue(Field field) {
     super(field, DataType.LONG, Long.class);
   }
   

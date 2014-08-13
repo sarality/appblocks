@@ -5,12 +5,14 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import com.sarality.app.data.field.Field.DataType;
+
 /**
  * Stores a Field with a Date Value.
  * 
  * @author abhideep@ (Abhideep Singh)
  */
-class DateFieldValue extends BaseFieldValue<Date> {
+public class DateFieldValue extends BaseFieldValue<Date> {
 
   public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
 
@@ -19,8 +21,8 @@ class DateFieldValue extends BaseFieldValue<Date> {
    * 
    * @param field Field that this is a value for.
    */
-  private DateFieldValue(Field field) {
-    super(field, Field.DataType.DATE, Date.class);
+  public DateFieldValue(Field field) {
+    super(field, DataType.DATE, Date.class);
   }
 
   @Override

@@ -8,11 +8,15 @@ public class EnumDataFieldValue<E extends EnumData<E>> extends BaseFieldValue<E>
 
   private final EnumDataRegistry registry;
 
-  public EnumDataFieldValue(Field field, DataType fieldType, Class<E> valueClass, EnumDataRegistry registry) {
+  protected EnumDataFieldValue(Field field, Class<E> valueClass, EnumDataRegistry registry) {
     super(field, DataType.ENUM_DATA, valueClass);
     this.registry = registry;
   }
 
+  public EnumDataFieldValue(Field field, Class<E> valueClass) {
+    this(field, valueClass, EnumDataRegistry.getGlobalInstance());
+  }
+  
   @Override
   public void castFrom(Object value) {
     @SuppressWarnings("unchecked")
@@ -46,7 +50,7 @@ public class EnumDataFieldValue<E extends EnumData<E>> extends BaseFieldValue<E>
 
     @Override
     public FieldValue<E> createFieldValue(Field field) {
-      return new EnumDataFieldValue<E>(field, DataType.ENUM_DATA, valueClass, registry);
+      return new EnumDataFieldValue<E>(field, valueClass, registry);
     }
   }
 }

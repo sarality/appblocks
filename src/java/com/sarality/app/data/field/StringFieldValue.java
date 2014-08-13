@@ -5,14 +5,14 @@ package com.sarality.app.data.field;
  * 
  * @author abhideep@ (Abhideep Singh)
  */
-class StringFieldValue extends BaseFieldValue<String> {
+public class StringFieldValue extends BaseFieldValue<String> {
 
   /**
    * Constructor.
    * 
    * @param field Field that this is a value for.
    */
-  private StringFieldValue(Field field) {
+  public StringFieldValue(Field field) {
     super(field, Field.DataType.STRING, String.class);
   }
 
@@ -42,7 +42,7 @@ class StringFieldValue extends BaseFieldValue<String> {
     return getValue();
   }
 
-  static class Factory implements FieldValueFactory<String> {
+  public static class Factory implements FieldValueFactory<String> {
 
     @Override
     public FieldValue<String> createFieldValue(Field field) {

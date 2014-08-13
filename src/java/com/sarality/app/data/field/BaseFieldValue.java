@@ -14,7 +14,7 @@ public abstract class BaseFieldValue<T> implements FieldValue<T> {
   private T value = null;
   private boolean hasValue = false;
   private final Field field;
-  private final DataType fieldType;
+  private final DataType dataType;
   private final Class<T> valueClass;
 
   /**
@@ -23,10 +23,18 @@ public abstract class BaseFieldValue<T> implements FieldValue<T> {
    * @param field Field that this is a value.
    * @param fieldType DataType for the Field
    */
-  protected BaseFieldValue(Field field, DataType fieldType, Class<T> valueClass) {
+  protected BaseFieldValue(Field field, DataType dataType, Class<T> valueClass) {
     this.field = field;
-    this.fieldType = fieldType;
+    this.dataType = dataType;
     this.valueClass = valueClass;
+    assertValidDataType(field, dataType);
+  }
+
+  protected void assertValidDataType(Field field, DataType dataType) {
+    if (field.getDataType() != dataType) {
+      throw new IllegalArgumentException("Field " + field.getName() + " has invalid data type " + field.getDataType() 
+          + ". The data type should have been " + dataType);
+    }
   }
 
   @Override
@@ -36,7 +44,7 @@ public abstract class BaseFieldValue<T> implements FieldValue<T> {
 
   @Override
   public DataType getDataType() {
-    return fieldType;
+    return dataType;
   }
 
   @Override
