@@ -5,14 +5,14 @@ package com.sarality.app.data.field;
  * 
  * @author abhideep@ (Abhideep Singh)
  */
-class DoubleFieldValue extends BaseFieldValue<Double> {
+public class DoubleFieldValue extends BaseFieldValue<Double> {
 
   /**
    * Constructor.
    * 
    * @param field Field that this is a value for.
    */
-  private DoubleFieldValue(Field field) {
+  public DoubleFieldValue(Field field) {
     super(field, Field.DataType.DOUBLE, Double.class);
   }
 
