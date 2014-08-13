@@ -58,7 +58,7 @@ public class MappedEnumColumnProcessorTest extends TestCase {
   public void testExtract_InvalidColumnName() {
     cursor.addRow(new Object[] { "Row 1", TestEnum.VALUE_1.name() });
     cursor.moveToNext();
-    column = new TestColumn("Column3", new ColumnSpec(ColumnDataType.ENUM, null, false));
+    column = new TestColumn("Column3", new ColumnSpec(ColumnDataType.TEXT, null, false));
     try {
       processor.extract(cursor, column);
       fail("Extract should throw exception if Column with given name does not exist");
@@ -89,7 +89,19 @@ public class MappedEnumColumnProcessorTest extends TestCase {
     assertNotNull(contentValues.get(column.getName()));
     assertEquals(2, contentValues.get(column.getName()));
   }
-  
+
+  public void testPopulate_DoubleColumn() {
+    ContentValues contentValues = new ContentValues();
+    column = new TestColumn("Column2", new ColumnSpec(ColumnDataType.DOUBLE, null, false));
+    try {
+      processor.populate(contentValues, column, TestEnum.VALUE_2);
+      fail("Populate should throw exception if Column data type is not INTEGER or TEXT");
+    } catch (IllegalStateException e) {
+      assertEquals("Mapped Enum are only supported for INTEGER or TEXT columns. Cannot populate Enum value VALUE_2 "
+          + "into column of type DOUBLE", e.getMessage());
+    }
+  }
+
   public void testPopulate_NullValue() {
     ContentValues contentValues = new ContentValues();
     processor.populate(contentValues, column, (TestEnum) null);

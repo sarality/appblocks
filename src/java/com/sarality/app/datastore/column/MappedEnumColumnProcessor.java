@@ -49,6 +49,9 @@ public class MappedEnumColumnProcessor<V, T extends MappedEnum<V>> implements Co
         contentValues.put(column.getName(), stringValue);
       } else if (dataType == ColumnDataType.INTEGER) {
         contentValues.put(column.getName(), Integer.valueOf(stringValue));        
+      } else {
+        throw new IllegalStateException("Mapped Enum are only supported for INTEGER or TEXT columns. Cannot"
+            + " populate Enum value " + value + " into column of type " + dataType);
       }
     } else {
       contentValues.putNull(column.getName());
