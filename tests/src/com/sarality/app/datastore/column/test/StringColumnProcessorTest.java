@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.database.MatrixCursor;
 
 import com.sarality.app.data.field.FieldValue;
+import com.sarality.app.data.field.GenericFieldValueFactory;
 import com.sarality.app.datastore.Column;
 import com.sarality.app.datastore.ColumnDataType;
 import com.sarality.app.datastore.ColumnSpec;
@@ -19,6 +20,7 @@ public class StringColumnProcessorTest extends TestCase {
   private StringColumnProcessor processor;
   private MatrixCursor cursor;
   private Column column;
+  private GenericFieldValueFactory factory;
 
   public StringColumnProcessorTest(String name) {
     super(name);
@@ -29,6 +31,7 @@ public class StringColumnProcessorTest extends TestCase {
     cursor = new MatrixCursor(new String[] { "Column1", "Column2" });
     processor = new StringColumnProcessor();
     column = new TestColumn("Column2", new ColumnSpec(ColumnDataType.TEXT, null, false));
+    factory = new GenericFieldValueFactory();
     assertNotNull(processor);
   }
 
@@ -76,8 +79,8 @@ public class StringColumnProcessorTest extends TestCase {
 
   public void testPopulate_FieldValue() {
     ContentValues contentValues = new ContentValues();
-    TestFieldValues fieldValues = new TestFieldValues();
-    FieldValue<?> value = fieldValues.createFieldValue(TestField.STRING_FIELD, "Value 1");
+    FieldValue<String> value = factory.stringValue(TestField.STRING_FIELD);
+    value.setValue("Value 1");
 
     processor.populate(contentValues, column, value);
     assertTrue(contentValues.containsKey(column.getName()));
@@ -87,8 +90,8 @@ public class StringColumnProcessorTest extends TestCase {
 
   public void testPopulate_NullFieldValue() {
     ContentValues contentValues = new ContentValues();
-    TestFieldValues fieldValues = new TestFieldValues();
-    FieldValue<?> value = fieldValues.createFieldValue(TestField.STRING_FIELD, null);
+    FieldValue<String> value = factory.stringValue(TestField.STRING_FIELD);
+    value.setValue(null);
 
     processor.populate(contentValues, column, value);
     assertTrue(contentValues.containsKey(column.getName()));

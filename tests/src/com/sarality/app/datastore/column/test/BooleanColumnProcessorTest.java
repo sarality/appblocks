@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.database.MatrixCursor;
 
 import com.sarality.app.data.field.FieldValue;
+import com.sarality.app.data.field.GenericFieldValueFactory;
 import com.sarality.app.datastore.Column;
 import com.sarality.app.datastore.ColumnDataType;
 import com.sarality.app.datastore.ColumnSpec;
@@ -19,6 +20,7 @@ public class BooleanColumnProcessorTest extends TestCase {
   private BooleanColumnProcessor processor;
   private MatrixCursor cursor;
   private Column column;
+  private GenericFieldValueFactory factory;
 
   public BooleanColumnProcessorTest(String name) {
     super(name);
@@ -29,6 +31,7 @@ public class BooleanColumnProcessorTest extends TestCase {
     cursor = new MatrixCursor(new String[] { "Column1", "Column2" });
     processor = new BooleanColumnProcessor();
     column = new TestColumn("Column2", new ColumnSpec(ColumnDataType.BOOLEAN, null, false));
+    factory = new GenericFieldValueFactory();
     assertNotNull(processor);
   }
 
@@ -116,8 +119,8 @@ public class BooleanColumnProcessorTest extends TestCase {
 
   public void testPopulate_TrueFieldValue() {
     ContentValues contentValues = new ContentValues();
-    TestFieldValues fieldValues = new TestFieldValues();
-    FieldValue<?> value = fieldValues.createFieldValue(TestField.BOOLEAN_FIELD, Boolean.TRUE);
+    FieldValue<Boolean> value = factory.booleanValue(TestField.BOOLEAN_FIELD);
+    value.setValue(Boolean.TRUE);
 
     processor.populate(contentValues, column, value);
     assertTrue(contentValues.containsKey(column.getName()));
@@ -127,8 +130,8 @@ public class BooleanColumnProcessorTest extends TestCase {
 
   public void testPopulate_FalseFieldValue() {
     ContentValues contentValues = new ContentValues();
-    TestFieldValues fieldValues = new TestFieldValues();
-    FieldValue<?> value = fieldValues.createFieldValue(TestField.BOOLEAN_FIELD, Boolean.FALSE);
+    FieldValue<Boolean> value = factory.booleanValue(TestField.BOOLEAN_FIELD);
+    value.setValue(Boolean.FALSE);
 
     processor.populate(contentValues, column, value);
     assertTrue(contentValues.containsKey(column.getName()));
@@ -138,8 +141,8 @@ public class BooleanColumnProcessorTest extends TestCase {
 
   public void testPopulate_NullFieldValue() {
     ContentValues contentValues = new ContentValues();
-    TestFieldValues fieldValues = new TestFieldValues();
-    FieldValue<?> value = fieldValues.createFieldValue(TestField.BOOLEAN_FIELD, null);
+    FieldValue<Boolean> value = factory.booleanValue(TestField.BOOLEAN_FIELD);
+    value.setValue(null);
 
     processor.populate(contentValues, column, value);
     assertTrue(contentValues.containsKey(column.getName()));
@@ -152,8 +155,8 @@ public class BooleanColumnProcessorTest extends TestCase {
 
   public void testPopulate_InvalidFieldValue() {
     ContentValues contentValues = new ContentValues();
-    TestFieldValues fieldValues = new TestFieldValues();
-    FieldValue<?> value = fieldValues.createFieldValue(TestField.LONG_FIELD, 100L);
+    FieldValue<Long> value = factory.longValue(TestField.LONG_FIELD);
+    value.setValue(100L);
 
     try {
       processor.populate(contentValues, column, value);

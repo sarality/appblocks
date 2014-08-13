@@ -10,6 +10,7 @@ import android.content.ContentValues;
 import android.database.MatrixCursor;
 
 import com.sarality.app.data.field.FieldValue;
+import com.sarality.app.data.field.GenericFieldValueFactory;
 import com.sarality.app.datastore.Column;
 import com.sarality.app.datastore.ColumnDataType;
 import com.sarality.app.datastore.ColumnFormat;
@@ -25,6 +26,7 @@ public class DateColumnProcessorTest extends TestCase {
   private DateColumnProcessor processor;
   private MatrixCursor cursor;
   private Column column;
+  private GenericFieldValueFactory factory;
 
   public DateColumnProcessorTest(String name) {
     super(name);
@@ -35,6 +37,7 @@ public class DateColumnProcessorTest extends TestCase {
     cursor = new MatrixCursor(new String[] { "Column1", "Column2" });
     processor = new DateColumnProcessor();
     column = new TestColumn("Column2", new ColumnSpec(ColumnDataType.DATETIME, null, false));
+    factory = new GenericFieldValueFactory();
     assertNotNull(processor);
   }
 
@@ -152,10 +155,10 @@ public class DateColumnProcessorTest extends TestCase {
 
   public void testPopulate_FieldValue() {
     ContentValues contentValues = new ContentValues();
-    TestFieldValues fieldValues = new TestFieldValues();
     DateTime dateTime = new DateTime(2014, 12, 25, 13, 11, 45, 0);
     Date dateValue = new Date(dateTime.getMilliseconds(TimeZone.getDefault()));
-    FieldValue<?> value = fieldValues.createFieldValue(TestField.DATE_FIELD, dateValue);
+    FieldValue<Date> value = factory.dateValue(TestField.DATE_FIELD);
+    value.setValue(dateValue);
 
     processor.populate(contentValues, column, value);
     assertTrue(contentValues.containsKey(column.getName()));
@@ -165,8 +168,8 @@ public class DateColumnProcessorTest extends TestCase {
 
   public void testPopulate_NullFieldValue() {
     ContentValues contentValues = new ContentValues();
-    TestFieldValues fieldValues = new TestFieldValues();
-    FieldValue<?> value = fieldValues.createFieldValue(TestField.DATE_FIELD, null);
+    FieldValue<Date> value = factory.dateValue(TestField.DATE_FIELD);
+    value.setValue(null);
 
     processor.populate(contentValues, column, value);
     assertTrue(contentValues.containsKey(column.getName()));
@@ -179,8 +182,8 @@ public class DateColumnProcessorTest extends TestCase {
 
   public void testPopulate_InvalidFieldValue() {
     ContentValues contentValues = new ContentValues();
-    TestFieldValues fieldValues = new TestFieldValues();
-    FieldValue<?> value = fieldValues.createFieldValue(TestField.STRING_FIELD, new Date());
+    FieldValue<String> value = factory.stringValue(TestField.STRING_FIELD);
+    value.setValue(new Date().toString());
 
     try {
       processor.populate(contentValues, column, value);

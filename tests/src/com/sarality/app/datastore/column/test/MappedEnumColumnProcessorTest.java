@@ -4,53 +4,59 @@ import junit.framework.TestCase;
 import android.content.ContentValues;
 import android.database.MatrixCursor;
 
-import com.sarality.app.data.BaseEnumData;
-import com.sarality.app.data.EnumDataRegistry;
 import com.sarality.app.data.field.FieldValue;
 import com.sarality.app.data.field.GenericFieldValueFactory;
 import com.sarality.app.datastore.Column;
 import com.sarality.app.datastore.ColumnDataType;
 import com.sarality.app.datastore.ColumnSpec;
+import com.sarality.app.datastore.MappedEnum;
 import com.sarality.app.datastore.column.EnumColumnProcessor;
-import com.sarality.app.datastore.column.EnumDataColumnProcessor;
+import com.sarality.app.datastore.column.MappedEnumColumnProcessor;
 
 /**
  * Tests for {@link EnumColumnProcessor}.
  * 
  * @author abhideep@ (Abhideep Singh)
  */
-public class EnumDataColumnProcessorTest extends TestCase {
-  private EnumDataColumnProcessor<TestEnum> processor;
-  private EnumDataRegistry registry;
+public class MappedEnumColumnProcessorTest extends TestCase {
+  private MappedEnumColumnProcessor<Integer, TestEnum> processor;
   private MatrixCursor cursor;
   private Column column;
   private GenericFieldValueFactory factory;
 
-  public EnumDataColumnProcessorTest(String name) {
+  public MappedEnumColumnProcessorTest(String name) {
     super(name);
   }
 
   @Override
   public void setUp() {
     cursor = new MatrixCursor(new String[] { "Column1", "Column2" });
-    registry = new EnumDataRegistry();
-    processor = new EnumDataColumnProcessor<TestEnum>(TestEnum.class, registry);
-    column = new TestColumn("Column2", new ColumnSpec(ColumnDataType.ENUM, null, false));
+    processor = new MappedEnumColumnProcessor<Integer, TestEnum>(TestEnum.class, TestEnum.values());
+    column = new TestColumn("Column2", new ColumnSpec(ColumnDataType.INTEGER, null, false));
     factory = new GenericFieldValueFactory();
     assertNotNull(processor);
   }
 
   public void testExtract() {
-    TestEnum enumData = new TestEnum("VALUE_1", registry);
-    cursor.addRow(new Object[] { "Row 1", "VALUE_1" });
+    cursor.addRow(new Object[] { "Row 1", 1 });
     cursor.moveToNext();
     TestEnum value = processor.extract(cursor, column);
     assertNotNull(value);
-    assertEquals(enumData, value);
+    assertEquals(TestEnum.VALUE_1, value);
   }
 
+  public void testExtract_TextColumn() {
+    cursor.addRow(new Object[] { "Row 1", "2" });
+    cursor.moveToNext();
+
+    column = new TestColumn("Column2", new ColumnSpec(ColumnDataType.TEXT, null, false));
+    TestEnum value = processor.extract(cursor, column);
+    assertNotNull(value);
+    assertEquals(TestEnum.VALUE_2, value);
+  }
+  
   public void testExtract_InvalidColumnName() {
-    cursor.addRow(new Object[] { "Row 1", "VALUE_1" });
+    cursor.addRow(new Object[] { "Row 1", TestEnum.VALUE_1.name() });
     cursor.moveToNext();
     column = new TestColumn("Column3", new ColumnSpec(ColumnDataType.ENUM, null, false));
     try {
@@ -70,13 +76,20 @@ public class EnumDataColumnProcessorTest extends TestCase {
 
   public void testPopulate() {
     ContentValues contentValues = new ContentValues();
-    TestEnum enumData = new TestEnum("VALUE_1", registry);
-    processor.populate(contentValues, column, enumData);
+    processor.populate(contentValues, column, TestEnum.VALUE_2);
     assertTrue(contentValues.containsKey(column.getName()));
     assertNotNull(contentValues.get(column.getName()));
-    assertEquals(enumData.getEnumName(), contentValues.get(column.getName()));
+    assertEquals(TestEnum.VALUE_2.getMappedValue(), contentValues.get(column.getName()));
   }
 
+  public void testPopulate_IntegerColumn() {
+    ContentValues contentValues = new ContentValues();
+    processor.populate(contentValues, column, TestEnum.VALUE_2);
+    assertTrue(contentValues.containsKey(column.getName()));
+    assertNotNull(contentValues.get(column.getName()));
+    assertEquals(2, contentValues.get(column.getName()));
+  }
+  
   public void testPopulate_NullValue() {
     ContentValues contentValues = new ContentValues();
     processor.populate(contentValues, column, (TestEnum) null);
@@ -86,18 +99,18 @@ public class EnumDataColumnProcessorTest extends TestCase {
 
   public void testPopulate_FieldValue() {
     ContentValues contentValues = new ContentValues();
-    FieldValue<TestEnum> value = factory.enumDataValue(TestField.ENUM_DATA_FIELD, TestEnum.class);
-    value.setValue(new TestEnum("VALUE_1", registry));
+    FieldValue<TestEnum> value = factory.enumValue(TestField.ENUM_FIELD, TestEnum.class);
+    value.setValue(TestEnum.VALUE_1);
 
     processor.populate(contentValues, column, value);
     assertTrue(contentValues.containsKey(column.getName()));
     assertNotNull(contentValues.get(column.getName()));
-    assertEquals("VALUE_1", contentValues.get(column.getName()));
+    assertEquals(TestEnum.VALUE_1.getMappedValue(), contentValues.get(column.getName()));
   }
 
   public void testPopulate_NullFieldValue() {
     ContentValues contentValues = new ContentValues();
-    FieldValue<TestEnum> value = factory.enumDataValue(TestField.ENUM_DATA_FIELD, TestEnum.class);
+    FieldValue<TestEnum> value = factory.enumValue(TestField.ENUM_FIELD, TestEnum.class);
     value.setValue(null);
 
     processor.populate(contentValues, column, value);
@@ -109,16 +122,19 @@ public class EnumDataColumnProcessorTest extends TestCase {
     assertNull(contentValues.get(column.getName()));
   }
 
-  private static class TestEnum extends BaseEnumData<TestEnum> {
+  private static enum TestEnum implements MappedEnum<Integer> {
+    VALUE_1(1),
+    VALUE_2(2);
 
-    public TestEnum(String enumName, EnumDataRegistry registry) {
-      super(enumName, registry);
-      register(TestEnum.class, this);
+    private Integer mappedValue;
+    
+    private TestEnum(Integer value) {
+      this.mappedValue = value;
     }
 
     @Override
-    public TestEnum getEnumData() {
-      return this;
+    public Integer getMappedValue() {
+      return mappedValue;
     }
   }
 }

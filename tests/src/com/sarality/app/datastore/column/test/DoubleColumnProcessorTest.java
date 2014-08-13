@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.database.MatrixCursor;
 
 import com.sarality.app.data.field.FieldValue;
+import com.sarality.app.data.field.GenericFieldValueFactory;
 import com.sarality.app.datastore.Column;
 import com.sarality.app.datastore.ColumnDataType;
 import com.sarality.app.datastore.ColumnSpec;
@@ -19,6 +20,7 @@ public class DoubleColumnProcessorTest extends TestCase {
   private DoubleColumnProcessor processor;
   private MatrixCursor cursor;
   private Column column;
+  private GenericFieldValueFactory factory;
 
   public DoubleColumnProcessorTest(String name) {
     super(name);
@@ -29,6 +31,7 @@ public class DoubleColumnProcessorTest extends TestCase {
     cursor = new MatrixCursor(new String[] { "Column1", "Column2" });
     processor = new DoubleColumnProcessor();
     column = new TestColumn("Column2", new ColumnSpec(ColumnDataType.DOUBLE, null, false));
+    factory = new GenericFieldValueFactory();
     assertNotNull(processor);
   }
 
@@ -88,8 +91,8 @@ public class DoubleColumnProcessorTest extends TestCase {
 
   public void testPopulate_FieldValue() {
     ContentValues contentValues = new ContentValues();
-    TestFieldValues fieldValues = new TestFieldValues();
-    FieldValue<?> value = fieldValues.createFieldValue(TestField.DOUBLE_FIELD, 200D);
+    FieldValue<Double> value = factory.doubleValue(TestField.DOUBLE_FIELD);
+    value.setValue(200D);
 
     processor.populate(contentValues, column, value);
     assertTrue(contentValues.containsKey(column.getName()));
@@ -99,8 +102,8 @@ public class DoubleColumnProcessorTest extends TestCase {
 
   public void testPopulate_NullFieldValue() {
     ContentValues contentValues = new ContentValues();
-    TestFieldValues fieldValues = new TestFieldValues();
-    FieldValue<?> value = fieldValues.createFieldValue(TestField.DOUBLE_FIELD, null);
+    FieldValue<Double> value = factory.doubleValue(TestField.DOUBLE_FIELD);
+    value.setValue(null);
 
     processor.populate(contentValues, column, value);
     assertTrue(contentValues.containsKey(column.getName()));
@@ -113,8 +116,8 @@ public class DoubleColumnProcessorTest extends TestCase {
 
   public void testPopulate_InvalidFieldValue() {
     ContentValues contentValues = new ContentValues();
-    TestFieldValues fieldValues = new TestFieldValues();
-    FieldValue<?> value = fieldValues.createFieldValue(TestField.STRING_FIELD, "Invalid");
+    FieldValue<String> value = factory.stringValue(TestField.STRING_FIELD);
+    value.setValue("Invalid");
 
     try {
       processor.populate(contentValues, column, value);
