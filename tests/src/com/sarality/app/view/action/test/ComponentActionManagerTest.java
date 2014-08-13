@@ -7,6 +7,7 @@ import java.util.List;
 
 import android.content.Context;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.sarality.app.common.collect.Lists;
@@ -73,7 +74,7 @@ public class ComponentActionManagerTest extends BaseUnitTest {
     // LISTVIEW with ID 2
     // VIEW with ID 3
     Context context = getInstrumentation().getTargetContext();
-    View layout = mock(View.class);
+    LinearLayout layout = new LinearLayout(context);
     View view1 = new View(context);
     view1.setId(1);
     View view3 = new View(context);
@@ -82,10 +83,9 @@ public class ComponentActionManagerTest extends BaseUnitTest {
     listView.setId(2);
 
     setupActionList();
-
-    when(layout.findViewById(1)).thenReturn(view1);
-    when(layout.findViewById(2)).thenReturn(listView);
-    when(layout.findViewById(3)).thenReturn(view3);
+    layout.addView(view1);
+    layout.addView(listView);
+    layout.addView(view3);
 
     ComponentActionManager actionManager = new ComponentActionManager(actionList);
     // No exceptions should be thrown
@@ -94,19 +94,19 @@ public class ComponentActionManagerTest extends BaseUnitTest {
 
   public void testSetUpActions_Exception() {
     Context context = getInstrumentation().getTargetContext();
-    View layout = mock(View.class);
+    LinearLayout layout = new LinearLayout(context);
     View view1 = new View(context);
     view1.setId(13);
+    layout.addView(view1);
 
     actionList = Lists.of(view1Action1);
-
-    when(layout.findViewById(1)).thenReturn(view1);
 
     ComponentActionManager actionManager = new ComponentActionManager(actionList);
     try {
       actionManager.setupActions(layout);
-    } catch (IllegalArgumentException e) {
-      // Do nothing
+      fail("Exception should be thrown");
+    } catch (IllegalStateException e) {
+      assertEquals("Invalid Configuration for CLICK Event. No View with Id 1 found in row ffffffff", e.getMessage());
     }
   }
 }

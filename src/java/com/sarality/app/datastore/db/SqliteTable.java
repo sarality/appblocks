@@ -27,11 +27,10 @@ import com.sarality.app.datastore.query.Query;
  * marshaling/unmarshaling of data to and from the cursor.
  * 
  * @author abhideep@ (Abhideep Singh)
- * 
  * @param <T> Data associated with each row of the table.
  */
-public abstract class SqliteTable<T extends DataObject<T>> 
-    extends AbstractWritableDataStore<T, Long> implements Table<T> {
+public abstract class SqliteTable<T extends DataObject<T>> extends AbstractWritableDataStore<T, Long> implements
+    Table<T> {
 
   private static final Logger logger = LoggerFactory.getLogger(SqliteTable.class);
 
@@ -61,7 +60,7 @@ public abstract class SqliteTable<T extends DataObject<T>>
   protected SqliteTable(Application application, String dbName, String tableName, int tableVersion,
       List<Column> columnList, CursorDataExtractor<T> extractor, ContentValuesPopulator<T> populator,
       SqliteTableSchemaUpdater schemaUpdter) {
-    super(application.getApplicationContext(), tableName, columnList, extractor, populator);
+    super(tableName, columnList, extractor, populator);
     this.dbName = dbName;
     this.tableName = tableName;
     this.tableVersion = tableVersion;
