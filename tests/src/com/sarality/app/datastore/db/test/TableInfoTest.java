@@ -4,7 +4,14 @@ import static org.mockito.Mockito.mock;
 
 import java.util.List;
 
+import junit.framework.TestCase;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
 
 import android.app.Application;
 
@@ -14,20 +21,19 @@ import com.sarality.app.datastore.ColumnDataType;
 import com.sarality.app.datastore.ColumnSpec;
 import com.sarality.app.datastore.db.TableColumnProperty;
 import com.sarality.app.datastore.db.TableInfo;
-import com.sarality.app.view.action.test.BaseUnitTest;
 
 /**
  * Tests for {@link TableInfo}.
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class TableInfoTest extends BaseUnitTest {
+@RunWith(RobolectricTestRunner.class)
+public class TableInfoTest extends TestCase {
   private Application app;
   
+  @Before
   public void setUp(){
-    super.setUp();
-    app = mock(Application.class);
-    Mockito.when(app.getApplicationContext()).thenReturn(context);
+    app = Robolectric.application;
   }
   
   private ColumnSpec createPrimaryKey(){
@@ -36,6 +42,7 @@ public class TableInfoTest extends BaseUnitTest {
     return spec;
   }
   
+  @Test
   public final void testTableInfo_OnePrimaryKey() {
     Column primaryCol = mock(Column.class);
     Mockito.when(primaryCol.getSpec()).thenReturn(createPrimaryKey());
@@ -52,6 +59,7 @@ public class TableInfoTest extends BaseUnitTest {
     assertFalse(info.hasCompositePrimaryKey());
   }
   
+  @Test
   public final void testTableInfo_TwoPrimaryKeys() {
     Column primaryCol = mock(Column.class);
     Mockito.when(primaryCol.getSpec()).thenReturn(createPrimaryKey());

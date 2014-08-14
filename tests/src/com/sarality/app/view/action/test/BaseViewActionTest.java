@@ -4,10 +4,12 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import junit.framework.TestCase;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
+import org.robolectric.RobolectricTestRunner;
 
-import android.test.MoreAsserts;
 import android.view.View;
 
 import com.sarality.app.view.action.BaseViewAction;
@@ -21,23 +23,28 @@ import com.sarality.app.view.action.ViewDetail;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
+@RunWith(RobolectricTestRunner.class)
 public class BaseViewActionTest extends TestCase {
 
+  @Test
   public void testBaseViewAction() {
     TestDummyBaseViewAction action = new TestDummyBaseViewAction(1234, TriggerType.CLICK);
     assertNotNull(action);
   }
 
+  @Test
   public void testGetViewId() {
     TestDummyBaseViewAction action = new TestDummyBaseViewAction(1234, TriggerType.CLICK);
     assertEquals(Integer.valueOf(action.getViewId()), Integer.valueOf(1234));
   }
 
+  @Test
   public void testGetTriggerType() {
     TestDummyBaseViewAction action = new TestDummyBaseViewAction(1234, TriggerType.CLICK);
     assertSame(action.getTriggerType(), TriggerType.CLICK);
   }
 
+  @Test
   public void testRegisterBeforeExecutionAction() {
     TestDummyBaseViewAction action = new TestDummyBaseViewAction(1234, TriggerType.CLICK);
     ViewAction beforeAction = mock(ViewAction.class);
@@ -45,6 +52,7 @@ public class BaseViewActionTest extends TestCase {
     MoreAsserts.assertContentsInOrder(action.getActions(), beforeAction);
   }
 
+  @Test
   public void testRegisterOnSuccessAction() {
     TestDummyBaseViewAction action = new TestDummyBaseViewAction(1234, TriggerType.CLICK);
     ViewAction onSuccessAction = mock(ViewAction.class);
@@ -52,6 +60,7 @@ public class BaseViewActionTest extends TestCase {
     MoreAsserts.assertContentsInOrder(action.getActions(), onSuccessAction);
   }
 
+  @Test
   public void testRegisterOnFailureAction() {
     TestDummyBaseViewAction action = new TestDummyBaseViewAction(1234, TriggerType.CLICK);
     ViewAction onFailureAction = mock(ViewAction.class);
@@ -59,6 +68,7 @@ public class BaseViewActionTest extends TestCase {
     MoreAsserts.assertContentsInOrder(action.getActions(), onFailureAction);
   }
 
+  @Test
   public void testGetActions() {
     TestDummyBaseViewAction action = new TestDummyBaseViewAction(1234, TriggerType.CLICK);
     ViewAction onFailureAction = mock(ViewAction.class);
@@ -70,6 +80,7 @@ public class BaseViewActionTest extends TestCase {
     MoreAsserts.assertContentsInAnyOrder(action.getActions(), beforeAction, onSuccessAction, onFailureAction);
   }
 
+  @Test
   public void testPerformAction() {
     // Mock ViewAction Trigger
     ViewActionTrigger actionTrigger = mock(ViewActionTrigger.class);
@@ -111,6 +122,7 @@ public class BaseViewActionTest extends TestCase {
     assertEquals(result, true);
   }
 
+  @Test
   public void testFailedAction() {
     // Mock ViewAction Trigger
     ViewActionTrigger actionTrigger = mock(ViewActionTrigger.class);

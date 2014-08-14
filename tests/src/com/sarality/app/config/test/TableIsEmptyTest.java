@@ -54,5 +54,4 @@ class TestDataObject extends BaseFieldBasedDataObject<TestDataObject>{
   public com.sarality.app.data.FieldBasedDataObject.Builder<TestDataObject> newBuilder() {
     return null;
   }
-  
 }

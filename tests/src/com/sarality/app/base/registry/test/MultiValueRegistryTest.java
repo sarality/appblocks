@@ -3,10 +3,10 @@ package com.sarality.app.base.registry.test;
 import java.util.List;
 
 import junit.framework.TestCase;
-import android.test.MoreAsserts;
 
 import com.sarality.app.base.registry.MultiValueRegistry;
 import com.sarality.app.common.collect.Lists;
+import com.sarality.app.view.action.test.MoreAsserts;
 
 /**
  * Tests for {@link MultiValueRegistry}.

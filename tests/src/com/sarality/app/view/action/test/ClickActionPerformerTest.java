@@ -4,7 +4,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import junit.framework.TestCase;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.robolectric.RobolectricTestRunner;
 
 import android.view.View;
 
@@ -18,8 +21,10 @@ import com.sarality.app.view.action.ViewDetail;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
+@RunWith(RobolectricTestRunner.class)
 public class ClickActionPerformerTest extends TestCase {
 
+  @Test
   public void testSetupListener() {
     ViewAction action = mock(ViewAction.class);
     View view = mock(View.class);
@@ -34,6 +39,7 @@ public class ClickActionPerformerTest extends TestCase {
     Mockito.verify(view, Mockito.times(1)).setOnClickListener(clickAction);
   }
 
+  @Test
   public void testSetupListener_InvalidArguments() {
     ViewAction action = mock(ViewAction.class);
     View view = mock(View.class);
@@ -53,12 +59,14 @@ public class ClickActionPerformerTest extends TestCase {
     Mockito.verify(view, Mockito.times(0)).setOnClickListener(clickAction);
   }
 
+  @Test
   public void testClickActionPerformer() {
     ViewAction action = mock(ViewAction.class);
     ClickActionPerformer clickAction = new ClickActionPerformer(action);
     assertNotNull(clickAction);
   }
 
+  @Test
   public void testOnClick() {
     ViewAction action = mock(ViewAction.class);
     View view = mock(View.class);

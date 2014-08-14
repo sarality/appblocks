@@ -6,6 +6,12 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import junit.framework.TestCase;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+
 import android.content.ContentValues;
 import android.database.MatrixCursor;
 
@@ -18,23 +24,21 @@ import com.sarality.app.datastore.ColumnFormat;
 import com.sarality.app.datastore.ColumnSpec;
 import com.sarality.app.datastore.column.DateColumnProcessor;
 import com.sarality.app.datastore.column.DateTimeColumnProcessor;
+import com.sarality.app.datastore.db.test.TestColumn;
 
 /**
  * Tests for {@link DateColumnProcessor}.
  * 
  * @author abhideep@ (Abhideep Singh)
  */
+@RunWith(RobolectricTestRunner.class)
 public class DateTimeColumnProcessorTest extends TestCase {
   private DateTimeColumnProcessor processor;
   private MatrixCursor cursor;
   private Column column;
   private GenericFieldValueFactory factory;
 
-  public DateTimeColumnProcessorTest(String name) {
-    super(name);
-  }
-
-  @Override
+  @Before
   public void setUp() {
     cursor = new MatrixCursor(new String[] { "Column1", "Column2" });
     processor = new DateTimeColumnProcessor(Field.DataType.DATETIME);
@@ -43,6 +47,7 @@ public class DateTimeColumnProcessorTest extends TestCase {
     assertNotNull(processor);
   }
 
+  @Test
   public void testExtract() {
     cursor.addRow(new Object[] { "Row 1", "2013-12-25 13:11:45" });
     cursor.moveToNext();
@@ -52,6 +57,7 @@ public class DateTimeColumnProcessorTest extends TestCase {
     assertEquals(dateValue, value);
   }
 
+  @Test
   public void testExtract_DateOnlyColumn() {
     processor = new DateTimeColumnProcessor(Field.DataType.DATE_ONLY);
     column = new TestColumn("Column2", new ColumnSpec(ColumnDataType.DATETIME, null, false));
@@ -64,6 +70,7 @@ public class DateTimeColumnProcessorTest extends TestCase {
     assertEquals(dateValue, value);
   }
 
+  @Test
   public void testExtract_TimeOnlyColumn() {
     processor = new DateTimeColumnProcessor(Field.DataType.TIME_ONLY);
     cursor.addRow(new Object[] { "Row 1", "13:11:45" });
@@ -74,6 +81,7 @@ public class DateTimeColumnProcessorTest extends TestCase {
     assertEquals(dateValue, value);
   }
 
+  @Test
   public void testExtract_DateAsNumberColumnFormat() {
     column = new TestColumn("Column2", new ColumnSpec(ColumnDataType.DATETIME, ColumnFormat.DATE_AS_INT, false));
 
@@ -85,6 +93,7 @@ public class DateTimeColumnProcessorTest extends TestCase {
     assertEquals(dateValue, value);
   }
 
+  @Test
   public void testExtract_EpochColumnFormat() {
     column = new TestColumn("Column2", new ColumnSpec(ColumnDataType.DATETIME, ColumnFormat.EPOCH, false));
 
@@ -98,6 +107,7 @@ public class DateTimeColumnProcessorTest extends TestCase {
     assertEquals(dateTime, value);
   }
 
+  @Test
   public void testExtract_EpochDateOnlyColumn() {
     processor = new DateTimeColumnProcessor(Field.DataType.DATE_ONLY);
     column = new TestColumn("Column2", new ColumnSpec(ColumnDataType.DATETIME, ColumnFormat.EPOCH, false));
@@ -112,6 +122,7 @@ public class DateTimeColumnProcessorTest extends TestCase {
     assertEquals(dateTime, value);
   }
 
+  @Test
   public void testExtract_InvalidColumnName() {
     cursor.addRow(new Object[] { "Row 1", "2013-12-25 13:11:45" });
     cursor.moveToNext();
@@ -124,6 +135,7 @@ public class DateTimeColumnProcessorTest extends TestCase {
     }
   }
 
+  @Test
   public void testExtract_NullValue() {
     cursor.addRow(new Object[] { "Row 1", null });
     cursor.moveToNext();
@@ -131,6 +143,7 @@ public class DateTimeColumnProcessorTest extends TestCase {
     assertNull(value);
   }
 
+  @Test
   public void testExtract_InvalidValue() {
     cursor.addRow(new Object[] { "Row 1", "Invalid" });
     cursor.moveToNext();
@@ -143,6 +156,7 @@ public class DateTimeColumnProcessorTest extends TestCase {
     }
   }
 
+  @Test
   public void testPopulate() {
     ContentValues contentValues = new ContentValues();
     DateTime dateValue = new DateTime(2014, 12, 25, 13, 11, 45, 0);
@@ -152,6 +166,7 @@ public class DateTimeColumnProcessorTest extends TestCase {
     assertEquals("2014-12-25 13:11:45", contentValues.get(column.getName()));
   }
 
+  @Test
   public void testPopulate_DateOnly() {
     processor = new DateTimeColumnProcessor(Field.DataType.DATE_ONLY);
     ContentValues contentValues = new ContentValues();
@@ -162,6 +177,7 @@ public class DateTimeColumnProcessorTest extends TestCase {
     assertEquals("2014-12-25", contentValues.get(column.getName()));
   }
 
+  @Test
   public void testPopulate_TimeOnly() {
     processor = new DateTimeColumnProcessor(Field.DataType.TIME_ONLY);
     ContentValues contentValues = new ContentValues();
@@ -172,6 +188,7 @@ public class DateTimeColumnProcessorTest extends TestCase {
     assertEquals("14:22:35", contentValues.get(column.getName()));
   }
 
+  @Test
   public void testPopulate_EpochColumnFormat() {
     column = new TestColumn("Column2", new ColumnSpec(ColumnDataType.DATETIME, ColumnFormat.EPOCH, false));
 
@@ -183,6 +200,7 @@ public class DateTimeColumnProcessorTest extends TestCase {
     assertEquals(dateValue.getMilliseconds(TimeZone.getDefault()), contentValues.get(column.getName()));
   }
 
+  @Test
   public void testPopulate_EpochDateOnlyColumnFormat() {
     processor = new DateTimeColumnProcessor(Field.DataType.DATE_ONLY);
     column = new TestColumn("Column2", new ColumnSpec(ColumnDataType.DATETIME, ColumnFormat.EPOCH, false));
@@ -195,6 +213,7 @@ public class DateTimeColumnProcessorTest extends TestCase {
     assertEquals(dateValue.getMilliseconds(TimeZone.getDefault()), contentValues.get(column.getName()));
   }
 
+  @Test
   public void testPopulate_EpochTimeOnlyColumnFormat() {
     processor = new DateTimeColumnProcessor(Field.DataType.TIME_ONLY);
     column = new TestColumn("Column2", new ColumnSpec(ColumnDataType.DATETIME, ColumnFormat.EPOCH, false));
@@ -209,6 +228,7 @@ public class DateTimeColumnProcessorTest extends TestCase {
     assertEquals(excpectedValue, contentValues.get(column.getName()));
   }
 
+  @Test
   public void testPopulate_DateAsIntColumnFormat() {
     column = new TestColumn("Column2", new ColumnSpec(ColumnDataType.DATETIME, ColumnFormat.DATE_AS_INT, false));
 
@@ -220,6 +240,7 @@ public class DateTimeColumnProcessorTest extends TestCase {
     assertEquals(20141225131145L, contentValues.get(column.getName()));
   }
 
+  @Test
   public void testPopulate_DateAsIntDateOnlyColumnFormat() {
     processor = new DateTimeColumnProcessor(Field.DataType.DATE_ONLY);
     column = new TestColumn("Column2", new ColumnSpec(ColumnDataType.DATETIME, ColumnFormat.DATE_AS_INT, false));
@@ -232,6 +253,7 @@ public class DateTimeColumnProcessorTest extends TestCase {
     assertEquals(20141225L, contentValues.get(column.getName()));
   }
 
+  @Test
   public void testPopulate_DateAsIntTimeOnlyColumnFormat() {
     processor = new DateTimeColumnProcessor(Field.DataType.TIME_ONLY);
     column = new TestColumn("Column2", new ColumnSpec(ColumnDataType.DATETIME, ColumnFormat.DATE_AS_INT, false));
@@ -244,6 +266,7 @@ public class DateTimeColumnProcessorTest extends TestCase {
     assertEquals(141225L, contentValues.get(column.getName()));
   }
 
+  @Test
   public void testPopulate_NullValue() {
     ContentValues contentValues = new ContentValues();
     processor.populate(contentValues, column, (DateTime) null);
@@ -256,6 +279,7 @@ public class DateTimeColumnProcessorTest extends TestCase {
     assertNull(contentValues.get(column.getName()));
   }
 
+  @Test
   public void testPopulate_FieldValue() {
     ContentValues contentValues = new ContentValues();
     DateTime dateValue = new DateTime(2014, 12, 25, 13, 11, 45, 0);
@@ -268,6 +292,7 @@ public class DateTimeColumnProcessorTest extends TestCase {
     assertEquals("2014-12-25 13:11:45", contentValues.get(column.getName()));
   }
 
+  @Test
   public void testPopulate_NullFieldValue() {
     ContentValues contentValues = new ContentValues();
     FieldValue<DateTime> value = factory.dateTimeValue(TestField.DATE_TIME_FIELD);
@@ -282,6 +307,7 @@ public class DateTimeColumnProcessorTest extends TestCase {
     assertNull(contentValues.get(column.getName()));
   }
 
+  @Test
   public void testPopulate_InvalidFieldValue() {
     ContentValues contentValues = new ContentValues();
     FieldValue<String> value = factory.stringValue(TestField.STRING_FIELD);

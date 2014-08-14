@@ -4,7 +4,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import junit.framework.TestCase;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.robolectric.RobolectricTestRunner;
 
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,15 +18,15 @@ import com.sarality.app.view.action.ViewAction;
 import com.sarality.app.view.action.ViewActionTrigger;
 import com.sarality.app.view.action.ViewDetail;
 
-//import org.mockito.Mockito;
-
 /**
  * Tests for {@link TouchActionPerformer}.
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
+@RunWith(RobolectricTestRunner.class)
 public class TouchActionPerformerTest extends TestCase {
 
+  @Test
   public void testSetupListener() {
     ViewAction action = mock(ViewAction.class);
     View view = mock(View.class);
@@ -38,6 +41,7 @@ public class TouchActionPerformerTest extends TestCase {
     Mockito.verify(view, Mockito.times(1)).setOnTouchListener(clickAction);
   }
 
+  @Test
   public void testSetupListener_InvalidArguments() {
     ViewAction action = mock(ViewAction.class);
     View view = mock(View.class);
@@ -57,12 +61,14 @@ public class TouchActionPerformerTest extends TestCase {
     Mockito.verify(view, Mockito.times(0)).setOnTouchListener(clickAction);
   }
 
+  @Test
   public void testClickActionPerformer() {
     ViewAction action = mock(ViewAction.class);
     TouchActionPerformer clickAction = new TouchActionPerformer(action);
     assertNotNull(clickAction);
   }
 
+  @Test
   public void testOnClick_TouchDown() {
     ViewAction action = mock(ViewAction.class);
     View view = mock(View.class);
@@ -79,6 +85,7 @@ public class TouchActionPerformerTest extends TestCase {
         Mockito.any(ViewDetail.class));
   }
 
+  @Test
   public void testOnClick_Touchup() {
     ViewAction action = mock(ViewAction.class);
     View view = mock(View.class);
@@ -95,6 +102,7 @@ public class TouchActionPerformerTest extends TestCase {
         Mockito.any(ViewDetail.class));
   }
 
+  @Test
   public void testOnClick_InvalidMotionEvent() {
     ViewAction action = mock(ViewAction.class);
     View view = mock(View.class);

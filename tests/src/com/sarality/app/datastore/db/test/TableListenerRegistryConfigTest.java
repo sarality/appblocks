@@ -3,20 +3,24 @@ package com.sarality.app.datastore.db.test;
 import static org.mockito.Mockito.mock;
 import junit.framework.TestCase;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.robolectric.RobolectricTestRunner;
 
 import com.sarality.app.datastore.db.Table;
 import com.sarality.app.datastore.db.TableListener;
 import com.sarality.app.datastore.db.TableListenerRegistryConfig;
-import com.sarality.app.datastore.test.TestObject;
 
 /**
  * Tests for {@link TableListenerRegistryConfig}.
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
+@RunWith(RobolectricTestRunner.class)
 public class TableListenerRegistryConfigTest extends TestCase {
 
+  @Test
   @SuppressWarnings("unchecked")
   public final void testListener() {
     Table<TestObject> sourceTable = mock(Table.class);

@@ -6,9 +6,14 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+
 import com.sarality.app.common.collect.Lists;
 import com.sarality.app.datastore.AbstractDataStore;
 import com.sarality.app.datastore.Column;
+import com.sarality.app.datastore.db.test.TestObject;
 import com.sarality.app.datastore.extractor.CursorDataExtractor;
 import com.sarality.app.datastore.query.Query;
 
@@ -17,8 +22,10 @@ import com.sarality.app.datastore.query.Query;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
+@RunWith(RobolectricTestRunner.class)
 public class AbstractDataStoreTest extends TestCase {
 
+  @Test
   @SuppressWarnings("unchecked")
   public void testAbstractDataStore() {
     List<Column> columnList = Lists.of();
@@ -36,7 +43,6 @@ public class AbstractDataStoreTest extends TestCase {
       super(name, columnList, extractor);
     }
 
-    @Override
     public List<TestObject> query(Query query) {
       return null;
     }

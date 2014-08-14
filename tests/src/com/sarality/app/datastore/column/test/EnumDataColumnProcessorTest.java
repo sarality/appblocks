@@ -1,6 +1,12 @@
 package com.sarality.app.datastore.column.test;
 
 import junit.framework.TestCase;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+
 import android.content.ContentValues;
 import android.database.MatrixCursor;
 
@@ -13,12 +19,14 @@ import com.sarality.app.datastore.ColumnDataType;
 import com.sarality.app.datastore.ColumnSpec;
 import com.sarality.app.datastore.column.EnumColumnProcessor;
 import com.sarality.app.datastore.column.EnumDataColumnProcessor;
+import com.sarality.app.datastore.db.test.TestColumn;
 
 /**
  * Tests for {@link EnumColumnProcessor}.
  * 
  * @author abhideep@ (Abhideep Singh)
  */
+@RunWith(RobolectricTestRunner.class)
 public class EnumDataColumnProcessorTest extends TestCase {
   private EnumDataColumnProcessor<TestEnum> processor;
   private EnumDataRegistry registry;
@@ -26,11 +34,7 @@ public class EnumDataColumnProcessorTest extends TestCase {
   private Column column;
   private GenericFieldValueFactory factory;
 
-  public EnumDataColumnProcessorTest(String name) {
-    super(name);
-  }
-
-  @Override
+  @Before
   public void setUp() {
     cursor = new MatrixCursor(new String[] { "Column1", "Column2" });
     registry = new EnumDataRegistry();
@@ -40,6 +44,7 @@ public class EnumDataColumnProcessorTest extends TestCase {
     assertNotNull(processor);
   }
 
+  @Test
   public void testExtract() {
     TestEnum enumData = new TestEnum("VALUE_1", registry);
     cursor.addRow(new Object[] { "Row 1", "VALUE_1" });
@@ -49,6 +54,7 @@ public class EnumDataColumnProcessorTest extends TestCase {
     assertEquals(enumData, value);
   }
 
+  @Test
   public void testExtract_InvalidColumnName() {
     cursor.addRow(new Object[] { "Row 1", "VALUE_1" });
     cursor.moveToNext();
@@ -61,6 +67,7 @@ public class EnumDataColumnProcessorTest extends TestCase {
     }
   }
 
+  @Test
   public void testExtract_NullValue() {
     cursor.addRow(new Object[] { "Row 2", null });
     cursor.moveToNext();
@@ -68,6 +75,7 @@ public class EnumDataColumnProcessorTest extends TestCase {
     assertNull(value);
   }
 
+  @Test
   public void testPopulate() {
     ContentValues contentValues = new ContentValues();
     TestEnum enumData = new TestEnum("VALUE_1", registry);
@@ -77,6 +85,7 @@ public class EnumDataColumnProcessorTest extends TestCase {
     assertEquals(enumData.getEnumName(), contentValues.get(column.getName()));
   }
 
+  @Test
   public void testPopulate_NullValue() {
     ContentValues contentValues = new ContentValues();
     processor.populate(contentValues, column, (TestEnum) null);
@@ -84,6 +93,7 @@ public class EnumDataColumnProcessorTest extends TestCase {
     assertNull(contentValues.get(column.getName()));
   }
 
+  @Test
   public void testPopulate_FieldValue() {
     ContentValues contentValues = new ContentValues();
     FieldValue<TestEnum> value = factory.enumDataValue(TestField.ENUM_DATA_FIELD, TestEnum.class);
@@ -95,6 +105,7 @@ public class EnumDataColumnProcessorTest extends TestCase {
     assertEquals("VALUE_1", contentValues.get(column.getName()));
   }
 
+  @Test
   public void testPopulate_NullFieldValue() {
     ContentValues contentValues = new ContentValues();
     FieldValue<TestEnum> value = factory.enumDataValue(TestField.ENUM_DATA_FIELD, TestEnum.class);
@@ -116,7 +127,6 @@ public class EnumDataColumnProcessorTest extends TestCase {
       register(TestEnum.class, this);
     }
 
-    @Override
     public TestEnum getEnumData() {
       return this;
     }

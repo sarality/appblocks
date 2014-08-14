@@ -1,8 +1,12 @@
 package com.sarality.app.config.test;
 
-import android.test.ActivityUnitTestCase;
+import junit.framework.TestCase;
 
-import com.dothat.app.module.reminder.ReminderListActivity;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
+
 import com.sarality.app.config.AppInitialized;
 
 /**
@@ -10,32 +14,23 @@ import com.sarality.app.config.AppInitialized;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class AppInitializedTest extends ActivityUnitTestCase<ReminderListActivity> {
 
-  public AppInitializedTest() {
-    super(ReminderListActivity.class);
-  }
+@RunWith(RobolectricTestRunner.class)
+public class AppInitializedTest extends TestCase {
 
-  public void testConstructor() {
-    AppInitialized initialized = new AppInitialized(getInstrumentation().getTargetContext().getApplicationContext());
+  @Test
+  public final void testAppInitialized() {
+    AppInitialized initialized = new AppInitialized(Robolectric.application);
     assertNotNull(initialized);
-  }
-
-  public void test_SetValue_False() {
-    AppInitialized initialized = new AppInitialized(getInstrumentation().getTargetContext().getApplicationContext());
     initialized.setValue(false);
     assertSame(false, initialized.getValue());
-  }
-
-  public void testIsEditable() {
-    AppInitialized initialized = new AppInitialized(getInstrumentation().getTargetContext().getApplicationContext());
     assertSame(true, initialized.isEditable());
   }
 
+  @Test
   public void testSetValue_True() {
-    AppInitialized initialized = new AppInitialized(getInstrumentation().getTargetContext().getApplicationContext());
+    AppInitialized initialized = new AppInitialized(Robolectric.application);
     initialized.setValue(true);
     assertSame(true, initialized.getValue());
   }
-
 }

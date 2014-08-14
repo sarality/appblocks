@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import junit.framework.TestCase;
-import android.test.MoreAsserts;
 
 import com.sarality.app.base.registry.Registry;
 import com.sarality.app.base.registry.Registry.Entry;
 import com.sarality.app.base.registry.Registry.EntryProvider;
+import com.sarality.app.view.action.test.MoreAsserts;
 
 /**
  * Tests for {@link Registry}.

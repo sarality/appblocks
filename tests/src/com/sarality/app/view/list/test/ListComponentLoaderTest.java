@@ -4,10 +4,18 @@ import static org.mockito.Mockito.mock;
 
 import java.util.List;
 
+import junit.framework.TestCase;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
+
+import android.content.Context;
 
 import com.sarality.app.common.collect.Lists;
-import com.sarality.app.view.action.test.BaseUnitTest;
 import com.sarality.app.view.datasource.DataSource;
 import com.sarality.app.view.list.ListComponent;
 import com.sarality.app.view.list.ListComponentLoader;
@@ -17,14 +25,23 @@ import com.sarality.app.view.list.ListComponentLoader;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class ListComponentLoaderTest extends BaseUnitTest {
+@RunWith(RobolectricTestRunner.class)
+public class ListComponentLoaderTest extends TestCase {
+  Context context;
 
+  @Before
+  public void setUp() {
+    context = Robolectric.application;
+  }
+
+  @Test
   public void testListComponentLoader() {
     ListComponentLoader<String> loader = new ListComponentLoader<String>(context, null);
     assertNotNull(loader);
     assertEquals(context, loader.getContext());
   }
 
+  @Test
   @SuppressWarnings("unchecked")
   public void testLoadInBackground() {
     List<String> list = Lists.of("Test1", "Test2", "Test3");
@@ -35,6 +52,7 @@ public class ListComponentLoaderTest extends BaseUnitTest {
     assertEquals(list, loader.loadInBackground());
   }
 
+  @Test
   @SuppressWarnings("unchecked")
   public void testLoadData() {
     List<String> list = Lists.of("Test1", "Test2", "Test3");
@@ -45,6 +63,7 @@ public class ListComponentLoaderTest extends BaseUnitTest {
     assertEquals(list, loader.loadData());
   }
 
+  @Test
   @SuppressWarnings("unchecked")
   public void testLoadData_EmptyList() {
     List<String> list = Lists.of();

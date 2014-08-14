@@ -6,6 +6,10 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+
 import com.sarality.app.data.Field;
 import com.sarality.app.datastore.BaseFieldColumnConfigProvider;
 import com.sarality.app.datastore.Column;
@@ -18,14 +22,17 @@ import com.sarality.app.datastore.populator.FieldDataValuePopulator;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
+@RunWith(RobolectricTestRunner.class)
 public class BaseFieldColumnConfigProviderTest extends TestCase {
 
+  @Test
   public final void testProvide_NullEntry() {
     BaseFieldColumnConfigProvider provider = new BaseFieldColumnConfigProvider();
     assertNotNull(provider);
-    assertEquals(0,provider.provide().size());
+    assertEquals(0, provider.provide().size());
   }
 
+  @Test
   public final void testProvide() {
     TestProvider provider = new TestProvider();
     Field field = mock(Field.class);
@@ -33,17 +40,18 @@ public class BaseFieldColumnConfigProviderTest extends TestCase {
     ColumnValueExtractor<?> extractor = mock(ColumnValueExtractor.class);
     FieldDataValuePopulator populator = mock(FieldDataValuePopulator.class);
     provider.addProvider(field, column, extractor, populator);
-    
+
     List<FieldColumnConfig> providerList = provider.provide();
     assertEquals(1, providerList.size());
-    assertEquals(column,providerList.get(0).getColumn());
-    assertEquals(field,providerList.get(0).getField());
-    assertEquals(extractor,providerList.get(0).getExtractor());
-    assertEquals(populator,providerList.get(0).getPopulator());
+    assertEquals(column, providerList.get(0).getColumn());
+    assertEquals(field, providerList.get(0).getField());
+    assertEquals(extractor, providerList.get(0).getExtractor());
+    assertEquals(populator, providerList.get(0).getPopulator());
   }
 
-  class TestProvider extends BaseFieldColumnConfigProvider{
-    public void addProvider(Field field, Column column, ColumnValueExtractor<?> extractor, FieldDataValuePopulator populator){
+  class TestProvider extends BaseFieldColumnConfigProvider {
+    public void addProvider(Field field, Column column, ColumnValueExtractor<?> extractor,
+        FieldDataValuePopulator populator) {
       addEntry(field, column, extractor, populator);
     }
   }

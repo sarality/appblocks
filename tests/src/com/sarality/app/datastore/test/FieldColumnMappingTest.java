@@ -2,30 +2,36 @@ package com.sarality.app.datastore.test;
 
 import junit.framework.TestCase;
 
-import com.sarality.app.data.field.Field;
-import com.sarality.app.data.field.test.TestField;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+
 import com.sarality.app.datastore.Column;
 import com.sarality.app.datastore.FieldColumnMapping;
 import com.sarality.app.datastore.column.ColumnProcessor;
 import com.sarality.app.datastore.column.StringColumnProcessor;
+import com.sarality.app.datastore.column.test.TestField;
+import com.sarality.app.datastore.db.test.TestColumn;
 
 /**
  * Tests for {@link FieldColumnMapping}.
  * 
  * @author abhideep@ (Abhideep Singh)
  */
+@RunWith(RobolectricTestRunner.class)
 public class FieldColumnMappingTest extends TestCase {
 
+  @Test
   public void testFieldColumnMapping() {
-    Field field = new TestField("Field1", Field.DataType.STRING);
     Column column = new TestColumn("Column1", null);
     ColumnProcessor<String> processor = new StringColumnProcessor();
-    FieldColumnMapping mapping = new FieldColumnMapping(field, column, processor);
-    assertSame(field, mapping.getField());
+    FieldColumnMapping mapping = new FieldColumnMapping(TestField.STRING_FIELD, column, processor);
+    assertSame(TestField.STRING_FIELD, mapping.getField());
     assertSame(column, mapping.getColumn());
     assertSame(processor, mapping.getColumnProcessor());
   }
 
+  @Test
   public void testFieldColumnMapping_NullField() {
     Column column = new TestColumn("Column1", null);
     ColumnProcessor<String> processor = new StringColumnProcessor();
@@ -37,25 +43,25 @@ public class FieldColumnMappingTest extends TestCase {
     }
   }
 
+  @Test
   public void testFieldColumnMapping_NullColumn() {
-    Field field = new TestField("Field1", Field.DataType.STRING);
     ColumnProcessor<String> processor = new StringColumnProcessor();
     try {
-      new FieldColumnMapping(field, null, processor);
+      new FieldColumnMapping(TestField.STRING_FIELD, null, processor);
       fail("FieldColumnMapping should throw an exception when created with null column");
     } catch (IllegalArgumentException e) {
-      assertEquals("Column mapped to field Field1 cannot be null", e.getMessage());
+      assertEquals("Column mapped to field STRING_FIELD cannot be null", e.getMessage());
     }
   }
 
+  @Test
   public void testFieldColumnMapping_NullColumnProcessor() {
-    Field field = new TestField("Field1", Field.DataType.STRING);
     Column column = new TestColumn("Column1", null);
     try {
-      new FieldColumnMapping(field, column, null);
+      new FieldColumnMapping(TestField.STRING_FIELD, column, null);
       fail("FieldColumnMapping should throw an exception when created with null column processor");
     } catch (IllegalArgumentException e) {
-      assertEquals("Must define a processor for field Field1 and column Column1", e.getMessage());
+      assertEquals("Must define a processor for field STRING_FIELD and column Column1", e.getMessage());
     }
   }
 }

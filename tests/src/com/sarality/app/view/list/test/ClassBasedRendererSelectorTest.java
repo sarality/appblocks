@@ -3,6 +3,10 @@ package com.sarality.app.view.list.test;
 import static org.mockito.Mockito.mock;
 import junit.framework.TestCase;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+
 import com.sarality.app.view.list.ClassBasedRendererSelector;
 import com.sarality.app.view.list.ListRowRenderer;
 
@@ -11,8 +15,10 @@ import com.sarality.app.view.list.ListRowRenderer;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
+@RunWith(RobolectricTestRunner.class)
 public class ClassBasedRendererSelectorTest extends TestCase {
 
+  @Test
   public void testRegister_StringClass() {
     ClassBasedRendererSelector<String> selector = new ClassBasedRendererSelector<String>();
     assertNotNull(selector);
@@ -21,6 +27,7 @@ public class ClassBasedRendererSelectorTest extends TestCase {
     assertEquals(null, selector.select("Test"));
   }
 
+  @Test
   public void testRegister_IntegerClass() {
     ClassBasedRendererSelector<Integer> selector = new ClassBasedRendererSelector<Integer>();
     assertNotNull(selector);
@@ -30,17 +37,17 @@ public class ClassBasedRendererSelectorTest extends TestCase {
     assertEquals(rowRenderer, selector.select(1234));
   }
 
+  @Test
   public void testSelect_WithNoRegister() {
     ClassBasedRendererSelector<Integer> selector = new ClassBasedRendererSelector<Integer>();
     assertNotNull(selector);
     try {
       selector.select(1234);
+      fail("Exception should be thrown");
     } catch (IllegalStateException e) {
-      // Expected exception do nothing
+      assertEquals("No Renderer registered for class java.lang.Integer", e.getMessage());
     } catch (Exception e) {
-      // for all others fail test case
       fail("Invalid Exception");
-      e.printStackTrace();
     }
   }
 }

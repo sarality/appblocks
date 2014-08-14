@@ -1,10 +1,18 @@
 package com.sarality.app.view.list.test;
 
+import junit.framework.TestCase;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
+
+import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.sarality.app.view.action.test.BaseUnitTest;
 import com.sarality.app.view.list.ListRowViewCache;
 
 /**
@@ -12,8 +20,16 @@ import com.sarality.app.view.list.ListRowViewCache;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class ListRowViewCacheTest extends BaseUnitTest {
-
+@RunWith(RobolectricTestRunner.class)
+public class ListRowViewCacheTest extends TestCase {
+  Context context;
+  
+  @Before
+  public void setUp(){
+    context =   Robolectric.application.getApplicationContext();
+  }
+  
+  @Test
   public void testViewCache() {
     int viewId = 1234;
     ListRowViewCache rowViewCache = new ListRowViewCache();
@@ -26,6 +42,7 @@ public class ListRowViewCacheTest extends BaseUnitTest {
     assertEquals(view, rowViewCache.getViewById(rowView, viewId));
   }
 
+  @Test
   public void testGetViewId_withNoCache() {
     int viewIdCached = 1234;
     int viewIdNotCached = 5678;

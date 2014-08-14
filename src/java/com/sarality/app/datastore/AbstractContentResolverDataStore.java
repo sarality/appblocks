@@ -33,6 +33,7 @@ public abstract class AbstractContentResolverDataStore<T> extends AbstractDataSt
     try {
       // TODO(abhideep): Add Query support here
       cursor = contentResolver.query(uri, null, null, null, null);
+      System.out.println("contentResolver value = " + contentResolver);
       CursorDataExtractor<T> extractor = getCursorDataExtractor();
 
       cursor.moveToFirst();

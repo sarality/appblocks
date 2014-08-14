@@ -3,10 +3,10 @@ package com.sarality.app.common.collect.test;
 import java.util.Map;
 
 import junit.framework.TestCase;
-import android.test.MoreAsserts;
 
 import com.sarality.app.common.collect.Maps;
 import com.sarality.app.common.collect.Maps.Builder;
+import com.sarality.app.view.action.test.MoreAsserts;
 
 /**
  * Tests for {@link Maps}.
