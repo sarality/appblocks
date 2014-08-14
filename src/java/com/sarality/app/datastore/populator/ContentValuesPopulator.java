@@ -18,6 +18,6 @@ public interface ContentValuesPopulator<T> {
    * @param contentValues ContentValues object to populate
    * @param data The source of the information
    */
-  public void populate(ContentValues contentValues, T data);
+  public boolean populate(ContentValues contentValues, T data);
   
 }

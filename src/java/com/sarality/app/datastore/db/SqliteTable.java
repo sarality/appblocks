@@ -144,14 +144,16 @@ public abstract class SqliteTable<T extends DataObject<T>> extends AbstractWrita
     logger.debug("Adding new row to table {} for data object {}", getTableName(), data);
     assertDatabaseOpen();
     ContentValues contentValues = new ContentValues();
-    getContentValuesPopulator().populate(contentValues, data);
-    logger.debug("Adding new row to table {} with Content Values {}", getTableName(), contentValues);
+    if (getContentValuesPopulator().populate(contentValues, data) == true) {
+      logger.debug("Adding new row to table {} with Content Values {}", getTableName(), contentValues);
 
-    if (listenerRegistry != null)
-      listenerRegistry.listener(data, this);
+      if (listenerRegistry != null)
+        listenerRegistry.listener(data, this);
 
-    // TODO(abhideep): Call a method that converts a rowd Id to a Long
-    return database.insert(getName(), null, contentValues);
+      // TODO(abhideep): Call a method that converts a rowd Id to a Long
+      return database.insert(getName(), null, contentValues);
+    }
+    return (long) -1;
   }
 
   /**
