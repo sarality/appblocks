@@ -3,7 +3,10 @@ package com.sarality.app.view.list.test;
 import static org.mockito.Mockito.mock;
 import junit.framework.TestCase;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.robolectric.RobolectricTestRunner;
 
 import android.util.SparseArray;
 import android.view.View;
@@ -17,8 +20,10 @@ import com.sarality.app.view.list.ListRowViewCache;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
+@RunWith(RobolectricTestRunner.class)
 public class BaseListRowRendererTest extends TestCase {
 
+  @Test
   public void testSetAdditionalTagList() {
     TestBaseListRowRenderer rowRenderer = new TestBaseListRowRenderer();
     int viewId = 1234;
@@ -30,6 +35,7 @@ public class BaseListRowRendererTest extends TestCase {
     assertEquals(1, list.size());
   }
 
+  @Test
   public void testSetupActions() {
     TestBaseListRowRenderer rowRenderer = new TestBaseListRowRenderer();
     View rowView = mock(View.class);
@@ -48,15 +54,15 @@ class TestBaseListRowRenderer extends BaseListRowRenderer<String> {
     return 0;
   }
 
+  public SparseArray<Object> getTagList() {
+    return tagList;
+  }
+
   @Override
   public void populateViewCache(View rowView, ListRowViewCache rowViewCache, String value) {
   }
 
   @Override
   public void render(View rowView, ListRowViewCache rowViewCache, String value) {
-  }
-
-  public SparseArray<Object> getTagList() {
-    return tagList;
   }
 }

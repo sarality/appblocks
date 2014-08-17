@@ -4,9 +4,20 @@ import static org.mockito.Mockito.mock;
 
 import java.util.List;
 
+import junit.framework.TestCase;
+
+import org.fest.util.Arrays;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 
 import android.app.Application;
+import android.content.ContentValues;
+import android.database.Cursor;
 
 import com.sarality.app.common.collect.Lists;
 import com.sarality.app.datastore.Column;
@@ -17,53 +28,52 @@ import com.sarality.app.datastore.db.SqliteTableSchemaUpdater;
 import com.sarality.app.datastore.db.TableColumnProperty;
 import com.sarality.app.datastore.db.TableInfo;
 import com.sarality.app.datastore.extractor.CursorDataExtractor;
+import com.sarality.app.datastore.populator.BaseContentValuesPopulator;
 import com.sarality.app.datastore.populator.ContentValuesPopulator;
-import com.sarality.app.datastore.test.TestObject;
-import com.sarality.app.view.action.test.BaseUnitTest;
+import com.sarality.app.datastore.query.Query;
 
 /**
  * Tests for {@link SqliteTable}.
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class SqliteTableTest extends BaseUnitTest {
+@RunWith(RobolectricTestRunner.class)
+@Config(shadows = { ShadowSQLiteOpenHelper.class })
+public class SqliteTableTest extends TestCase {
 
-  List<Column> colList;
-  ContentValuesPopulator<TestObject> populator;
-  CursorDataExtractor<TestObject> extractor;
+  private List<Column> colList;
+  private ContentValuesPopulator<TestObject> populator;
+  private CursorDataExtractor<TestObject> extractor;
+  private final String primaryColName = "PrimaryCol";
+  private final String textColName = "TextCol";
 
+  @Before
   public void setUp() {
-    super.setUp();
     colList = createColumnList();
   }
 
   private List<Column> createColumnList() {
-    Column primaryCol = mock(Column.class);
     ColumnSpec spec = new ColumnSpec(ColumnDataType.INTEGER, true, TableColumnProperty.PRIMARY_KEY,
         TableColumnProperty.AUTO_INCREMENT);
-    Mockito.when(primaryCol.getSpec()).thenReturn(spec);
-    Mockito.when(primaryCol.getName()).thenReturn("Primary Col");
+    Column primaryCol = new TestColumn(primaryColName, spec);
 
-    Column textCol = mock(Column.class);
     spec = new ColumnSpec(ColumnDataType.TEXT, false);
-    Mockito.when(textCol.getSpec()).thenReturn(spec);
-    Mockito.when(textCol.getName()).thenReturn("Text Col");
+    Column textCol = new TestColumn(textColName, spec);
 
     List<Column> colList = Lists.of(primaryCol, textCol);
     return colList;
   }
 
-  @SuppressWarnings("unchecked")
   private TestTable createTable() {
-    Application app = mock(Application.class);
-    Mockito.when(app.getApplicationContext()).thenReturn(context);
-    extractor = mock(CursorDataExtractor.class);
-    populator = mock(ContentValuesPopulator.class);
+    Application app = Robolectric.application;
+    extractor = new TestExtractor();
+    populator = new TestPopulator();
     SqliteTableSchemaUpdater updater = mock(SqliteTableSchemaUpdater.class);
     TestTable table = new TestTable(app, "TestDb", "TestTable", 1, colList, extractor, populator, updater);
     return table;
   }
 
+  @Test
   public final void testCreateTable() {
     TestTable table = createTable();
     assertNotNull(table);
@@ -79,6 +89,7 @@ public class SqliteTableTest extends BaseUnitTest {
     table.close();
   }
 
+  @Test
   public final void testCreateWithoutOpening() {
     TestTable table = createTable();
     TestObject data = mock(TestObject.class);
@@ -86,12 +97,12 @@ public class SqliteTableTest extends BaseUnitTest {
       table.create(data);
       fail("IllegalState Exception not thrown");
     } catch (IllegalStateException e) {
-      assertEquals(e.getMessage(),
-          "Cannot perform operation since the database was either not opened or " +
-          "has already been closed.");
+      assertEquals(e.getMessage(), "Cannot perform operation since the database was either not opened or "
+          + "has already been closed.");
     }
   }
 
+  @Test
   public final void testCreate_WithNullValue() {
     TestTable table = createTable();
     TestObject data = mock(TestObject.class);
@@ -99,20 +110,73 @@ public class SqliteTableTest extends BaseUnitTest {
     assertEquals(true, table.create(data) < 0);
     table.close();
   }
- 
-  public final void atestDelete() {
-    fail("Not yet implemented"); // TODO
+
+  private TestTable createTwoEntries() {
+    TestObject data = new TestObject.Builder().setText("Testing1").build();
+    TestTable table = createTable();
+    table.open();
+    table.create(data);
+
+    data = new TestObject.Builder().setText("Testing2").build();
+    table.create(data);
+    return table;
   }
 
-  public final void atestQuery() {
-    fail("Not yet implemented"); // TODO
+  @Test
+  public final void testDelete() {
+    Query query = mock(Query.class);
+    TestTable table = createTwoEntries();
+    Mockito.when(query.getWhereClause()).thenReturn(textColName + "=?");
+    Mockito.when(query.getWhereClauseValues()).thenReturn(Arrays.array("Testing1"));
+    table.delete(query);
+    List<TestObject> list = table.query(null);
+    assertEquals(1, list.size());
+    assertEquals("Testing2", list.get(0).value);
+    table.close();
   }
 
-  public final void atestSetListener() {
-    fail("Not yet implemented"); // TODO
+  @Test
+  public final void testQuery() {
+    TestTable table = createTwoEntries();
+    List<TestObject> list = table.query(null);
+    assertEquals(2, list.size());
+    assertEquals("Testing2", list.get(1).value);
+    assertEquals("Testing1", list.get(0).value);
+    table.close();
   }
 
-  public final void atestUpdate() {
-    fail("Not yet implemented"); // TODO
+  public final void testUpdate() {
+    TestTable table = createTwoEntries();
+    Query query = mock(Query.class);
+    Mockito.when(query.getWhereClause()).thenReturn(textColName + "=?");
+    Mockito.when(query.getWhereClauseValues()).thenReturn(Arrays.array("Testing1"));
+    TestObject data = new TestObject.Builder().setText("Testing3").build();
+    table.update(data, query);
+    List<TestObject> list = table.query(null);
+    assertEquals(2, list.size());
+    assertEquals("Testing3", list.get(1).value);
+    assertEquals("Testing1", list.get(0).value);
+    table.close();
+  }
+
+  class TestExtractor implements CursorDataExtractor<TestObject> {
+
+    public TestObject extract(Cursor cursor, Query query) {
+      TestObject.Builder builder = new TestObject.Builder();
+      TestObject data = builder.setId(cursor.getInt(cursor.getColumnIndex(primaryColName)))
+          .setText(cursor.getString(cursor.getColumnIndex(textColName))).build();
+      return data;
+    }
+  }
+
+  class TestPopulator extends BaseContentValuesPopulator<TestObject> {
+
+    public boolean populate(ContentValues contentValues, TestObject data) {
+      if (data.value != null) {
+        contentValues.put("TextCol", data.value);
+        return true;
+      }
+      return false;
+    }
   }
 }

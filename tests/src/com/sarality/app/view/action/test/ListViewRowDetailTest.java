@@ -1,8 +1,12 @@
 package com.sarality.app.view.action.test;
 
 import static org.mockito.Mockito.mock;
+import junit.framework.TestCase;
 
-import android.content.Context;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
@@ -14,12 +18,14 @@ import com.sarality.app.view.action.ListViewRowDetail;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class ListViewRowDetailTest extends BaseUnitTest {
-
+@RunWith(RobolectricTestRunner.class)
+public class ListViewRowDetailTest extends TestCase {
+  
+  @Test
   public void testListViewRowDetail() {
-    Context context = getInstrumentation().getTargetContext().getApplicationContext();
     View view = mock(View.class);
-    AdapterView<ListAdapter> parent = new TestListView(context);
+    @SuppressWarnings("unchecked")
+    AdapterView<ListAdapter> parent = mock(AdapterView.class);
     int position = 2;
     long rowId = 5;
     ListViewRowDetail rowViewDetail = new ListViewRowDetail(view, parent, position, rowId);
@@ -32,27 +38,3 @@ public class ListViewRowDetailTest extends BaseUnitTest {
   }
 }
 
-class TestListView extends AdapterView<ListAdapter> {
-
-  public TestListView(Context context) {
-    super(context);
-  }
-
-  @Override
-  public ListAdapter getAdapter() {
-    return null;
-  }
-
-  @Override
-  public View getSelectedView() {
-    return null;
-  }
-
-  @Override
-  public void setAdapter(ListAdapter arg0) {
-  }
-
-  @Override
-  public void setSelection(int arg0) {
-  }
-}

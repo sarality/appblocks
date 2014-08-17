@@ -5,6 +5,15 @@ import static org.mockito.Mockito.when;
 
 import java.util.List;
 
+import junit.framework.TestCase;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mockito;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
+
 import android.content.Context;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -20,7 +29,9 @@ import com.sarality.app.view.action.ViewAction;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class ComponentActionManagerTest extends BaseUnitTest {
+@RunWith(RobolectricTestRunner.class)
+public class ComponentActionManagerTest extends TestCase {
+  Context context;
 
   private ViewAction view1Action1;
   private ViewAction listView2Action1;
@@ -32,10 +43,8 @@ public class ComponentActionManagerTest extends BaseUnitTest {
   private ViewAction view1Action3;
   List<ViewAction> actionList;
 
-  @Override
+  @Before
   public void setUp() {
-    super.setUp();
-
     // view1Action1, view1Action2, view1Action3 on view1
     // listViewAction1, listViewAction2 on listView
     // view2Action1, view2Action2, view2Action3 on view3
@@ -48,6 +57,9 @@ public class ComponentActionManagerTest extends BaseUnitTest {
     view3Action2 = createMockAction(3, TriggerType.TOUCH_DOWN);
     view3Action3 = createMockAction(3, TriggerType.TOUCH_UP);
     view1Action3 = createMockAction(1, TriggerType.CLICK);
+
+    context = Robolectric.application.getApplicationContext();
+
   }
 
   private ViewAction createMockAction(int viewId, TriggerType trigger) {
@@ -62,18 +74,19 @@ public class ComponentActionManagerTest extends BaseUnitTest {
         view3Action3, view1Action3);
   }
 
+  @Test
   public void testComponentActionManager() {
     setupActionList();
     ComponentActionManager actionManager = new ComponentActionManager(actionList);
     assertNotNull(actionManager);
   }
 
+  @Test
   public void testSetupActions() {
     // LAYOUT
     // VIEW with ID 1
     // LISTVIEW with ID 2
     // VIEW with ID 3
-    Context context = getInstrumentation().getTargetContext();
     LinearLayout layout = new LinearLayout(context);
     View view1 = new View(context);
     view1.setId(1);
@@ -92,11 +105,11 @@ public class ComponentActionManagerTest extends BaseUnitTest {
     actionManager.setupActions(layout);
   }
 
+  @Test
   public void testSetUpActions_Exception() {
-    Context context = getInstrumentation().getTargetContext();
     LinearLayout layout = new LinearLayout(context);
-    View view1 = new View(context);
-    view1.setId(13);
+    View view1 = mock(View.class);
+    Mockito.when(view1.getId()).thenReturn(13);
     layout.addView(view1);
 
     actionList = Lists.of(view1Action1);

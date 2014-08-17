@@ -8,7 +8,10 @@ import java.util.Set;
 
 import junit.framework.TestCase;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.robolectric.RobolectricTestRunner;
 
 import com.sarality.app.common.collect.Lists;
 import com.sarality.app.datastore.Column;
@@ -20,7 +23,6 @@ import com.sarality.app.datastore.db.SqliteTableSchemaValidator;
 import com.sarality.app.datastore.db.Table;
 import com.sarality.app.datastore.db.TableColumnProperty;
 import com.sarality.app.datastore.db.TableInfo;
-import com.sarality.app.datastore.test.TestObject;
 import com.sarality.app.error.ValidationException;
 
 /**
@@ -28,9 +30,11 @@ import com.sarality.app.error.ValidationException;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
+@RunWith(RobolectricTestRunner.class)
 public class SqliteTableSchemaValidatorTest extends TestCase {
 
   @SuppressWarnings("unchecked")
+  @Test
   public final void testValidate() {
     SqliteTableSchemaValidator validator = new SqliteTableSchemaValidator();
     TableInfo metaData = mock(TableInfo.class);
@@ -69,6 +73,7 @@ public class SqliteTableSchemaValidatorTest extends TestCase {
     return table;
   }
 
+  @Test
   public final void testValidate_WithException() throws Exception {
     Column col1 = createColumn(ColumnDataType.INTEGER, true);
     Table<TestObject> table = createTable(col1);
@@ -78,15 +83,14 @@ public class SqliteTableSchemaValidatorTest extends TestCase {
       validator.validate(table);
       fail("Exception thrown for mismatch of column and format");
     } catch (ValidationException e) {
-      assertEquals(
-          e.getMessage(),
-          "Column with name null is improperly defined. The data type for the " +
-          "column is INTEGER which does not support Data Type ENUM_AS_INT");
+      assertEquals(e.getMessage(), "Column with name null is improperly defined. The data type for the "
+          + "column is INTEGER which does not support Data Type ENUM_AS_INT");
     } catch (Exception e) {
       throw e;
     }
   }
 
+  @Test
   public final void testValidate_PrimaryKeyException() throws Exception {
     Column col1 = createColumn(ColumnDataType.ENUM, false);
     Table<TestObject> table = createTable(col1);
@@ -97,8 +101,7 @@ public class SqliteTableSchemaValidatorTest extends TestCase {
       validator.validate(table);
       fail("Exception should be thrown for Column part of Primary Key but not marked as required");
     } catch (ValidationException e) {
-      assertEquals(e.getMessage(), "Column with name null" 
-          + " is part of the Primary key but not marked as Required."
+      assertEquals(e.getMessage(), "Column with name null" + " is part of the Primary key but not marked as Required."
           + " All Primary Key Columns must be marked as required.");
     } catch (Exception e) {
       throw e;

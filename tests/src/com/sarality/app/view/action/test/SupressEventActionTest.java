@@ -3,7 +3,10 @@ package com.sarality.app.view.action.test;
 import static org.mockito.Mockito.mock;
 import junit.framework.TestCase;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.robolectric.RobolectricTestRunner;
 
 import android.view.View;
 
@@ -15,8 +18,10 @@ import com.sarality.app.view.action.TriggerType;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
+@RunWith(RobolectricTestRunner.class)
 public class SupressEventActionTest extends TestCase {
 
+  @Test
   public void testDoAction() {
     View view = mock(View.class);
     int viewId = 1234;
@@ -27,6 +32,7 @@ public class SupressEventActionTest extends TestCase {
     Mockito.verifyZeroInteractions(view);
   }
 
+  @Test
   public void testLogEventAction() {
     int viewId = 1234;
     TriggerType triggerType = TriggerType.CLICK;
@@ -36,5 +42,4 @@ public class SupressEventActionTest extends TestCase {
     assertEquals(viewId, eventAction.getViewId());
     assertEquals(triggerType, eventAction.getTriggerType());
   }
-
 }

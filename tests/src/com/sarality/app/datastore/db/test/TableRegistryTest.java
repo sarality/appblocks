@@ -4,7 +4,13 @@ import static org.mockito.Mockito.mock;
 
 import java.util.Arrays;
 
+import junit.framework.TestCase;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
 
 import android.app.Application;
 
@@ -13,14 +19,14 @@ import com.sarality.app.datastore.ColumnDataType;
 import com.sarality.app.datastore.ColumnSpec;
 import com.sarality.app.datastore.db.TableColumnProperty;
 import com.sarality.app.datastore.db.TableRegistry;
-import com.sarality.app.view.action.test.BaseUnitTest;
 
 /**
  * Tests for {@link TableRegistry}.
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class TableRegistryTest extends BaseUnitTest {
+@RunWith(RobolectricTestRunner.class)
+public class TableRegistryTest extends TestCase {
 
   private Column createColumn() {
     Column column = mock(Column.class);
@@ -34,17 +40,17 @@ public class TableRegistryTest extends BaseUnitTest {
     return column;
   }
   
+  @Test
   public final void testRegister() {
     TableRegistry register = new TableRegistry();
-    Application app = mock(Application.class);
-    Mockito.when(app.getApplicationContext()).thenReturn(context);
-    
+    Application app = Robolectric.application;
     TestTable table = new TestTable(app, "TestDb", "TestTable", 1, Arrays.asList(createColumn()), null, null, null);
 
     register.register(table);
     assertEquals(table,register.getTable("TestTable"));
   }
   
+  @Test
   public final void testRegister_WithNullValue() {
     TableRegistry register = new TableRegistry();
     assertNull(register.getTable("TestTable"));

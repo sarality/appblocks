@@ -4,8 +4,11 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import junit.framework.TestCase;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
+import org.robolectric.RobolectricTestRunner;
 
 import com.sarality.app.view.action.CompositeViewAction;
 import com.sarality.app.view.action.TriggerType;
@@ -16,8 +19,10 @@ import com.sarality.app.view.action.ViewAction;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
+@RunWith(RobolectricTestRunner.class)
 public class CompositeViewActionTest extends TestCase {
 
+  @Test
   public void testCompositeViewAction() {
     CompositeViewAction viewAction = new CompositeViewAction(1, TriggerType.CLICK);
     assertNotNull(viewAction);
@@ -33,6 +38,7 @@ public class CompositeViewActionTest extends TestCase {
     return action;
   }
 
+  @Test
   public void testRegisterAction() {
     CompositeViewAction viewAction = new CompositeViewAction(1, TriggerType.CLICK);
     ViewAction clickAction1 = createAction(viewAction.getViewId(), viewAction.getTriggerType());
@@ -52,6 +58,7 @@ public class CompositeViewActionTest extends TestCase {
     Mockito.verifyZeroInteractions(nullAction);
   }
 
+  @Test
   public void testRegisterAction_IllegalArgument() {
     CompositeViewAction viewAction = new CompositeViewAction(1, TriggerType.CLICK);
     ViewAction clickActionView2 = createAction(2, TriggerType.CLICK);

@@ -4,7 +4,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import junit.framework.TestCase;
 
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mockito;
+import org.robolectric.RobolectricTestRunner;
 
 import android.view.View;
 
@@ -17,8 +20,10 @@ import com.sarality.app.view.list.ListComponent;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
+@RunWith(RobolectricTestRunner.class)
 public class RefreshListActionTest extends TestCase {
 
+  @Test
   public void testDoAction() {
     View view = mock(View.class);
     int viewId = 1234;
@@ -33,6 +38,7 @@ public class RefreshListActionTest extends TestCase {
     Mockito.verify(component, Mockito.times(1)).refresh();
   }
 
+  @Test
   public void testLogEventAction() {
     int viewId = 1234;
     TriggerType triggerType = TriggerType.CLICK;

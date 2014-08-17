@@ -2,6 +2,11 @@ package com.sarality.app.view.action.test;
 
 import static org.mockito.Mockito.mock;
 import junit.framework.TestCase;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -13,8 +18,10 @@ import com.sarality.app.view.action.ViewActionTrigger;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
+@RunWith(RobolectricTestRunner.class)
 public class ViewActionTriggerTest extends TestCase {
 
+  @Test
   public void testViewActionTrigger() {
     View view = mock(View.class);
     TriggerType triggerType = TriggerType.TOUCH;

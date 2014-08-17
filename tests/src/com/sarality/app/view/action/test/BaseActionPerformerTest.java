@@ -2,6 +2,15 @@ package com.sarality.app.view.action.test;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import junit.framework.TestCase;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
+
+import android.content.res.Resources;
+import android.test.mock.MockContext;
 import android.view.View;
 
 import com.sarality.app.view.action.BaseActionPerformer;
@@ -12,18 +21,21 @@ import com.sarality.app.view.action.ViewAction;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class BaseActionPerformerTest extends BaseUnitTest {
+@RunWith(RobolectricTestRunner.class)
+public class BaseActionPerformerTest extends TestCase {
 
+  @Test
   public void testBaseActionPerformer() {
     ViewAction action = mock(ViewAction.class);
     BaseActionPerformer performer = new TestActionPerformer(action);
     assertNotNull(performer);
   }
 
+  @Test
   public void testIsValidListenerView() {
     ViewAction action = mock(ViewAction.class);
     BaseActionPerformer performer = new TestActionPerformer(action);
-    View view = new View(context);
+    View view = new View(Robolectric.application);
     view.setId(1234);
 
     // stubbing
@@ -56,3 +68,11 @@ class TestActionPerformer extends BaseActionPerformer {
   }
 
 }
+
+class TestContext extends MockContext{
+  @Override
+  public Resources getResources(){
+    return mock(Resources.class);
+  }
+}
+

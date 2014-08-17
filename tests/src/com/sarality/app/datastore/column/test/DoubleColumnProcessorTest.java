@@ -1,6 +1,12 @@
 package com.sarality.app.datastore.column.test;
 
 import junit.framework.TestCase;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+
 import android.content.ContentValues;
 import android.database.MatrixCursor;
 
@@ -10,23 +16,21 @@ import com.sarality.app.datastore.Column;
 import com.sarality.app.datastore.ColumnDataType;
 import com.sarality.app.datastore.ColumnSpec;
 import com.sarality.app.datastore.column.DoubleColumnProcessor;
+import com.sarality.app.datastore.db.test.TestColumn;
 
 /**
  * Tests for {@link DoubleColumnProcessor}.
  * 
  * @author abhideep@ (Abhideep Singh)
  */
+@RunWith(RobolectricTestRunner.class)
 public class DoubleColumnProcessorTest extends TestCase {
   private DoubleColumnProcessor processor;
   private MatrixCursor cursor;
   private Column column;
   private GenericFieldValueFactory factory;
 
-  public DoubleColumnProcessorTest(String name) {
-    super(name);
-  }
-
-  @Override
+  @Before
   public void setUp() {
     cursor = new MatrixCursor(new String[] { "Column1", "Column2" });
     processor = new DoubleColumnProcessor();
@@ -35,6 +39,7 @@ public class DoubleColumnProcessorTest extends TestCase {
     assertNotNull(processor);
   }
 
+  @Test
   public void testExtract() {
     cursor.addRow(new Object[] { "Row 1", 1D });
     cursor.moveToNext();
@@ -43,6 +48,7 @@ public class DoubleColumnProcessorTest extends TestCase {
     assertEquals(1D, value);
   }
 
+  @Test
   public void testExtract_InvalidColumnName() {
     cursor.addRow(new Object[] { "Row 1", 1000D });
     cursor.moveToNext();
@@ -55,6 +61,7 @@ public class DoubleColumnProcessorTest extends TestCase {
     }
   }
 
+  @Test
   public void testExtract_NullValue() {
     cursor.addRow(new Object[] { "Row 1", null });
     cursor.moveToNext();
@@ -62,6 +69,7 @@ public class DoubleColumnProcessorTest extends TestCase {
     assertNull(value);
   }
 
+  @Test
   public void testExtract_InvalidValue() {
     cursor.addRow(new Object[] { "Row 1", "Invalid" });
     cursor.moveToNext();

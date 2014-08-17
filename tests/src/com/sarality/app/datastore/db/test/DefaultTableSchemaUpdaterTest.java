@@ -1,12 +1,13 @@
 package com.sarality.app.datastore.db.test;
 
-import static org.mockito.Mockito.mock;
-
 import java.util.Arrays;
 
 import junit.framework.TestCase;
 
-import org.mockito.Mockito;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.Robolectric;
+import org.robolectric.RobolectricTestRunner;
 
 import android.app.Application;
 import android.content.Context;
@@ -26,35 +27,35 @@ import com.sarality.app.datastore.db.TableColumnProperty;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
+@RunWith(RobolectricTestRunner.class)
 public class DefaultTableSchemaUpdaterTest extends TestCase {
 
   public static final String TABLE_NAME = "test";
   private static final String DATABASE_NAME = "test.db";
   private static final int TABLE_VERSION = 1;
 
+  @Test
   public void testDefaultTableSchemaUpdater() {
     DefaultTableSchemaUpdater schemaUpdater = new DefaultTableSchemaUpdater();
     assertNotNull(schemaUpdater);
   }
 
   private Column createColumn() {
-    Column column = mock(Column.class);
     ColumnSpec spec;
     String name;
     spec = new ColumnSpec(ColumnDataType.INTEGER, true, TableColumnProperty.PRIMARY_KEY,
         TableColumnProperty.AUTO_INCREMENT);
     name = "Primary_Key";
-    Mockito.when(column.getSpec()).thenReturn(spec);
-    Mockito.when(column.getName()).thenReturn(name);
+    Column column = new TestColumn(name, spec);
     return column;
   }
 
+  @Test
   public void testUpdateSchema() {
     DefaultTableSchemaUpdater schemaUpdater = new DefaultTableSchemaUpdater();
-    Application app = mock(Application.class);
-    Context context = mock(Context.class);
-    Mockito.when(app.getApplicationContext()).thenReturn(context);
-
+    Application app = Robolectric.application;
+    Context context = app.getApplicationContext();
+   
     TestTable testTable = new TestTable(app, DATABASE_NAME, TABLE_NAME, TABLE_VERSION, Arrays.asList(createColumn()),
         null, null, schemaUpdater);
 
@@ -90,5 +91,4 @@ class TestOnlineHelper extends SQLiteOpenHelper {
   @Override
   public void onUpgrade(SQLiteDatabase arg0, int arg1, int arg2) {
   }
-
 }
