@@ -6,7 +6,7 @@ import java.util.Set;
 
 public abstract class BaseFieldBasedDataObject<T> implements FieldBasedDataObject<T> {
 
-  protected final Map<Field, FieldData<?>> fieldDataMap = new LinkedHashMap<Field, FieldData<?>>();
+  private final Map<Field, FieldData<?>> fieldDataMap = new LinkedHashMap<Field, FieldData<?>>();
 
   public BaseFieldBasedDataObject() {
     super();
