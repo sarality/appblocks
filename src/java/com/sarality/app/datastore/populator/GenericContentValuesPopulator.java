@@ -36,7 +36,7 @@ public class GenericContentValuesPopulator<T extends FieldBasedDataObject<T>> im
   }
 
   @Override
-  public void populate(ContentValues contentValues, T data) {
+  public boolean populate(ContentValues contentValues, T data) {
     Set<Field> fieldSet = data.getFields();
     for (Field field : fieldSet) {
       if (data.hasValue(field)) {
@@ -46,5 +46,6 @@ public class GenericContentValuesPopulator<T extends FieldBasedDataObject<T>> im
         populator.populate(contentValues, config.getColumn(), value);
       }
     }
+    return true;
   }
 }
