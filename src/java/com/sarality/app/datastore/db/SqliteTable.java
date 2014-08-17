@@ -144,7 +144,7 @@ public abstract class SqliteTable<T extends DataObject<T>> extends AbstractWrita
     logger.debug("Adding new row to table {} for data object {}", getTableName(), data);
     assertDatabaseOpen();
     ContentValues contentValues = new ContentValues();
-    if (getContentValuesPopulator().populate(contentValues, data) == true) {
+    if (getContentValuesPopulator().populate(contentValues, data)) {
       logger.debug("Adding new row to table {} with Content Values {}", getTableName(), contentValues);
 
       if (listenerRegistry != null)

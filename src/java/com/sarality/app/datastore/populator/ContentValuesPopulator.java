@@ -17,6 +17,7 @@ public interface ContentValuesPopulator<T> {
    * 
    * @param contentValues ContentValues object to populate
    * @param data The source of the information
+   * @return boolean Confirm if the data could be successfully be converted into contentValues 
    */
   public boolean populate(ContentValues contentValues, T data);
   
