@@ -56,8 +56,12 @@ public class ListComponentAdapter<T> extends ArrayAdapter<T> {
 
     ListRowViewCache viewCache = (ListRowViewCache) rowView.getTag();
     rowRenderer.render(rowView, viewCache, rowValue);
+    
     // Setup actions on the new row
     rowRenderer.setupActions(rowView, viewCache, rowValue, componentManager);
+    
+    // Setup Animation
+    rowRenderer.setAnimation(context, rowView);
     return rowView;
   }
 
