@@ -8,6 +8,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.robolectric.RobolectricTestRunner;
 
+import android.content.Context;
 import android.util.SparseArray;
 import android.view.View;
 
@@ -64,5 +65,19 @@ class TestBaseListRowRenderer extends BaseListRowRenderer<String> {
 
   @Override
   public void render(View rowView, ListRowViewCache rowViewCache, String value) {
+  }
+
+  @Override
+  public void setAnimation(Context context, View rowView, String value) {
+  }
+
+  @Override
+  public int getViewTypeCount() {
+    return 1;
+  }
+
+  @Override
+  public int getItemViewType(String value) {
+    return 0;
   }
 }

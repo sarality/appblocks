@@ -1,5 +1,6 @@
 package com.sarality.app.view.list;
 
+import android.content.Context;
 import android.view.View;
 
 import com.sarality.app.view.action.ComponentActionManager;
@@ -53,5 +54,20 @@ public class CompositeListRowRenderer<T> implements ListRowRenderer<T> {
   public void setAdditionalTagList(int viewId, Object data, T value){
     ListRowRenderer<T> renderer = selector.select(value);
     renderer.setAdditionalTagList(viewId, data, value);
+  }
+
+  @Override
+  public void setAnimation(Context context, View rowView, T value) {
+    // Do nothing
+  }
+
+  @Override
+  public int getViewTypeCount() {
+    return 1;
+  }
+
+  @Override
+  public int getItemViewType(T value) {
+    return 0;
   }
 }

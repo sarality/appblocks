@@ -1,5 +1,6 @@
 package com.sarality.app.view.list;
 
+import android.content.Context;
 import android.view.View;
 
 import com.sarality.app.view.action.ComponentActionManager;
@@ -8,7 +9,6 @@ import com.sarality.app.view.action.ComponentActionManager;
  * Interface for classes that render a row in a List View.
  * 
  * @author abhideep@dothat.in (Abhideep Singh)
- * 
  * @param <T> The type of data that is used to render a row.
  */
 public interface ListRowRenderer<T> {
@@ -56,4 +56,27 @@ public interface ListRowRenderer<T> {
    * @param value
    */
   public void setAdditionalTagList(int viewId, Object data, T value);
+
+  /**
+   * Setup Animation for each row
+   * 
+   * @param context Application Context
+   * @param rowView The row to be animated
+   */
+  public void setAnimation(Context context, View rowView, T value);
+
+  /**
+   * Returns the number of types of Views that will be created by getView(int, View, ViewGroup).
+   * 
+   * @return Count of the view types
+   */
+  public int getViewTypeCount();
+
+  /**
+   * Get the type of View that will be created by getView(int, View, ViewGroup) for the specified item.
+   * 
+   * @param value
+   * @return
+   */
+  public int getItemViewType(T value);
 }
