@@ -68,6 +68,16 @@ class TestBaseListRowRenderer extends BaseListRowRenderer<String> {
   }
 
   @Override
-  public void setAnimation(Context context, View rowView) {
+  public void setAnimation(Context context, View rowView, String value) {
+  }
+
+  @Override
+  public int getViewTypeCount() {
+    return 1;
+  }
+
+  @Override
+  public int getItemViewType(String value) {
+    return 0;
   }
 }

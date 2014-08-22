@@ -63,5 +63,20 @@ public interface ListRowRenderer<T> {
    * @param context Application Context
    * @param rowView The row to be animated
    */
-  public void setAnimation(Context context, View rowView);
+  public void setAnimation(Context context, View rowView, T value);
+
+  /**
+   * Returns the number of types of Views that will be created by getView(int, View, ViewGroup).
+   * 
+   * @return Count of the view types
+   */
+  public int getViewTypeCount();
+
+  /**
+   * Get the type of View that will be created by getView(int, View, ViewGroup) for the specified item.
+   * 
+   * @param value
+   * @return
+   */
+  public int getItemViewType(T value);
 }
