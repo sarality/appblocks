@@ -1,6 +1,5 @@
 package com.sarality.app.view.list;
 
-import android.content.Context;
 import android.view.View;
 
 import com.sarality.app.view.action.ComponentActionManager;
@@ -57,11 +56,11 @@ public interface ListRowRenderer<T> {
    */
   public void setAdditionalTagList(int viewId, Object data, T value);
 
-  /**
-   * Setup Animation for each row
-   * 
-   * @param context Application Context
-   * @param rowView The row to be animated
+ /**
+   * Gets the Animation resource to be applied to the the row
+   * @param rowView
+   * @param rowValue
+   * @return Returns the animation object associated with the view
    */
-  public void setAnimation(Context context, View rowView);
+  public int getAnimation(View rowView, T rowValue);
 }

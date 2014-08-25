@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 
 import com.sarality.app.view.action.ComponentActionManager;
@@ -61,7 +62,8 @@ public class ListComponentAdapter<T> extends ArrayAdapter<T> {
     rowRenderer.setupActions(rowView, viewCache, rowValue, componentManager);
     
     // Setup Animation
-    rowRenderer.setAnimation(context, rowView);
+    rowView.startAnimation(AnimationUtils.loadAnimation(context,rowRenderer.getAnimation(rowView, rowValue)));
+
     return rowView;
   }
 

@@ -8,7 +8,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.robolectric.RobolectricTestRunner;
 
-import android.content.Context;
 import android.util.SparseArray;
 import android.view.View;
 
@@ -68,6 +67,8 @@ class TestBaseListRowRenderer extends BaseListRowRenderer<String> {
   }
 
   @Override
-  public void setAnimation(Context context, View rowView) {
+  public int getAnimation(View rowView, String value) {
+    return 0;
+    
   }
 }
