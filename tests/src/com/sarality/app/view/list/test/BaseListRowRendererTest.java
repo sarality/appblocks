@@ -65,4 +65,10 @@ class TestBaseListRowRenderer extends BaseListRowRenderer<String> {
   @Override
   public void render(View rowView, ListRowViewCache rowViewCache, String value) {
   }
+
+  @Override
+  public int getAnimation(View rowView, String value) {
+    return 0;
+    
+  }
 }

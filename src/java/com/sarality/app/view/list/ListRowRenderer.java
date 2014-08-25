@@ -8,7 +8,6 @@ import com.sarality.app.view.action.ComponentActionManager;
  * Interface for classes that render a row in a List View.
  * 
  * @author abhideep@dothat.in (Abhideep Singh)
- * 
  * @param <T> The type of data that is used to render a row.
  */
 public interface ListRowRenderer<T> {
@@ -56,4 +55,12 @@ public interface ListRowRenderer<T> {
    * @param value
    */
   public void setAdditionalTagList(int viewId, Object data, T value);
+
+ /**
+   * Gets the Animation resource to be applied to the the row
+   * @param rowView
+   * @param rowValue
+   * @return Returns the animation object associated with the view
+   */
+  public int getAnimation(View rowView, T rowValue);
 }
