@@ -56,11 +56,27 @@ public interface ListRowRenderer<T> {
    */
   public void setAdditionalTagList(int viewId, Object data, T value);
 
- /**
+  /**
    * Gets the Animation resource to be applied to the the row
+   * 
    * @param rowView
    * @param rowValue
    * @return Returns the animation object associated with the view
    */
   public int getAnimation(View rowView, T rowValue);
+
+  /**
+   * Get the type of View that will be created by getView(int, View, ViewGroup) for the specified item
+   * 
+   * @param rowValue
+   * @return Type of View
+   */
+  public int getItemViewType(T value);
+
+  /**
+   * Returns the number of types of Views that will be created by getView(int, View, ViewGroup).
+   * 
+   * @return Count of view types
+   */
+  public int getViewTypeCount();
 }
