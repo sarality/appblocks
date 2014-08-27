@@ -17,7 +17,7 @@ import com.sarality.app.datastore.query.Query;
  * 
  * @author abhideep@ (Abhideep Singh)
  * 
- * @param <T> Type of data object that is extarcted.
+ * @param <T> Type of data object that is extracted.
  */
 public class FieldBasedCursorDataExtractor<T> implements CursorDataExtractor<T> {
 
