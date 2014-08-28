@@ -12,12 +12,13 @@ import com.sarality.app.view.datasource.DataSource;
  * ListComponent Object that works on a list and adds the ability to add section headers to the list
  * 
  * @author sunayna@dothat.in sunayna
- * @param <T>
+ * @param <H> Section Header Data
+ * @param <I> Section List item Data
  */
 public class SectionListComponent<H, I> extends ListComponent<I> {
 
   private final FragmentActivity activity;
-  private ListItemGenerator<SectionListItem<H, I>> listGenerator;
+  private SectionListItemGenerator<SectionListItem<H, I>> listGenerator;
   private final SectionListItemRenderer<H, I> sectionListItemRenderer;
 
   /**
@@ -28,7 +29,7 @@ public class SectionListComponent<H, I> extends ListComponent<I> {
    * @param sectionRenderer - custom renderer as specified by the activity
    */
   public SectionListComponent(FragmentActivity activity, ListView view, ListRowRenderer<H> sectionHeaderRenderer,
-      ListRowRenderer<I> sectionItemRenderer, ListItemGenerator<SectionListItem<H, I>> listGenerator) {
+      ListRowRenderer<I> sectionItemRenderer, SectionListItemGenerator<SectionListItem<H, I>> listGenerator) {
     super(activity, view, sectionItemRenderer);
     this.sectionListItemRenderer = new SectionListItemRenderer<H, I>(sectionHeaderRenderer, sectionItemRenderer);
     this.activity = activity;
@@ -55,6 +56,6 @@ public class SectionListComponent<H, I> extends ListComponent<I> {
     ComponentActionManager componentManager = new ComponentActionManager(getRowActions());
     SectionListAdapter<H, I> adapter = new SectionListAdapter<H, I>(activity, sectionListItemRenderer, selectList,
         componentManager);
-    view.setAdapter(adapter);
+    createAdapter(adapter);
   }
 }

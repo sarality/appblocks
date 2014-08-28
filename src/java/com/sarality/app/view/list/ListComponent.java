@@ -22,7 +22,7 @@ public class ListComponent<T> {
   private final FragmentActivity activity;
 
   // The view associated with the List to be rendered.
-  protected final ListView view;
+  private final ListView view;
   private final ListRowRenderer<T> rowRenderer;
 
   // List of actions to be setup on the List.
@@ -111,7 +111,7 @@ public class ListComponent<T> {
    * 
    * @param data
    */
-  public void setAdapter(List<T> data) {
+  public void render(List<T> data) {
     ComponentActionManager componentActionManager = new ComponentActionManager(getRowActions());
     adapter = new ListComponentAdapter<T>(activity, rowRenderer, data, componentActionManager);
     view.setAdapter(adapter);
@@ -128,5 +128,9 @@ public class ListComponent<T> {
     } else {// Sync Load
       adapter.reinitalize(loader.loadData());
     }
+  }
+  
+  protected void createAdapter(ListComponentAdapter<?> adapter){
+    view.setAdapter(adapter);
   }
 }

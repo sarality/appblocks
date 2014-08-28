@@ -30,42 +30,44 @@ public class SectionListItemRenderer<H, I> extends BaseListRowRenderer<SectionLi
   public int getRowLayout(SectionListItem<H, I> value) {
     if (value.isSectionHeader()) {
       return headerRenderer.getRowLayout(value.getSectionHeader());
+    } else {
+      return itemRenderer.getRowLayout(value.getData());
     }
-    return itemRenderer.getRowLayout(value.getData());
   }
 
   @Override
   public void populateViewCache(View rowView, ListRowViewCache viewCache, SectionListItem<H, I> value) {
     if (value.isSectionHeader()) {
       headerRenderer.populateViewCache(rowView, viewCache, value.getSectionHeader());
-      return;
+    } else {
+      itemRenderer.populateViewCache(rowView, viewCache, value.getData());
     }
-    itemRenderer.populateViewCache(rowView, viewCache, value.getData());
   }
 
   @Override
   public void render(View rowView, ListRowViewCache viewCache, SectionListItem<H, I> value) {
     if (value.isSectionHeader()) {
       headerRenderer.render(rowView, viewCache, value.getSectionHeader());
-      return;
+    } else {
+      itemRenderer.render(rowView, viewCache, value.getData());
     }
-    itemRenderer.render(rowView, viewCache, value.getData());
   }
 
   @Override
+  // TODO animations should be loaded in the component and then started in the adapter.
   public int getAnimation(View rowView, SectionListItem<H, I> rowValue) {
     if (!rowValue.isSectionHeader()) {
+      return headerRenderer.getAnimation(rowView, rowValue.getSectionHeader());
+    } else {
       return itemRenderer.getAnimation(rowView, rowValue.getData());
-    } else
-      return 0;
+    }
   }
 
   @Override
   public void setupActions(View rowView, ListRowViewCache rowViewCache, SectionListItem<H, I> value,
       ComponentActionManager componentManager) {
-    if (value.isSectionHeader()) {
-      return;
+    if (!value.isSectionHeader()) {
+      super.setupActions(rowView, rowViewCache, value, componentManager);
     }
-    super.setupActions(rowView, rowViewCache, value, componentManager);
   }
 }

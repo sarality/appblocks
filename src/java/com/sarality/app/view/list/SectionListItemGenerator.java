@@ -8,7 +8,7 @@ import java.util.List;
  * @author sunayna@dothat.in sunayna
  * @param <T> Item that would be either be a header or an item
  */
-public interface ListItemGenerator<T> {
+public interface SectionListItemGenerator<T> {
 
   /**
    * Generates the complete list by grouping the items into different sections and adding section headers

@@ -1,30 +1,24 @@
 package com.sarality.app.view.list;
 
-import com.sarality.app.data.BaseFieldBasedDataObject;
-
 /**
  * Creates the ability to create Section Headers and Section Data A common listitem that would either have a section
  * header or section data
  * 
  * @author sunayna@dothat.in sunayna
- * @param <H,I> : Section Header and Section Item
+ * @param <H> Section Header
+ * @param <I> Section Item
  */
-public class SectionListItem<H, I> extends BaseFieldBasedDataObject<SectionListItem<H, I>> {
+public class SectionListItem<H, I> {
   private boolean isSectionHeader;
   private H sectionHeader;
   private I sectionData;
-
-  @Override
-  public Builder<H, I> newBuilder() {
-    return new Builder<H, I>();
-  }
 
   /**
    * Returns if the current item is a section header
    * 
    * @return
    */
-  public boolean isSectionHeader() {
+  public final boolean isSectionHeader() {
     return isSectionHeader;
   }
 
@@ -33,10 +27,8 @@ public class SectionListItem<H, I> extends BaseFieldBasedDataObject<SectionListI
    * 
    * @return
    */
-  public H getSectionHeader() {
-    if (isSectionHeader)
-      return sectionHeader;
-    return null;
+  public final H getSectionHeader() {
+    return sectionHeader;
   }
 
   /**
@@ -44,35 +36,18 @@ public class SectionListItem<H, I> extends BaseFieldBasedDataObject<SectionListI
    * 
    * @return
    */
-  public I getData() {
-    if (!isSectionHeader)
-      return sectionData;
-    return null;
+  public final I getData() {
+    return sectionData;
   }
 
-  /**
-   * Builder for creating the SectionListItem
-   * 
-   * @author sunayna@dothat.in sunayna
-   * @param <T>
-   */
-  public static class Builder<H, I> extends BaseFieldBasedDataObject.Builder<SectionListItem<H, I>> {
+  public final void setSectionHeader(H sectionHeader) {
+    this.sectionHeader = sectionHeader;
+    this.isSectionHeader = true;
+  }
 
-    @Override
-    protected SectionListItem<H, I> newDataObject() {
-      return new SectionListItem<H, I>();
-    }
+  public final void setSectionData(I sectionData) {
+    this.sectionData = sectionData;
+    this.isSectionHeader = false;
 
-    public Builder<H, I> setSectionHeader(H sectionHeader) {
-      data.sectionHeader = sectionHeader;
-      data.isSectionHeader = true;
-      return this;
-    }
-
-    public Builder<H, I> setSectionData(I sectionData) {
-      data.sectionData = sectionData;
-      data.isSectionHeader = false;
-      return this;
-    }
   }
 }

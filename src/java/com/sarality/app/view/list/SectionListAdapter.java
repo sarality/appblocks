@@ -20,6 +20,7 @@ public class SectionListAdapter<H, T> extends ListComponentAdapter<SectionListIt
     super(context, rowRenderer, rowValueList, componentManager);
   }
 
+  @Override
   public int getViewTypeCount() {
     return 2;
   }
