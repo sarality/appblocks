@@ -6,6 +6,7 @@ import java.util.List;
  * Section Group for a set of list items This group would have a header and a list of in it.
  * 
  * @author sunayna@dothat.in sunayna
+ * 
  * @param <H> Section Header
  * @param <I> Items within that section
  */

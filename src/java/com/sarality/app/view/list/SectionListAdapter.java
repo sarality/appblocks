@@ -10,6 +10,7 @@ import com.sarality.app.view.action.ComponentActionManager;
  * Custom Adapter that would be used with SectionListComponent
  * 
  * @author sunayna@dothat.in sunayna
+ * 
  * @param <H> : Section Header
  * @param <T> : Section Data Item
  */

@@ -8,6 +8,7 @@ import com.sarality.app.view.action.ComponentActionManager;
  * Renders both the SectionHeader and the content in each of the sections
  * 
  * @author sunayna@dothat.in sunayna
+ * 
  * @param <H,I> : Section Header and Section Item
  */
 public class SectionListItemRenderer<H, I> extends BaseListRowRenderer<SectionListItem<H, I>> implements

@@ -7,19 +7,19 @@ import android.support.v4.app.FragmentActivity;
 import android.widget.ListView;
 
 import com.sarality.app.view.action.ComponentActionManager;
-import com.sarality.app.view.datasource.DataSource;
 
 /**
  * ListComponent Object that works on a list and adds the ability to add section headers to the list
  * 
  * @author sunayna@dothat.in sunayna
+ * 
  * @param <H> Section Header Data
  * @param <I> Section List item Data
  */
 public class SectionListComponent<H, I> extends ListComponent<I> {
 
   private final FragmentActivity activity;
-  private SectionListItemGenerator<H, I> listGenerator;
+  private final ListItemGroupGenerator<H, I> groupGenerator;
   private final SectionListItemRenderer<H, I> sectionListItemRenderer;
 
   /**
@@ -30,22 +30,21 @@ public class SectionListComponent<H, I> extends ListComponent<I> {
    * @param sectionRenderer - custom renderer as specified by the activity
    */
   public SectionListComponent(FragmentActivity activity, ListView view, ListRowRenderer<H> sectionHeaderRenderer,
-      ListRowRenderer<I> sectionItemRenderer, SectionListItemGenerator<H, I> listGenerator) {
+      ListRowRenderer<I> sectionItemRenderer, ListItemGroupGenerator<H, I> groupGenerator) {
     super(activity, view, sectionItemRenderer);
     this.sectionListItemRenderer = new SectionListItemRenderer<H, I>(sectionHeaderRenderer, sectionItemRenderer);
     this.activity = activity;
-    this.listGenerator = listGenerator;
+    this.groupGenerator = groupGenerator;
   }
 
-  /**
-   * Initializes the list from the dataSource and then also generates the complete list of data with section headers
-   * 
-   * @param dataSource
-   */
-  public void initSource(DataSource<I> dataSource) {
-    List<I> listItems = super.init(dataSource);
-    List<SectionListGroup<H, I>> selectList = listGenerator.generateList(listItems);
-    setComponentAdapter(flattenList(selectList));
+  @Override
+  protected void createAdapter(List<I> data){
+    List<SectionListGroup<H, I>> groupList = groupGenerator.generateGroups(data);
+    List<SectionListItem<H, I>> selectList = flattenList(groupList);
+    ComponentActionManager componentManager = new ComponentActionManager(getRowActions());
+    SectionListAdapter<H, I> adapter = new SectionListAdapter<H, I>(activity, sectionListItemRenderer, selectList,
+        componentManager);
+    setAdapter(adapter);
   }
 
   private List<SectionListItem<H, I>> flattenList(List<SectionListGroup<H, I>> sectionList){
@@ -53,27 +52,14 @@ public class SectionListComponent<H, I> extends ListComponent<I> {
     for( int i=0; i< sectionList.size(); i++){
       SectionListGroup<H, I> entry = sectionList.get(i);
       
-      SectionListItem<H,I> itemHeader = new SectionListItem<H,I>();
-      itemHeader.setSectionHeader(entry.getHeader());
+      SectionListItem<H,I> itemHeader = new SectionListItem<H,I>(entry.getHeader(), null);
       flattenedList.add(itemHeader);
       
       for(I entryData: entry.getItems()){
-        SectionListItem<H,I> itemData = new SectionListItem<H,I>();
-        itemData.setSectionData(entryData);
+        SectionListItem<H,I> itemData = new SectionListItem<H,I>(null,entryData);
         flattenedList.add(itemData);
       }
     }
     return flattenedList;
-  }
-  /**
-   * Creates the adapter using the SectionListItem list and sets the adapter for the view
-   * 
-   * @param selectList
-   */
-  private void setComponentAdapter(List<SectionListItem<H, I>> selectList) {
-    ComponentActionManager componentManager = new ComponentActionManager(getRowActions());
-    SectionListAdapter<H, I> adapter = new SectionListAdapter<H, I>(activity, sectionListItemRenderer, selectList,
-        componentManager);
-    createAdapter(adapter);
   }
 }

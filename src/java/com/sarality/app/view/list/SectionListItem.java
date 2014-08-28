@@ -5,21 +5,37 @@ package com.sarality.app.view.list;
  * header or section data
  * 
  * @author sunayna@dothat.in sunayna
- * @param <H> Section Header
- * @param <I> Section Item
+ * 
+ * @param <H> Header Data
+ * @param <I> Item Data
  */
 public class SectionListItem<H, I> {
-  private boolean isSectionHeader;
-  private H sectionHeader;
-  private I sectionData;
+  private final boolean isHeader;
+  private final H headerData;
+  private final I itemData;
 
+  /**
+   * Constructor
+   * @param header
+   * @param itemData
+   */
+  public SectionListItem(H header, I itemData){
+    if(header != null){
+      isHeader = true;
+    }else
+    {
+      isHeader = false;
+    }
+    this.headerData = header;
+    this.itemData = itemData;
+  }
   /**
    * Returns if the current item is a section header
    * 
    * @return
    */
   public final boolean isSectionHeader() {
-    return isSectionHeader;
+    return isHeader;
   }
 
   /**
@@ -28,7 +44,7 @@ public class SectionListItem<H, I> {
    * @return
    */
   public final H getSectionHeader() {
-    return sectionHeader;
+    return headerData;
   }
 
   /**
@@ -37,17 +53,6 @@ public class SectionListItem<H, I> {
    * @return
    */
   public final I getData() {
-    return sectionData;
-  }
-
-  public final void setSectionHeader(H sectionHeader) {
-    this.sectionHeader = sectionHeader;
-    this.isSectionHeader = true;
-  }
-
-  public final void setSectionData(I sectionData) {
-    this.sectionData = sectionData;
-    this.isSectionHeader = false;
-
+    return itemData;
   }
 }

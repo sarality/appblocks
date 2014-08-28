@@ -10,7 +10,7 @@ import java.util.List;
  * @param H : Section Header
  * @param I : Item within the the Section
  */
-public interface SectionListItemGenerator<H,I> {
+public interface ListItemGroupGenerator<H,I> {
 
   /**
    * Generates the list of groups of items each group with its own list of items and section header
@@ -18,5 +18,5 @@ public interface SectionListItemGenerator<H,I> {
    * @param list : List from the DataSource
    * @return : New List with Section Headers
    */
-  public List<SectionListGroup<H,I>> generateList(List<?> list);
+  public List<SectionListGroup<H,I>> generateGroups(List<?> list);
 }
