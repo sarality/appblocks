@@ -56,7 +56,7 @@ public class SectionListItemRenderer<H, I> extends BaseListRowRenderer<SectionLi
   @Override
   // TODO animations should be loaded in the component and then started in the adapter.
   public int getAnimation(View rowView, SectionListItem<H, I> rowValue) {
-    if (!rowValue.isSectionHeader()) {
+    if (rowValue.isSectionHeader()) {
       return headerRenderer.getAnimation(rowView, rowValue.getSectionHeader());
     } else {
       return itemRenderer.getAnimation(rowView, rowValue.getData());

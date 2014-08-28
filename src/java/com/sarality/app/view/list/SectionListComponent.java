@@ -1,5 +1,6 @@
 package com.sarality.app.view.list;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.support.v4.app.FragmentActivity;
@@ -18,7 +19,7 @@ import com.sarality.app.view.datasource.DataSource;
 public class SectionListComponent<H, I> extends ListComponent<I> {
 
   private final FragmentActivity activity;
-  private SectionListItemGenerator<SectionListItem<H, I>> listGenerator;
+  private SectionListItemGenerator<H, I> listGenerator;
   private final SectionListItemRenderer<H, I> sectionListItemRenderer;
 
   /**
@@ -29,7 +30,7 @@ public class SectionListComponent<H, I> extends ListComponent<I> {
    * @param sectionRenderer - custom renderer as specified by the activity
    */
   public SectionListComponent(FragmentActivity activity, ListView view, ListRowRenderer<H> sectionHeaderRenderer,
-      ListRowRenderer<I> sectionItemRenderer, SectionListItemGenerator<SectionListItem<H, I>> listGenerator) {
+      ListRowRenderer<I> sectionItemRenderer, SectionListItemGenerator<H, I> listGenerator) {
     super(activity, view, sectionItemRenderer);
     this.sectionListItemRenderer = new SectionListItemRenderer<H, I>(sectionHeaderRenderer, sectionItemRenderer);
     this.activity = activity;
@@ -43,10 +44,27 @@ public class SectionListComponent<H, I> extends ListComponent<I> {
    */
   public void initSource(DataSource<I> dataSource) {
     List<I> listItems = super.init(dataSource);
-    List<SectionListItem<H, I>> selectList = listGenerator.generateList(listItems);
-    setComponentAdapter(selectList);
+    List<SectionListGroup<H, I>> selectList = listGenerator.generateList(listItems);
+    setComponentAdapter(flattenList(selectList));
   }
 
+  private List<SectionListItem<H, I>> flattenList(List<SectionListGroup<H, I>> sectionList){
+    List<SectionListItem<H, I>>  flattenedList = new ArrayList<SectionListItem<H, I>>();
+    for( int i=0; i< sectionList.size(); i++){
+      SectionListGroup<H, I> entry = sectionList.get(i);
+      
+      SectionListItem<H,I> itemHeader = new SectionListItem<H,I>();
+      itemHeader.setSectionHeader(entry.getHeader());
+      flattenedList.add(itemHeader);
+      
+      for(I entryData: entry.getItems()){
+        SectionListItem<H,I> itemData = new SectionListItem<H,I>();
+        itemData.setSectionData(entryData);
+        flattenedList.add(itemData);
+      }
+    }
+    return flattenedList;
+  }
   /**
    * Creates the adapter using the SectionListItem list and sets the adapter for the view
    * 

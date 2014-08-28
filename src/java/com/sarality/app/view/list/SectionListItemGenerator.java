@@ -3,18 +3,20 @@ package com.sarality.app.view.list;
 import java.util.List;
 
 /**
- * Generates the list of items with section Headers given the dataList
+ * Generates the list of sections with section Headers given the dataList It groups the original list of items into
+ * different sections and defines a section header for each of the sections as well
  * 
  * @author sunayna@dothat.in sunayna
- * @param <T> Item that would be either be a header or an item
+ * @param H : Section Header
+ * @param I : Item within the the Section
  */
-public interface SectionListItemGenerator<T> {
+public interface SectionListItemGenerator<H,I> {
 
   /**
-   * Generates the complete list by grouping the items into different sections and adding section headers
+   * Generates the list of groups of items each group with its own list of items and section header
    * 
    * @param list : List from the DataSource
    * @return : New List with Section Headers
    */
-  public List<T> generateList(List<?> list);
+  public List<SectionListGroup<H,I>> generateList(List<?> list);
 }
