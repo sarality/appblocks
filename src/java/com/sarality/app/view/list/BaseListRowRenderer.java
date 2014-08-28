@@ -35,4 +35,9 @@ public abstract class BaseListRowRenderer<T> implements ListRowRenderer<T> {
       view.setTag(tagList.keyAt(i), tagList.valueAt(i));
     }
   }
+  
+  @Override
+  public int getAnimation(View rowView, T rowValue) {
+    return 0;
+  }
 }
