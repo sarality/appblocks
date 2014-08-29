@@ -6,7 +6,6 @@ import java.util.List;
  * Section Group for a set of list items This group would have a header and a list of in it.
  * 
  * @author sunayna@dothat.in sunayna
- * 
  * @param <H> Section Header
  * @param <I> Items within that section
  */
@@ -55,6 +54,7 @@ public class SectionListGroup<H, I> {
 
   /**
    * Sets the items for this group
+   * 
    * @param items
    */
   public void setItems(List<I> items) {
@@ -70,6 +70,7 @@ public class SectionListGroup<H, I> {
 
   /**
    * Remove a particular item from the group
+   * 
    * @param item
    */
   public void removeItem(I item) {
@@ -78,6 +79,7 @@ public class SectionListGroup<H, I> {
 
   /**
    * Adds one item at a time to this group
+   * 
    * @param item
    */
   public void addItem(I item) {

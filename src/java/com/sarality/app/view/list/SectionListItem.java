@@ -5,7 +5,6 @@ package com.sarality.app.view.list;
  * header or section data
  * 
  * @author sunayna@dothat.in sunayna
- * 
  * @param <H> Header Data
  * @param <I> Item Data
  */
@@ -16,19 +15,20 @@ public class SectionListItem<H, I> {
 
   /**
    * Constructor
+   * 
    * @param header
    * @param itemData
    */
-  public SectionListItem(H header, I itemData){
-    if(header != null){
+  public SectionListItem(H header, I itemData) {
+    if (header != null) {
       isHeader = true;
-    }else
-    {
+    } else {
       isHeader = false;
     }
     this.headerData = header;
     this.itemData = itemData;
   }
+
   /**
    * Returns if the current item is a section header
    * 

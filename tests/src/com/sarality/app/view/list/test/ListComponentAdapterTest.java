@@ -49,7 +49,6 @@ public class ListComponentAdapterTest extends TestCase {
     ListComponentAdapter<String> adapter = new ListComponentAdapter<String>(context, null, null, null);
 
     assertNotNull(adapter);
-    assertEquals(context, adapter.getContext());
   }
 
   @Test

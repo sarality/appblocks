@@ -36,7 +36,7 @@ public class ListComponentLoaderCallback<T> implements LoaderManager.LoaderCallb
 
   @Override
   public void onLoadFinished(Loader<List<T>> loader, List<T> data) {
-    component.createAdapter(data);
+    component.render(data);
   }
 
   @Override
