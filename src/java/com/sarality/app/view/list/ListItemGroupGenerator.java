@@ -18,5 +18,5 @@ public interface ListItemGroupGenerator<H,I> {
    * @param list : List from the DataSource
    * @return : New List with Section Headers
    */
-  public List<SectionListGroup<H,I>> generateGroups(List<?> list);
+  public List<SectionListGroup<H,I>> generateGroups(List<I> list);
 }
