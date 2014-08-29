@@ -6,6 +6,7 @@ import java.util.Date;
 
 import com.sarality.app.data.EnumData;
 import com.sarality.app.data.field.Field.DataType;
+import com.sarality.app.datastore.MappedEnum;
 
 /**
  * Provides ColumnProcessors for a given type of Column.
@@ -75,5 +76,9 @@ public class ColumnProcessors {
 
   public final <E extends EnumData<E>> ColumnProcessor<E> forEnumData(Class<E> enumClass) {
     return new EnumDataColumnProcessor<E>(enumClass);
+  }
+
+  public final <V, E extends MappedEnum<V>> ColumnProcessor<E> forMappedEnum(Class<E> enumClass, E[] values) {
+    return new MappedEnumColumnProcessor<V, E>(enumClass, values);
   }
 }

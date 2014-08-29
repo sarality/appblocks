@@ -6,9 +6,12 @@ import junit.framework.TestCase;
 
 import com.sarality.app.datastore.sms.SmsMessage;
 import com.sarality.app.datastore.sms.SmsMessage.MessageType;
+import com.sarality.app.datastore.sms.SmsMessageBuilder;
 
 /**
  * Tests for {@link SmsMessageTest}.
+ * <p>
+ * TODO(abhideep): This is a simple port. Add some proper Unit tests here.
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
@@ -19,8 +22,8 @@ public class SmsMessageTest extends TestCase {
       .append("Received : null,\n").append("Read : null,\n").append("Folder : null\n").toString();
 
   public void testToString() {
-    SmsMessage.Builder builder = new SmsMessage.Builder();
-    SmsMessage smsMessage = builder.newDataObject();
+    SmsMessageBuilder builder = new SmsMessageBuilder();
+    SmsMessage smsMessage = builder.build();
     assertNotNull(smsMessage.toString());
     assertEquals(emptyString, smsMessage.toString());
   }
@@ -29,7 +32,7 @@ public class SmsMessageTest extends TestCase {
     Long longValue = Long.valueOf("1234567890123456789");
     Date now = new Date();
 
-    SmsMessage message = new SmsMessage.Builder().setMessageId(longValue).setBody("testing").setSentDate(now)
+    SmsMessage message = new SmsMessageBuilder().setMessageId(longValue).setBody("testing").setSentDate(now)
         .setReceivedDate(now).setAddress("testAddress").setRecipient("John Doe").setRead(false)
         .setMessageType(MessageType.DRAFT).build();
 
@@ -41,37 +44,5 @@ public class SmsMessageTest extends TestCase {
     assertEquals("John Doe", message.getRecipient());
     assertEquals(false, message.isRead());
     assertEquals(MessageType.DRAFT, message.getMessageType());
-  }
-
-  public void testSmsMessage_EmptyBuilder() {
-    SmsMessage.Builder builder = new SmsMessage.Builder();
-    SmsMessage smsMessage = builder.build();
-
-    assertEquals(emptyString, smsMessage.toString());
-  }
-
-  public void testGetBuilder() {
-    SmsMessage.Builder builder = new SmsMessage.Builder();
-    SmsMessage smsMessage = builder.setMessageId(Long.valueOf("1234567890")).setAddress("Test Box")
-        .setBody("Testing....").setRecipient("Jane Doe").setReceivedDate(new Date()).setRead(false).build();
-
-    assertNotNull(smsMessage.getBuilder());
-    assertEquals(Long.valueOf("1234567890"), smsMessage.getMessageId());
-    assertEquals("Testing....", smsMessage.getBody());
-    assertEquals("Jane Doe", smsMessage.getRecipient());
-    assertEquals(false, smsMessage.isRead());
-  }
-
-  public void testGetBuilder_EmptyMessage() {
-    SmsMessage.Builder builder = new SmsMessage.Builder();
-    SmsMessage smsMessage = builder.build();
-
-    assertNotNull(smsMessage.getBuilder());
-    assertEquals(smsMessage.getBuilder().build().toString(), smsMessage.toString());
-  }
-
-  public void testNewBuilder() {
-    SmsMessage.Builder builder = new SmsMessage.Builder();
-    assertNotNull(builder);
   }
 }
