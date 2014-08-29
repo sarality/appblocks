@@ -5,6 +5,11 @@ import java.util.Date;
 import com.sarality.app.data.DataObject;
 import com.sarality.app.datastore.sms.SmsMessage.MessageType;
 
+/**
+ * Builder for {@link SmsMessage}.
+ * 
+ * @author abhideep@ (abhideep Singh)
+ */
 public class SmsMessageBuilder implements DataObject.Builder<SmsMessage> {
 
   // Id of the SMS message
