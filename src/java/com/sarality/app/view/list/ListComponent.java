@@ -91,7 +91,6 @@ public class ListComponent<T> {
    * @param source
    */
   public void init(DataSource<T> source) {
-    // Load the data
     loader = new ListComponentLoader<T>(activity, source);
     render(loader.loadData());
   }
@@ -107,13 +106,31 @@ public class ListComponent<T> {
   }
 
   /**
-   * Render the view with the data
+   * Creates the Default Adapter and sets the adapter on the view
    * 
-   * @param data
+   * @param data : Adapter to be created for this list of data
    */
-  public void render(List<T> data) {
+  protected ListComponentAdapter<T> createAdapter(List<T> data) {
     ComponentActionManager componentActionManager = new ComponentActionManager(getRowActions());
     adapter = new ListComponentAdapter<T>(activity, rowRenderer, data, componentActionManager);
+    return adapter;
+  }
+
+  /**
+   * Renders the view
+   * 
+   * @param adapter
+   */
+  public void render(List<T> data) {
+    setAdapter(createAdapter(data));
+  }
+
+  /**
+   * Sets the adapter on the view
+   * 
+   * @param adapter
+   */
+  private void setAdapter(ListComponentAdapter<?> adapter) {
     view.setAdapter(adapter);
   }
 
