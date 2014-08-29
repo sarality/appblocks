@@ -1,5 +1,6 @@
 package com.sarality.app.view.list;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -83,6 +84,9 @@ public class SectionListGroup<H, I> {
    * @param item
    */
   public void addItem(I item) {
+    if(items == null){
+      items = new ArrayList<I>();
+    }
     items.add(item);
   }
 }
