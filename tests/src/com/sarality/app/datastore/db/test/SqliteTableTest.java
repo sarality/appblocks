@@ -131,7 +131,7 @@ public class SqliteTableTest extends TestCase {
     table.delete(query);
     List<TestObject> list = table.query(null);
     assertEquals(1, list.size());
-    assertEquals("Testing2", list.get(0).value);
+    assertEquals("Testing2", list.get(0).getValue());
     table.close();
   }
 
@@ -140,8 +140,8 @@ public class SqliteTableTest extends TestCase {
     TestTable table = createTwoEntries();
     List<TestObject> list = table.query(null);
     assertEquals(2, list.size());
-    assertEquals("Testing2", list.get(1).value);
-    assertEquals("Testing1", list.get(0).value);
+    assertEquals("Testing2", list.get(1).getValue());
+    assertEquals("Testing1", list.get(0).getValue());
     table.close();
   }
 
@@ -154,8 +154,8 @@ public class SqliteTableTest extends TestCase {
     table.update(data, query);
     List<TestObject> list = table.query(null);
     assertEquals(2, list.size());
-    assertEquals("Testing3", list.get(1).value);
-    assertEquals("Testing1", list.get(0).value);
+    assertEquals("Testing3", list.get(1).getValue());
+    assertEquals("Testing1", list.get(0).getValue());
     table.close();
   }
 
@@ -172,8 +172,8 @@ public class SqliteTableTest extends TestCase {
   class TestPopulator extends BaseContentValuesPopulator<TestObject> {
 
     public boolean populate(ContentValues contentValues, TestObject data) {
-      if (data.value != null) {
-        contentValues.put("TextCol", data.value);
+      if (data.getValue() != null) {
+        contentValues.put("TextCol", data.getValue());
         return true;
       }
       return false;

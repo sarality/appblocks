@@ -9,7 +9,7 @@ import java.util.List;
 import junit.framework.TestCase;
 
 import com.sarality.app.config.TableIsEmpty;
-import com.sarality.app.data.BaseFieldBasedDataObject;
+import com.sarality.app.data.DataObject;
 import com.sarality.app.datastore.db.Table;
 
 /**
@@ -48,10 +48,15 @@ public class TableIsEmptyTest extends TestCase {
   }
 }
 
-class TestDataObject extends BaseFieldBasedDataObject<TestDataObject>{
+class TestDataObject implements DataObject<TestDataObject>{
 
   @Override
-  public com.sarality.app.data.FieldBasedDataObject.Builder<TestDataObject> newBuilder() {
+  public DataObject.Builder<TestDataObject> newBuilder() {
+    return null;
+  }
+
+  @Override
+  public DataObject.Builder<TestDataObject> getBuilder() {
     return null;
   }
 }
