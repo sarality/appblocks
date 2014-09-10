@@ -28,7 +28,6 @@ import com.sarality.app.datastore.db.SqliteTableSchemaUpdater;
 import com.sarality.app.datastore.db.TableColumnProperty;
 import com.sarality.app.datastore.db.TableInfo;
 import com.sarality.app.datastore.extractor.CursorDataExtractor;
-import com.sarality.app.datastore.populator.BaseContentValuesPopulator;
 import com.sarality.app.datastore.populator.ContentValuesPopulator;
 import com.sarality.app.datastore.query.Query;
 
@@ -169,7 +168,7 @@ public class SqliteTableTest extends TestCase {
     }
   }
 
-  class TestPopulator extends BaseContentValuesPopulator<TestObject> {
+  class TestPopulator implements ContentValuesPopulator<TestObject> {
 
     public boolean populate(ContentValues contentValues, TestObject data) {
       if (data.value != null) {
