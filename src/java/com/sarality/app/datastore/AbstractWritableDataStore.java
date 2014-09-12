@@ -2,9 +2,6 @@ package com.sarality.app.datastore;
 
 import java.util.List;
 
-import com.sarality.app.datastore.extractor.CursorDataExtractor;
-import com.sarality.app.datastore.populator.ContentValuesPopulator;
-
 /**
  * Abstract class that provides the base implementation for a writable version of {@link DataStore}, where items can be
  * updated or inserted.

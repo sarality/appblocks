@@ -1,4 +1,4 @@
-package com.sarality.app.datastore.populator;
+package com.sarality.app.datastore;
 
 import android.content.ContentValues;
 

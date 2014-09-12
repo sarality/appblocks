@@ -11,9 +11,9 @@ import com.sarality.app.datastore.AbstractContentResolverDataStore;
 import com.sarality.app.datastore.ColumnDataType;
 import com.sarality.app.datastore.ColumnFormat;
 import com.sarality.app.datastore.ColumnSpec;
+import com.sarality.app.datastore.CursorDataExtractor;
 import com.sarality.app.datastore.column.ColumnProcessor;
 import com.sarality.app.datastore.column.ColumnProcessors;
-import com.sarality.app.datastore.extractor.CursorDataExtractor;
 import com.sarality.app.datastore.query.Query;
 import com.sarality.app.datastore.sms.SmsMessage.MessageType;
 

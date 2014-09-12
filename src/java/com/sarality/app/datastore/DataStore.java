@@ -2,7 +2,6 @@ package com.sarality.app.datastore;
 
 import java.util.List;
 
-import com.sarality.app.datastore.extractor.CursorDataExtractor;
 import com.sarality.app.datastore.query.Query;
 
 /**
@@ -45,9 +44,4 @@ public interface DataStore<T> {
    * @return  {@code List} of {@code DataObject}s matching the query.
    */
   public List<T> query(Query query);
-
-  /**
-   * @return The class that convert the cursor returned by the DataStore into a DataObject.
-   */
-  public CursorDataExtractor<T> getCursorDataExtractor();
 }

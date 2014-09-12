@@ -3,8 +3,6 @@ package com.sarality.app.datastore;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sarality.app.datastore.extractor.CursorDataExtractor;
-
 /**
  * Abstract class that provides the base implementation for all {@link DataStore}s.
  * <p>
@@ -48,7 +46,6 @@ public abstract class AbstractDataStore<T> implements DataStore<T> {
     return columnList;
   }
 
-  @Override
   public final CursorDataExtractor<T> getCursorDataExtractor() {
     return extractor;
   }

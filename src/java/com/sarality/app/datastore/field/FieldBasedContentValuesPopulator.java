@@ -6,10 +6,10 @@ import com.sarality.app.data.field.Field;
 import com.sarality.app.data.field.FieldContainer;
 import com.sarality.app.data.field.FieldContainerFactory;
 import com.sarality.app.datastore.Column;
+import com.sarality.app.datastore.ContentValuesPopulator;
 import com.sarality.app.datastore.FieldColumnMapping;
 import com.sarality.app.datastore.FieldColumnMappingList;
 import com.sarality.app.datastore.column.ColumnProcessor;
-import com.sarality.app.datastore.populator.ContentValuesPopulator;
 
 /**
  * Generic implementation of the ContentValuesPopulator that uses Field and FieldContainers to populate a ContentValues
