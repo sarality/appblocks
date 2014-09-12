@@ -6,10 +6,10 @@ import com.sarality.app.data.field.Field;
 import com.sarality.app.data.field.FieldContainer;
 import com.sarality.app.data.field.FieldContainerFactory;
 import com.sarality.app.datastore.Column;
+import com.sarality.app.datastore.CursorDataExtractor;
 import com.sarality.app.datastore.FieldColumnMapping;
 import com.sarality.app.datastore.FieldColumnMappingList;
 import com.sarality.app.datastore.column.ColumnProcessor;
-import com.sarality.app.datastore.extractor.CursorDataExtractor;
 import com.sarality.app.datastore.query.Query;
 
 /**

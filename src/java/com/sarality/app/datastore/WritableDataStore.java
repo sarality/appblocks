@@ -1,7 +1,6 @@
 package com.sarality.app.datastore;
 
 import com.sarality.app.data.DataObject;
-import com.sarality.app.datastore.populator.ContentValuesPopulator;
 import com.sarality.app.datastore.query.Query;
 
 /**
@@ -35,11 +34,5 @@ public interface WritableDataStore<T, I> extends DataStore<T> {
    * @param data The data with the updated values.
    * @param query Query to define the set of items that need to be updated.
    */
-  public void update(T data, Query query);
-  
-  /**
-   * @return A class that populates values in the {@code ContentValues} needed to insert
-   * or update data in a data store.
-   */
-  public ContentValuesPopulator<T> getContentValuesPopulator();
+  public void update(T data, Query query);  
 }

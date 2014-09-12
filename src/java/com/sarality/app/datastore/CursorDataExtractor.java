@@ -1,4 +1,4 @@
-package com.sarality.app.datastore.extractor;
+package com.sarality.app.datastore;
 
 import android.database.Cursor;
 

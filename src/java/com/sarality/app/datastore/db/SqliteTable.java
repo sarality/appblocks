@@ -16,8 +16,8 @@ import android.database.sqlite.SQLiteDatabase;
 import com.sarality.app.data.DataObject;
 import com.sarality.app.datastore.AbstractWritableDataStore;
 import com.sarality.app.datastore.Column;
-import com.sarality.app.datastore.extractor.CursorDataExtractor;
-import com.sarality.app.datastore.populator.ContentValuesPopulator;
+import com.sarality.app.datastore.ContentValuesPopulator;
+import com.sarality.app.datastore.CursorDataExtractor;
 import com.sarality.app.datastore.query.Query;
 
 /**
