@@ -20,19 +20,24 @@ import com.sarality.app.datastore.db.TableRegistry;
  */
 public abstract class BaseApplication extends Application {
 
-  private final TableRegistry tableRegistry = new TableRegistry();
-
   private final List<ModuleInitializer> moduleInitializerList = Lists.of();
+  private final TableRegistry tableRegistry;
 
-  public BaseApplication(Context context){
+  public BaseApplication(Context context, TableRegistry tableRegistry) {
     super();
     attachBaseContext(context);
+    this.tableRegistry = tableRegistry;
   }
-  
+
+  public BaseApplication(Context context) {
+    this(context, TableRegistry.getGlobalInstance());
+  }
+
   public BaseApplication() {
     super();
+    this.tableRegistry = TableRegistry.getGlobalInstance();
   }
-  
+
   public static BaseApplication getApp(Context context) {
     return (BaseApplication) context.getApplicationContext();
   }
@@ -81,7 +86,7 @@ public abstract class BaseApplication extends Application {
    * Performs and Application specific initialization.
    */
   protected abstract void initApp();
-  
+
   /**
    * Initialize all Tables provided by the ModuleInitialized registered with the Application.
    */
