@@ -25,6 +25,12 @@ public interface ViewAction {
    */
   public TriggerType getTriggerType();
 
+  /**
+   * Sets up the action for the given view, 
+   * 
+   * @param view The view on which the action is being configured.
+   */
+  public void setupAction(View view);
 
   /**
    * Perform the action

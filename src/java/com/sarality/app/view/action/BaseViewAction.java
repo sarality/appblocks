@@ -3,6 +3,9 @@ package com.sarality.app.view.action;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import android.view.View;
 
 import com.sarality.app.common.collect.Lists;
@@ -17,6 +20,8 @@ import com.sarality.app.common.collect.Lists;
  */
 public abstract class BaseViewAction implements ViewAction {
 
+  private static final Logger logger = LoggerFactory.getLogger(BaseViewAction.class);
+  
   // The Id of the view that triggers the action
   private final int viewId;
 
@@ -75,6 +80,37 @@ public abstract class BaseViewAction implements ViewAction {
     completeActionList.addAll(failureActionList);
     completeActionList.addAll(beforeActionList);
     return completeActionList;
+  }
+
+  @Override
+  public void setupAction(View view) {
+    View actionView = view.findViewById(getViewId());
+    if (actionView == null) {
+      String message = "Invalid Configuration for " + getTriggerType() + " Event. No View with Id "
+          + Integer.toHexString(getViewId()) + " found in view " + Integer.toHexString(view.getId());
+      IllegalStateException exception = new IllegalStateException(message);
+      logger.error(message, exception);
+      throw exception;
+    }
+    setActionPerformer(actionView);
+  }
+
+  /**
+   * Sets up the Action performer for a particular kind of trigger
+   * 
+   * @param layout layout view on which the actions are set
+   */
+  private void setActionPerformer(View view) {
+    if (triggerType == TriggerType.CLICK) {
+      new ClickActionPerformer(this).setupListener(view);
+    } else if (triggerType == TriggerType.LONG_CLICK) {
+      new LongClickActionPerformer(this).setupListener(view);
+    } else if (triggerType == TriggerType.TOUCH || triggerType == TriggerType.TOUCH_DOWN
+        || triggerType == TriggerType.TOUCH_UP) {
+      new TouchActionPerformer(this).setupListener(view);
+    } else if (triggerType == TriggerType.CLICK_LIST_ITEM) {
+      new ListItemClickActionPerformer(this).setupListener(view);
+    }
   }
 
   public abstract boolean doAction(View view, ViewActionTrigger actionDetail, ViewDetail viewDetail);
