@@ -4,13 +4,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import android.util.Log;
 import android.view.View;
 
 public class ComponentActionManager {
-
-  // Tag for Logging
-  private static final String TAG = "ComponentActionManager";
 
   // Map of View ID and compositeView Action
   private final Map<ViewTrigger, ViewAction> viewMap;
@@ -63,33 +59,7 @@ public class ComponentActionManager {
    */
   public void setupActions(View layout) {
     for (ViewAction action : viewMap.values()) {
-      View view = layout.findViewById(action.getViewId());
-      if (view == null) {
-        String message = "Invalid Configuration for " + action.getTriggerType() + " Event. No View with Id "
-            + Integer.toHexString(action.getViewId()) + " found in row " + Integer.toHexString(layout.getId());
-        IllegalStateException exception = new IllegalStateException(message);
-        Log.e(TAG, message, exception);
-        throw exception;
-      }
-      setActionPerformer(view, action);
-    }
-  }
-
-  /**
-   * Sets up the Action performer for a particular kind of trigger
-   * 
-   * @param layout layout view on which the actions are set
-   */
-  private void setActionPerformer(View view, ViewAction action) {
-    if (action.getTriggerType() == TriggerType.CLICK) {
-      new ClickActionPerformer(action).setupListener(view);
-    } else if (action.getTriggerType() == TriggerType.LONG_CLICK) {
-      new LongClickActionPerformer(action).setupListener(view);
-    } else if (action.getTriggerType() == TriggerType.TOUCH || action.getTriggerType() == TriggerType.TOUCH_DOWN
-        || action.getTriggerType() == TriggerType.TOUCH_UP) {
-      new TouchActionPerformer(action).setupListener(view);
-    } else if (action.getTriggerType() == TriggerType.CLICK_LIST_ITEM) {
-      new ListItemClickActionPerformer(action).setupListener(view);
+      action.setupAction(layout);
     }
   }
 }
