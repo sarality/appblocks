@@ -20,7 +20,7 @@ import com.sarality.app.view.action.ViewDetail;
 public class StartActivityAction extends BaseViewAction {
 
   // The context of the class that is calling the action
-  private final Context context;
+  protected final Context context;
 
   // The class that has to be opened.
   private final Class<? extends Activity> newActivityClass;
