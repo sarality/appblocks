@@ -14,7 +14,8 @@ import com.sarality.app.view.action.ViewDetail;
  * @author sunayna@ (Sunayna Uberoy)
  */
 public class FinishActivityAction extends BaseViewAction {
- private final Activity activity;
+  private final Activity activity;
+
   /**
    * Constructor.
    * 
