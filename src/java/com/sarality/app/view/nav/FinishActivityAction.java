@@ -9,7 +9,7 @@ import com.sarality.app.view.action.ViewActionTrigger;
 import com.sarality.app.view.action.ViewDetail;
 
 /**
- * Action to be finished
+ * Action to finish an Activity
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
