@@ -30,8 +30,11 @@ public abstract class AbstractContentResolverDataStore<T> extends AbstractDataSt
     Cursor cursor = null;
     List<T> dataList = new ArrayList<T>();
     try {
-      // TODO(abhideep): Add Query support here
-      cursor = contentResolver.query(uri, null, null, null, null);
+      if (query != null) {
+        cursor = contentResolver.query(uri, query.getColumns(), query.getWhereClause(), query.getWhereClauseValues(), null);
+      } else {
+        cursor = contentResolver.query(uri, null, null, null, null);
+      }
       CursorDataExtractor<T> extractor = getCursorDataExtractor();
 
       cursor.moveToFirst();
