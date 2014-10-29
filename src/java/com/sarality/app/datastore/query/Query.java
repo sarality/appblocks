@@ -64,7 +64,7 @@ public class Query {
 
     String[] columnString = new String[columns.size()];
     for (int i = 0; i < columns.size(); i++) {
-      columnString[i] = columns.get(i).toString();
+      columnString[i] = columns.get(i).getName();
     }
     return columnString;
   }
