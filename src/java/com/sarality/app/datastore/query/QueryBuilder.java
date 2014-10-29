@@ -24,7 +24,7 @@ public class QueryBuilder {
 
   // The type of filter. Initialized to NONE since no filter condition is defined at first.
   private FilterType filterType = FilterType.NONE;
-  
+
   // The filters that form the Where clause i.e. Column and Value pair
   private final List<QueryFilter> filterList = new ArrayList<QueryFilter>();
 
@@ -166,7 +166,7 @@ public class QueryBuilder {
    */
   public Query build() {
     List<String> valueList = Lists.of();
-    
+
     StringBuilder whereClauseBuilder = new StringBuilder();
     boolean isFirst = true;
     for (QueryFilter filter : filterList) {
@@ -179,8 +179,8 @@ public class QueryBuilder {
       String value = filter.getValue().getStringValue(filter.getColumn());
       if (value != null) {
         whereClauseBuilder.append(" ? ");
-        if(filter.getOperation().equals(Operator.LIKE)){
-          value = "%"+value+"%";
+        if (filter.getOperation().equals(Operator.LIKE)) {
+          value = "%" + value + "%";
         }
         valueList.add(value);
       }
@@ -212,8 +212,8 @@ public class QueryBuilder {
       processedFirstColumn = true;
     } // Order By Column
 
-    return new Query(columnList, filterType, filterList, orderByColumnList, 
-        whereClause, valueList, orderByClause.toString());
+    return new Query(columnList, filterType, filterList, orderByColumnList, whereClause, valueList,
+        orderByClause.toString());
   }
 
   /**
@@ -241,13 +241,13 @@ public class QueryBuilder {
     }
 
     if (filterList.size() == 1) {
-      this.filterType = newFilterType;      
+      this.filterType = newFilterType;
     }
 
     if (this.filterType != newFilterType) {
-      throw new IllegalStateException("Invalid combination of AND and OR filters. Cannot define an " 
-          + newFilterType.name() + " Condition when all previous filter conditions use an " 
-          + filterType.name() + " clause");
+      throw new IllegalStateException("Invalid combination of AND and OR filters. Cannot define an "
+          + newFilterType.name() + " Condition when all previous filter conditions use an " + filterType.name()
+          + " clause");
     }
   }
 }
