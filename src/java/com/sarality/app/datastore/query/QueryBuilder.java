@@ -179,6 +179,9 @@ public class QueryBuilder {
       String value = filter.getValue().getStringValue(filter.getColumn());
       if (value != null) {
         whereClauseBuilder.append(" ? ");
+        if(filter.getOperation().equals(Operator.LIKE)){
+          value = "%"+value+"%";
+        }
         valueList.add(value);
       }
       whereClauseBuilder.append(")");
