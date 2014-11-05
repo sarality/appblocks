@@ -27,13 +27,13 @@ public class ContactDataBuilder implements DataObject.Builder<ContactData> {
 
   private Integer logoId;
 
-  private List<ContactNumber> contactNumbers = new ArrayList<ContactNumber>();
+  private List<ContactNumber> contactNumberList = new ArrayList<ContactNumber>();
 
-  private List<String> emailIds = new ArrayList<String>();
+  private List<String> emailIdList = new ArrayList<String>();
 
   @Override
   public ContactData build() {
-    return new ContactData(contactId, name, hasPhoneNumber, contactNumbers, emailIds, photoId, logoId);
+    return new ContactData(contactId, name, hasPhoneNumber, contactNumberList, emailIdList, photoId, logoId);
   }
 
   public final ContactDataBuilder setContactId(Long contactId) {
@@ -61,17 +61,23 @@ public class ContactDataBuilder implements DataObject.Builder<ContactData> {
     return this;
   }
 
-  public final ContactDataBuilder addPhoneNumber(ContactNumber... contactNumbers) {
-    for (ContactNumber contactNumber : contactNumbers) {
-      this.contactNumbers.add(contactNumber);
-    }
+  public final ContactDataBuilder addPhoneNumber(ContactNumber contactNumber) {
+    this.contactNumberList.add(contactNumber);
     return this;
   }
 
-  public final ContactDataBuilder addEmailId(String... emailIds) {
-    for (String emailId : emailIds) {
-      this.emailIds.add(emailId);
-    }
+  public final ContactDataBuilder setPhoneNumberList(List<ContactNumber> contactNumberList) {
+    this.contactNumberList.addAll(contactNumberList);
+    return this;
+  }
+
+  public final ContactDataBuilder addEmailId(String emailId) {
+    this.emailIdList.add(emailId);
+    return this;
+  }
+
+  public final ContactDataBuilder setEmailList(List<String> emailList) {
+    this.emailIdList.addAll(emailList);
     return this;
   }
 
