@@ -1,5 +1,8 @@
 package com.sarality.app.datastore.contact;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.sarality.app.data.DataObject;
 
 /**
@@ -24,13 +27,13 @@ public class ContactDataBuilder implements DataObject.Builder<ContactData> {
 
   private Integer logoId;
 
-  private String contactNumber;
+  private List<ContactNumber> contactNumbers = new ArrayList<ContactNumber>();
 
-  private String emailId;
+  private List<String> emailIds = new ArrayList<String>();
 
   @Override
   public ContactData build() {
-    return new ContactData(contactId, name, hasPhoneNumber, contactNumber, emailId, photoId, logoId);
+    return new ContactData(contactId, name, hasPhoneNumber, contactNumbers, emailIds, photoId, logoId);
   }
 
   public final ContactDataBuilder setContactId(Long contactId) {
@@ -58,14 +61,17 @@ public class ContactDataBuilder implements DataObject.Builder<ContactData> {
     return this;
   }
 
-  public final ContactDataBuilder setPhoneNumber(String contactNumber) {
-    this.contactNumber = contactNumber;
+  public final ContactDataBuilder addPhoneNumber(ContactNumber... contactNumbers) {
+    for (ContactNumber contactNumber : contactNumbers) {
+      this.contactNumbers.add(contactNumber);
+    }
     return this;
-
   }
 
-  public final ContactDataBuilder setEmailId(String emailId) {
-    this.emailId = emailId;
+  public final ContactDataBuilder addEmailId(String... emailIds) {
+    for (String emailId : emailIds) {
+      this.emailIds.add(emailId);
+    }
     return this;
   }
 
