@@ -1,5 +1,8 @@
 package com.sarality.app.datastore.contact;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.sarality.app.data.DataObject;
 
 /**
@@ -26,19 +29,21 @@ public class ContactData implements DataObject<ContactData> {
   private final Integer logoId;
 
   // Contact Number
-  private final String contactNumber;
+  private final List<ContactNumber> contactNumberList;
 
   // Email Id
-  private final String emailId;
+  private final List<String> emailIdList;
 
-  public ContactData(Long contactId, String name, Boolean hasPhoneNumber, String contactNumber, String emailId,
-      Integer photoId, Integer logoId) {
+  public ContactData(Long contactId, String name, Boolean hasPhoneNumber, List<ContactNumber> contactNumberList,
+      List<String> emailIdList, Integer photoId, Integer logoId) {
     super();
     this.contactId = contactId;
     this.name = name;
     this.hasPhoneNumber = hasPhoneNumber;
-    this.contactNumber = contactNumber;
-    this.emailId = emailId;
+    this.contactNumberList = new ArrayList<ContactNumber>();
+    this.contactNumberList.addAll(contactNumberList);
+    this.emailIdList = new ArrayList<String>();
+    this.emailIdList.addAll(emailIdList);
     this.photoId = photoId;
     this.logoId = logoId;
   }
@@ -46,7 +51,7 @@ public class ContactData implements DataObject<ContactData> {
   @Override
   public final ContactDataBuilder getBuilder() {
     return new ContactDataBuilder().setContactId(contactId).setName(name).setHasPhoneNumber(hasPhoneNumber)
-        .setPhoneNumber(contactNumber).setPhotoId(photoId).setLogo(logoId);
+        .setPhoneNumberList(contactNumberList).setPhotoId(photoId).setLogo(logoId);
   }
 
   @Override
@@ -58,8 +63,9 @@ public class ContactData implements DataObject<ContactData> {
   public final String toString() {
     return new StringBuilder().append("Contact Id : ").append(contactId).append(",\n").append("Name : ").append(name)
         .append(",\n").append("HAS_PHONE_NUMBER : ").append(hasPhoneNumber).append(",\n").append("Contact Number : ")
-        .append(contactNumber).append(",\n").append("EmailId : ").append(emailId).append(",\n").append("PhotoID : ")
-        .append(photoId).append(",\n").append("LogoID : ").append(logoId).append("\n").toString();
+        .append(contactNumberList.toArray()).append(",\n").append("EmailId : ").append(emailIdList.toArray())
+        .append(",\n").append("PhotoID : ").append(photoId).append(",\n").append("LogoID : ").append(logoId)
+        .append("\n").toString();
   }
 
   public final Long getContactId() {
@@ -74,8 +80,8 @@ public class ContactData implements DataObject<ContactData> {
     return hasPhoneNumber;
   }
 
-  public final String getPhoneNumber() {
-    return contactNumber;
+  public final List<ContactNumber> getPhoneNumberList() {
+    return contactNumberList;
   }
 
   public final Integer getPhotoId() {
@@ -86,7 +92,7 @@ public class ContactData implements DataObject<ContactData> {
     return logoId;
   }
 
-  public final String getEmailId() {
-    return emailId;
+  public final List<String> getEmailIdList() {
+    return emailIdList;
   }
 }
