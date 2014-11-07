@@ -16,7 +16,7 @@ import android.widget.ImageView;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class LoadContactPhoto extends AsyncTask<Long, Void, Bitmap> {
+public class ContactPhotoLoader extends AsyncTask<Long, Void, Bitmap> {
 
   private final Uri baseUri = Contacts.CONTENT_URI;
   private final Context context;
@@ -27,7 +27,7 @@ public class LoadContactPhoto extends AsyncTask<Long, Void, Bitmap> {
    * 
    * @param context : Application context
    */
-  public LoadContactPhoto(Context context, ImageView imageView) {
+  public ContactPhotoLoader(Context context, ImageView imageView) {
     this.context = context;
     this.imageView = imageView;
   }
