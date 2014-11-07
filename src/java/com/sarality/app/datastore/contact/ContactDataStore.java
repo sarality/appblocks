@@ -30,6 +30,8 @@ public class ContactDataStore extends AbstractContentResolverDataStore<ContactDa
   private final Context context;
 
   private final Uri baseUri = ContactsContract.Contacts.CONTENT_URI;
+  private static final String staticWhereClause = Column.HAS_PHONE_NUMBER + " !=0 AND (" + Column.MIMETYPE + " = ? OR "
+      + Column.MIMETYPE + " = ? ) ";
 
   /**
    * Constructor
@@ -47,13 +49,13 @@ public class ContactDataStore extends AbstractContentResolverDataStore<ContactDa
    * @author sunayna@ (Sunayna Uberoy)
    */
   public enum Column implements com.sarality.app.datastore.Column {
-    contact_id(new ColumnSpec(ColumnDataType.INTEGER, false, null, null)),
-    display_name(new ColumnSpec(ColumnDataType.TEXT, false)),
-    is_primary(new ColumnSpec(ColumnDataType.INTEGER, false)),
-    mimetype(new ColumnSpec(ColumnDataType.TEXT, false)),
-    data1(new ColumnSpec(ColumnDataType.TEXT, false)),
-    photo_id(new ColumnSpec(ColumnDataType.INTEGER, false)),
-    has_phone_number(new ColumnSpec(ColumnDataType.INTEGER, false));
+    CONTACT_ID(new ColumnSpec(ColumnDataType.INTEGER, false, null, null)),
+    DISPLAY_NAME(new ColumnSpec(ColumnDataType.TEXT, false)),
+    IS_PRIMARY(new ColumnSpec(ColumnDataType.INTEGER, false)),
+    MIMETYPE(new ColumnSpec(ColumnDataType.TEXT, false)),
+    DATA1(new ColumnSpec(ColumnDataType.TEXT, false)),
+    PHOTO_ID(new ColumnSpec(ColumnDataType.INTEGER, false)),
+    HAS_PHONE_NUMBER(new ColumnSpec(ColumnDataType.INTEGER, false));
 
     private ColumnSpec spec;
 
@@ -86,7 +88,7 @@ public class ContactDataStore extends AbstractContentResolverDataStore<ContactDa
   @Override
   public List<ContactData> query(Query query) {
     Cursor cursor = getContentResolver().query(Data.CONTENT_URI, null, buildWhereClause(query),
-        buildWhereClauseValues(query), Column.contact_id.name());
+        buildWhereClauseValues(query), Column.CONTACT_ID.name());
     return buildContactList(cursor);
   }
 
@@ -97,13 +99,13 @@ public class ContactDataStore extends AbstractContentResolverDataStore<ContactDa
    * @return Concatenated whereClause String
    */
   private String buildWhereClause(Query query) {
-    String whereClause = Column.has_phone_number + " !=0 AND (" + Column.mimetype + " = ? OR " + Column.mimetype
-        + " = ? ) ";
+    StringBuilder stringBuilder = new StringBuilder(staticWhereClause);
 
     if (query != null) {
-      return (whereClause + " AND " + query.getWhereClause());
+      stringBuilder.append("AND ");
+      stringBuilder.append(query.getWhereClause());
     }
-    return whereClause;
+    return stringBuilder.toString();
   }
 
   /**
@@ -142,7 +144,7 @@ public class ContactDataStore extends AbstractContentResolverDataStore<ContactDa
     cursor.moveToFirst();
     ContactDataBuilder builder = null;
     while (!cursor.isAfterLast()) {
-      long contactId = processors.forInteger().extract(cursor, Column.contact_id);
+      long contactId = processors.forInteger().extract(cursor, Column.CONTACT_ID);
       if (contactId != oldContactId) {
         if (builder != null) {
           dataList.add(builder.build());
@@ -171,11 +173,11 @@ public class ContactDataStore extends AbstractContentResolverDataStore<ContactDa
     final ColumnProcessors processors = new ColumnProcessors();
 
     builder.setContactId(contactId);
-    builder.setName(processors.forString().extract(cursor, Column.display_name));
-    builder.setPhotoId(processors.forInteger().extract(cursor, Column.photo_id));
-    String mimeType = processors.forString().extract(cursor, Column.mimetype);
-    String data = processors.forString().extract(cursor, Column.data1);
-    int isPrimary = processors.forInteger().extract(cursor, Column.is_primary);
+    builder.setName(processors.forString().extract(cursor, Column.DISPLAY_NAME));
+    builder.setPhotoId(processors.forInteger().extract(cursor, Column.PHOTO_ID));
+    String mimeType = processors.forString().extract(cursor, Column.MIMETYPE);
+    String data = processors.forString().extract(cursor, Column.DATA1);
+    int isPrimary = processors.forInteger().extract(cursor, Column.IS_PRIMARY);
     if (mimeType.equals(Email.CONTENT_ITEM_TYPE)) {
       builder.addEmailId(data);
     } else if (mimeType.equals(Phone.CONTENT_ITEM_TYPE)) {
