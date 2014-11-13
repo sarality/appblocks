@@ -31,7 +31,7 @@ public class ContactDataStore extends AbstractContentResolverDataStore<ContactDa
   private final Context context;
 
   private static final String staticWhereClause = Column.HAS_PHONE_NUMBER + " !=0 AND (" + Column.MIMETYPE + " = ? OR "
-      + Column.MIMETYPE + " = ? OR " + Column.MIMETYPE + " = ? ) ";
+      + Column.MIMETYPE + " = ? OR " + Column.MIMETYPE + " = ? )";
 
   /**
    * Constructor
@@ -43,6 +43,7 @@ public class ContactDataStore extends AbstractContentResolverDataStore<ContactDa
     this.context = context;
   }
 
+  // TODO Add SqlName in ColumnSpec
   /**
    * Defines the list of columns specific to the
    * 
@@ -81,7 +82,7 @@ public class ContactDataStore extends AbstractContentResolverDataStore<ContactDa
 
   @Override
   public Uri getQueryUri(Query query) {
-    return null;
+    return Data.CONTENT_URI;
   }
 
   @Override
@@ -92,7 +93,7 @@ public class ContactDataStore extends AbstractContentResolverDataStore<ContactDa
 
   @Override
   public List<ContactData> query(Query query) {
-    Cursor cursor = getContentResolver().query(Data.CONTENT_URI, null, buildWhereClause(query),
+    Cursor cursor = getContentResolver().query(getQueryUri(null), null, buildWhereClause(query),
         buildWhereClauseValues(query), Column.CONTACT_ID.name());
     return buildContactList(cursor);
   }
@@ -148,6 +149,7 @@ public class ContactDataStore extends AbstractContentResolverDataStore<ContactDa
     List<ContactData> dataList = new ArrayList<ContactData>();
 
     cursor.moveToFirst();
+
     ContactDataBuilder builder = null;
     while (!cursor.isAfterLast()) {
       long contactId = processors.forInteger().extract(cursor, Column.CONTACT_ID);
@@ -191,17 +193,12 @@ public class ContactDataStore extends AbstractContentResolverDataStore<ContactDa
     } else if (mimeType.equals(StructuredName.CONTENT_ITEM_TYPE)) {
       PersonNameDataBuilder nameBuilder = new PersonNameDataBuilder();
       nameBuilder.setDisplayName(data);
-      data = processors.forString().extract(cursor, Column.DATA2);
-      nameBuilder.setGivenName(data);
-      data = processors.forString().extract(cursor, Column.DATA3);
-      nameBuilder.setFamilyName(data);
-      data = processors.forString().extract(cursor, Column.DATA4);
-      nameBuilder.setPrefix(data);
-      data = processors.forString().extract(cursor, Column.DATA5);
-      nameBuilder.setMiddleName(data);
-      data = processors.forString().extract(cursor, Column.DATA6);
-      nameBuilder.setSuffix(data);
-      builder.setName(nameBuilder.build());
+      nameBuilder.setGivenName(processors.forString().extract(cursor, Column.DATA2));
+      nameBuilder.setFamilyName(processors.forString().extract(cursor, Column.DATA3));
+      nameBuilder.setPrefix(processors.forString().extract(cursor, Column.DATA4));
+      nameBuilder.setMiddleName(processors.forString().extract(cursor, Column.DATA5));
+      nameBuilder.setSuffix(processors.forString().extract(cursor, Column.DATA6));
+      builder.setName(nameBuilder);
     }
 
     return builder;

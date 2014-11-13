@@ -35,6 +35,8 @@ public class ContactData implements DataObject<ContactData> {
   // Email Id
   private final List<String> emailIdList;
 
+  // TODO Add Label to ContactNumber
+  // TODO emailAddress to also have its own class
   public ContactData(Long contactId, PersonNameData name, Boolean hasPhoneNumber,
       List<ContactNumber> contactNumberList, List<String> emailIdList, Integer photoId, Integer logoId) {
     super();

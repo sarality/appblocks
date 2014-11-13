@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sarality.app.common.data.user.PersonNameData;
+import com.sarality.app.common.data.user.PersonNameDataBuilder;
 import com.sarality.app.data.DataObject;
 
 /**
@@ -18,7 +19,7 @@ public class ContactDataBuilder implements DataObject.Builder<ContactData> {
   private Long contactId;
 
   // Name of the person
-  private PersonNameData name;
+  private PersonNameDataBuilder nameBuilder;
 
   // Does the contact have a phone number
   private Boolean hasPhoneNumber;
@@ -34,7 +35,8 @@ public class ContactDataBuilder implements DataObject.Builder<ContactData> {
 
   @Override
   public ContactData build() {
-    return new ContactData(contactId, name, hasPhoneNumber, contactNumberList, emailIdList, photoId, logoId);
+    return new ContactData(contactId, nameBuilder.build(), hasPhoneNumber, contactNumberList, emailIdList, photoId,
+        logoId);
   }
 
   public final ContactDataBuilder setContactId(Long contactId) {
@@ -43,7 +45,12 @@ public class ContactDataBuilder implements DataObject.Builder<ContactData> {
   }
 
   public final ContactDataBuilder setName(PersonNameData name) {
-    this.name = name;
+    this.nameBuilder = name.getBuilder();
+    return this;
+  }
+
+  public final ContactDataBuilder setName(PersonNameDataBuilder nameBuilder) {
+    this.nameBuilder = nameBuilder;
     return this;
   }
 
@@ -80,6 +87,10 @@ public class ContactDataBuilder implements DataObject.Builder<ContactData> {
   public final ContactDataBuilder setEmailList(List<String> emailList) {
     this.emailIdList.addAll(emailList);
     return this;
+  }
+
+  public PersonNameDataBuilder getName() {
+    return this.nameBuilder;
   }
 
 }
