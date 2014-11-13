@@ -8,11 +8,12 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.CommonDataKinds.Phone;
+import android.provider.ContactsContract.CommonDataKinds.StructuredName;
 import android.provider.ContactsContract.Data;
 
+import com.sarality.app.common.data.user.PersonNameDataBuilder;
 import com.sarality.app.datastore.AbstractContentResolverDataStore;
 import com.sarality.app.datastore.ColumnDataType;
 import com.sarality.app.datastore.ColumnSpec;
@@ -29,9 +30,8 @@ public class ContactDataStore extends AbstractContentResolverDataStore<ContactDa
   public static final String DATASTORE_NAME = "ContactDataStore";
   private final Context context;
 
-  private final Uri baseUri = ContactsContract.Contacts.CONTENT_URI;
   private static final String staticWhereClause = Column.HAS_PHONE_NUMBER + " !=0 AND (" + Column.MIMETYPE + " = ? OR "
-      + Column.MIMETYPE + " = ? ) ";
+      + Column.MIMETYPE + " = ? OR " + Column.MIMETYPE + " = ? ) ";
 
   /**
    * Constructor
@@ -51,6 +51,11 @@ public class ContactDataStore extends AbstractContentResolverDataStore<ContactDa
   public enum Column implements com.sarality.app.datastore.Column {
     CONTACT_ID(new ColumnSpec(ColumnDataType.INTEGER, false, null, null)),
     DISPLAY_NAME(new ColumnSpec(ColumnDataType.TEXT, false)),
+    DATA2(new ColumnSpec(ColumnDataType.TEXT, false)),
+    DATA3(new ColumnSpec(ColumnDataType.TEXT, false)),
+    DATA4(new ColumnSpec(ColumnDataType.TEXT, false)),
+    DATA5(new ColumnSpec(ColumnDataType.TEXT, false)),
+    DATA6(new ColumnSpec(ColumnDataType.TEXT, false)),
     IS_PRIMARY(new ColumnSpec(ColumnDataType.INTEGER, false)),
     MIMETYPE(new ColumnSpec(ColumnDataType.TEXT, false)),
     DATA1(new ColumnSpec(ColumnDataType.TEXT, false)),
@@ -76,7 +81,7 @@ public class ContactDataStore extends AbstractContentResolverDataStore<ContactDa
 
   @Override
   public Uri getQueryUri(Query query) {
-    return baseUri;
+    return null;
   }
 
   @Override
@@ -115,7 +120,8 @@ public class ContactDataStore extends AbstractContentResolverDataStore<ContactDa
    * @return new WhereClauseValues String[]
    */
   private String[] buildWhereClauseValues(Query query) {
-    String[] whereClauseValues = new String[] { Email.CONTENT_ITEM_TYPE, Phone.CONTENT_ITEM_TYPE };
+    String[] whereClauseValues = new String[] { Email.CONTENT_ITEM_TYPE, Phone.CONTENT_ITEM_TYPE,
+        StructuredName.CONTENT_ITEM_TYPE };
 
     String[] concatWhereClauseValue;
 
@@ -173,7 +179,7 @@ public class ContactDataStore extends AbstractContentResolverDataStore<ContactDa
     final ColumnProcessors processors = new ColumnProcessors();
 
     builder.setContactId(contactId);
-    builder.setName(processors.forString().extract(cursor, Column.DISPLAY_NAME));
+
     builder.setPhotoId(processors.forInteger().extract(cursor, Column.PHOTO_ID));
     String mimeType = processors.forString().extract(cursor, Column.MIMETYPE);
     String data = processors.forString().extract(cursor, Column.DATA1);
@@ -182,7 +188,22 @@ public class ContactDataStore extends AbstractContentResolverDataStore<ContactDa
       builder.addEmailId(data);
     } else if (mimeType.equals(Phone.CONTENT_ITEM_TYPE)) {
       builder.addPhoneNumber(new ContactNumber(data, isPrimary > 0 ? true : false));
+    } else if (mimeType.equals(StructuredName.CONTENT_ITEM_TYPE)) {
+      PersonNameDataBuilder nameBuilder = new PersonNameDataBuilder();
+      nameBuilder.setDisplayName(data);
+      data = processors.forString().extract(cursor, Column.DATA2);
+      nameBuilder.setGivenName(data);
+      data = processors.forString().extract(cursor, Column.DATA3);
+      nameBuilder.setFamilyName(data);
+      data = processors.forString().extract(cursor, Column.DATA4);
+      nameBuilder.setPrefix(data);
+      data = processors.forString().extract(cursor, Column.DATA5);
+      nameBuilder.setMiddleName(data);
+      data = processors.forString().extract(cursor, Column.DATA6);
+      nameBuilder.setSuffix(data);
+      builder.setName(nameBuilder.build());
     }
+
     return builder;
   }
 }

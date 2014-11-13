@@ -3,6 +3,7 @@ package com.sarality.app.datastore.contact;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sarality.app.common.data.user.PersonNameData;
 import com.sarality.app.data.DataObject;
 
 /**
@@ -17,7 +18,7 @@ public class ContactData implements DataObject<ContactData> {
   private final Long contactId;
 
   // Name of the contact
-  private final String name;
+  private final PersonNameData name;
 
   // Confirms if the contact has a phone number
   private final Boolean hasPhoneNumber;
@@ -34,8 +35,8 @@ public class ContactData implements DataObject<ContactData> {
   // Email Id
   private final List<String> emailIdList;
 
-  public ContactData(Long contactId, String name, Boolean hasPhoneNumber, List<ContactNumber> contactNumberList,
-      List<String> emailIdList, Integer photoId, Integer logoId) {
+  public ContactData(Long contactId, PersonNameData name, Boolean hasPhoneNumber,
+      List<ContactNumber> contactNumberList, List<String> emailIdList, Integer photoId, Integer logoId) {
     super();
     this.contactId = contactId;
     this.name = name;
@@ -72,7 +73,7 @@ public class ContactData implements DataObject<ContactData> {
     return contactId;
   }
 
-  public final String getName() {
+  public final PersonNameData getName() {
     return name;
   }
 
