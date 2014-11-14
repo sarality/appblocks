@@ -104,4 +104,12 @@ public class PersonNameData implements DataObject<PersonNameData> {
   public PersonNameDataBuilder newBuilder() {
     return new PersonNameDataBuilder();
   }
+
+  @Override
+  public final String toString() {
+    return new StringBuilder().append("Display Name : ").append(displayName).append(",\n").append("Given Name : ")
+        .append(givenName).append(",\n").append("Middle Name : ").append(middleName).append(",\n")
+        .append("Family Name : ").append(familyName).append(",\n").append("prefix : ").append(prefix).append(",\n")
+        .append("Suffix : ").append(suffix).append(",\n").toString();
+  }
 }
