@@ -17,7 +17,9 @@ import com.sarality.app.common.data.user.PersonNameDataBuilder;
 import com.sarality.app.datastore.AbstractContentResolverDataStore;
 import com.sarality.app.datastore.ColumnDataType;
 import com.sarality.app.datastore.ColumnSpec;
+import com.sarality.app.datastore.column.ColumnProcessor;
 import com.sarality.app.datastore.column.ColumnProcessors;
+import com.sarality.app.datastore.contact.ContactNumber.ContactLabel;
 import com.sarality.app.datastore.query.Query;
 
 /**
@@ -179,6 +181,7 @@ public class ContactDataStore extends AbstractContentResolverDataStore<ContactDa
    */
   private ContactDataBuilder extractContactData(ContactDataBuilder builder, long contactId, Cursor cursor) {
     final ColumnProcessors processors = new ColumnProcessors();
+    final ColumnProcessor<ContactLabel> labelTypeProcessor = processors.forMappedEnum(ContactLabel.class, ContactLabel.values());
 
     builder.setContactId(contactId);
 
@@ -189,7 +192,8 @@ public class ContactDataStore extends AbstractContentResolverDataStore<ContactDa
     if (mimeType.equals(Email.CONTENT_ITEM_TYPE)) {
       builder.addEmailId(data);
     } else if (mimeType.equals(Phone.CONTENT_ITEM_TYPE)) {
-      builder.addPhoneNumber(new ContactNumber(data, isPrimary > 0 ? true : false));
+      ContactLabel labelType = labelTypeProcessor.extract(cursor, Column.DATA2);
+      builder.addPhoneNumber(new ContactNumber(data, isPrimary > 0 ? true : false, labelType));
     } else if (mimeType.equals(StructuredName.CONTENT_ITEM_TYPE)) {
       PersonNameDataBuilder nameBuilder = new PersonNameDataBuilder();
       nameBuilder.setDisplayName(data);

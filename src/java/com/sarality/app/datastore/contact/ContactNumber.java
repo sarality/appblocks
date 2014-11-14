@@ -1,5 +1,7 @@
 package com.sarality.app.datastore.contact;
 
+import com.sarality.app.datastore.MappedEnum;
+
 /**
  * ContactNumber to store properties of a number
  * 
@@ -14,12 +16,35 @@ public class ContactNumber {
   // If the number is private
   private final boolean isPrimary;
 
+  private final ContactLabel label;
+
   // Constructor
-  public ContactNumber(String number, boolean isPrimary) {
+  public ContactNumber(String number, boolean isPrimary, ContactLabel label) {
     this.number = number;
     this.isPrimary = isPrimary;
+    this.label = label;
   }
 
+  public static enum ContactLabel implements MappedEnum<Integer> {
+    HOME(1),
+    MOBILE(2),
+    WORK(2),
+    OTHER(7),
+    MAIN(12);
+    
+
+    private int mappedValue;
+
+    private ContactLabel(int mappedValue) {
+      this.mappedValue = mappedValue;
+    }
+
+    @Override
+    public Integer getMappedValue() {
+      return mappedValue;
+    }
+  }
+  
   /**
    * Returns the phoneNumber
    * 
@@ -36,5 +61,14 @@ public class ContactNumber {
    */
   public boolean isPrimary() {
     return isPrimary;
+  }
+
+  /**
+   * Returns the label of the number
+   * 
+   * @return label
+   */
+  public ContactLabel getLabel() {
+    return label;
   }
 }
