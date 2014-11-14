@@ -3,8 +3,8 @@ package com.sarality.app.view.dialog;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ListView;
@@ -22,7 +22,7 @@ import com.sarality.app.view.list.ListRowRenderer;
  */
 public class AlertDialogComponent<T> {
   private static List<ViewAction> rowActionList = new ArrayList<ViewAction>();
-  private final Activity context;
+  private final Context context;
   private AlertDialog dialog;
 
   // List of actions to be setup on each row in the List.
@@ -40,7 +40,7 @@ public class AlertDialogComponent<T> {
    * @param date Activation Date to be changed once the user has selected one of the options
    * @param snoozeAction Reference to the caller.
    */
-  public AlertDialogComponent(Activity context, int dialogLayout, int listViewId) {
+  public AlertDialogComponent(Context context, int dialogLayout, int listViewId) {
     this.context = context;
     this.dialogLayout = dialogLayout;
     this.listViewId = listViewId;
@@ -102,8 +102,8 @@ public class AlertDialogComponent<T> {
     ListView listView = (ListView) dialogView.findViewById(listViewId);
     ComponentActionManager componentActionManager = new ComponentActionManager(rowActionList);
 
-    ListComponentAdapter<T> adapter = new ListComponentAdapter<T>(context, dialogRenderer,
-        viewOptions, componentActionManager);
+    ListComponentAdapter<T> adapter = new ListComponentAdapter<T>(context, dialogRenderer, viewOptions,
+        componentActionManager);
     listView.setAdapter(adapter);
     return dialogView;
   }
