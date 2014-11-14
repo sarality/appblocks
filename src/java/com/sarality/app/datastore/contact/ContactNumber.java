@@ -16,26 +16,26 @@ public class ContactNumber {
   // If the number is private
   private final boolean isPrimary;
 
-  private final LabelType label;
+  private final ContactLabel label;
 
   // Constructor
-  public ContactNumber(String number, boolean isPrimary, LabelType label) {
+  public ContactNumber(String number, boolean isPrimary, ContactLabel label) {
     this.number = number;
     this.isPrimary = isPrimary;
     this.label = label;
   }
 
-  public static enum LabelType implements MappedEnum<Integer> {
-    Home(1),
-    Mobile(2),
-    Work(2),
-    Other(7),
-    Main(12);
+  public static enum ContactLabel implements MappedEnum<Integer> {
+    HOME(1),
+    MOBILE(2),
+    WORK(2),
+    OTHER(7),
+    MAIN(12);
     
 
     private int mappedValue;
 
-    private LabelType(int mappedValue) {
+    private ContactLabel(int mappedValue) {
       this.mappedValue = mappedValue;
     }
 
@@ -68,7 +68,7 @@ public class ContactNumber {
    * 
    * @return label
    */
-  public LabelType getLabel() {
+  public ContactLabel getLabel() {
     return label;
   }
 }
