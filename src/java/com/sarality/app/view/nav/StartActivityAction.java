@@ -3,6 +3,7 @@ package com.sarality.app.view.nav;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 
 import com.sarality.app.view.action.BaseViewAction;
@@ -43,6 +44,9 @@ public class StartActivityAction extends BaseViewAction {
   @Override
   public boolean doAction(View view, ViewActionTrigger actionDetail, ViewDetail viewDetail) {
     Intent intent = new Intent(context, newActivityClass);
+    Bundle bundle = new Bundle();
+    bundle.putLong("ID", (Long) view.getTag(view.getId()));
+    intent.putExtras(bundle);
     context.startActivity(intent);
     return true;
   }
