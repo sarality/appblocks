@@ -35,7 +35,11 @@ public class ContactDataBuilder implements DataObject.Builder<ContactData> {
 
   @Override
   public ContactData build() {
-    return new ContactData(contactId, nameBuilder.build(), hasPhoneNumber, contactNumberList, emailIdList, photoId,
+    PersonNameData personName = null;
+    if(nameBuilder != null){
+      personName = nameBuilder.build();
+    }
+    return new ContactData(contactId, personName, hasPhoneNumber, contactNumberList, emailIdList, photoId,
         logoId);
   }
 
