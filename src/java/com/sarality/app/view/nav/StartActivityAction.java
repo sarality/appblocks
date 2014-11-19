@@ -44,10 +44,19 @@ public class StartActivityAction extends BaseViewAction {
   @Override
   public boolean doAction(View view, ViewActionTrigger actionDetail, ViewDetail viewDetail) {
     Intent intent = new Intent(context, newActivityClass);
-    Bundle bundle = new Bundle();
-    bundle.putLong("ID", (Long) view.getTag(view.getId()));
-    intent.putExtras(bundle);
+    intent.putExtras(getBundle(view));
     context.startActivity(intent);
     return true;
+  }
+
+  /**
+   * Return a bundle to be used to pass parameters to the newActivity. The default method creates an empty bundle.
+   * 
+   * @param view
+   * @return Bundle
+   */
+  protected Bundle getBundle(View view) {
+    Bundle bundle = new Bundle();
+    return bundle;
   }
 }
