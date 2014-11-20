@@ -19,7 +19,7 @@ public class ContactDataBuilder implements DataObject.Builder<ContactData> {
   private Long contactId;
 
   // Name of the person
-  private PersonNameDataBuilder nameBuilder;
+  private PersonNameDataBuilder nameBuilder = new PersonNameDataBuilder();
 
   // Does the contact have a phone number
   private Boolean hasPhoneNumber;
@@ -35,8 +35,11 @@ public class ContactDataBuilder implements DataObject.Builder<ContactData> {
 
   @Override
   public ContactData build() {
-    return new ContactData(contactId, nameBuilder.build(), hasPhoneNumber, contactNumberList, emailIdList, photoId,
-        logoId);
+    PersonNameData personName = null;
+    if (nameBuilder != null) {
+      personName = nameBuilder.build();
+    }
+    return new ContactData(contactId, personName, hasPhoneNumber, contactNumberList, emailIdList, photoId, logoId);
   }
 
   public final ContactDataBuilder setContactId(Long contactId) {
