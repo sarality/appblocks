@@ -3,7 +3,8 @@ package com.sarality.app.datastore.contact;
 import java.io.IOException;
 import java.io.InputStream;
 
-import com.sarality.app.datastore.contact.ContactPhotoType.PhotoType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import android.annotation.TargetApi;
 import android.content.ContentUris;
@@ -17,16 +18,20 @@ import android.os.Build;
 import android.provider.ContactsContract.Contacts;
 import android.widget.ImageView;
 
+import com.sarality.app.datastore.contact.ContactPhotoRequest.PhotoType;
+import com.sarality.app.datastore.db.SqliteTable;
+
 /**
  * Gets the Actual photo of the contact
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class ContactPhotoLoader extends AsyncTask<ContactPhotoType, Void, Bitmap> {
+public class ContactPhotoLoader extends AsyncTask<ContactPhotoRequest, Void, Bitmap> {
 
   private final Uri baseUri = Contacts.CONTENT_URI;
   private final Context context;
   private ImageView imageView;
+  private static final Logger logger = LoggerFactory.getLogger(SqliteTable.class);
 
   /**
    * Constructor
@@ -39,7 +44,7 @@ public class ContactPhotoLoader extends AsyncTask<ContactPhotoType, Void, Bitmap
   }
 
   @Override
-  protected Bitmap doInBackground(ContactPhotoType... contactPhotoType) {
+  protected Bitmap doInBackground(ContactPhotoRequest... contactPhotoType) {
 
     Uri contactUri = ContentUris.withAppendedId(baseUri, contactPhotoType[0].getContactId());
 
@@ -65,18 +70,20 @@ public class ContactPhotoLoader extends AsyncTask<ContactPhotoType, Void, Bitmap
 
   @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
   private Bitmap getFullSizePhoto(Uri contactUri) {
-    Uri displayPhotoUri = Uri.withAppendedPath(contactUri, Contacts.Photo.DISPLAY_PHOTO);
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+      Uri displayPhotoUri = Uri.withAppendedPath(contactUri, Contacts.Photo.DISPLAY_PHOTO);
 
-    try {
-      AssetFileDescriptor fd = context.getContentResolver().openAssetFileDescriptor(displayPhotoUri, "r");
-      InputStream input;
-      input = fd.createInputStream();
-      return BitmapFactory.decodeStream(input);
+      try {
+        AssetFileDescriptor fd = context.getContentResolver().openAssetFileDescriptor(displayPhotoUri, "r");
+        InputStream input;
+        input = fd.createInputStream();
+        return BitmapFactory.decodeStream(input);
 
-    } catch (IOException e) {
-      e.printStackTrace();
+      } catch (IOException e) {
+        logger.error("Could not get the photoStream.", e);
+        e.printStackTrace();
+      }
     }
     return null;
-
   }
 }
