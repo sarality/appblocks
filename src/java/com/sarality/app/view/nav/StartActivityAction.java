@@ -36,9 +36,7 @@ public class StartActivityAction extends BaseViewAction {
    */
   public StartActivityAction(int viewId, TriggerType triggerType, Context context,
       Class<? extends Activity> newActivityClass) {
-    super(viewId, triggerType);
-    this.context = context;
-    this.newActivityClass = newActivityClass;
+    this(viewId, triggerType, context, newActivityClass, null);
   }
 
   /**
@@ -56,7 +54,7 @@ public class StartActivityAction extends BaseViewAction {
     this.newActivityClass = newActivityClass;
     this.bundleGenerator = bundleGenerator;
   }
-  
+
   @Override
   public boolean doAction(View view, ViewActionTrigger actionDetail, ViewDetail viewDetail) {
     Intent intent = new Intent(context, newActivityClass);
@@ -66,5 +64,5 @@ public class StartActivityAction extends BaseViewAction {
     context.startActivity(intent);
     return true;
   }
- 
+
 }
