@@ -24,6 +24,7 @@ public class StartActivityAction extends BaseViewAction {
 
   // The class that has to be opened.
   private final Class<? extends Activity> newActivityClass;
+  private BundleGenerator bundleGenerator = null;
 
   /**
    * Constructor.
@@ -35,15 +36,33 @@ public class StartActivityAction extends BaseViewAction {
    */
   public StartActivityAction(int viewId, TriggerType triggerType, Context context,
       Class<? extends Activity> newActivityClass) {
+    this(viewId, triggerType, context, newActivityClass, null);
+  }
+
+  /**
+   * Constructor.
+   * 
+   * @param viewId Id of view that triggers the action.
+   * @param triggerType Type of event that triggers the action.
+   * @param context Context of the class that triggers the action.
+   * @param Class Class for the Activity that has to be started.
+   */
+  public StartActivityAction(int viewId, TriggerType triggerType, Context context,
+      Class<? extends Activity> newActivityClass, BundleGenerator bundleGenerator) {
     super(viewId, triggerType);
     this.context = context;
     this.newActivityClass = newActivityClass;
+    this.bundleGenerator = bundleGenerator;
   }
 
   @Override
   public boolean doAction(View view, ViewActionTrigger actionDetail, ViewDetail viewDetail) {
     Intent intent = new Intent(context, newActivityClass);
+    if (bundleGenerator != null) {
+      intent.putExtras(bundleGenerator.generate(view));
+    }
     context.startActivity(intent);
     return true;
   }
+
 }
