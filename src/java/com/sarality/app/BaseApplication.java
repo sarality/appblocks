@@ -7,6 +7,8 @@ import android.app.Application;
 import android.content.Context;
 
 import com.sarality.app.common.collect.Lists;
+import com.sarality.app.datastore.DataStore;
+import com.sarality.app.datastore.DataStoreRegistry;
 import com.sarality.app.datastore.db.Table;
 import com.sarality.app.datastore.db.TableRegistry;
 
@@ -22,20 +24,23 @@ public abstract class BaseApplication extends Application {
 
   private final List<ModuleInitializer> moduleInitializerList = Lists.of();
   private final TableRegistry tableRegistry;
+  private final DataStoreRegistry dataStoreRegistry;
 
-  public BaseApplication(Context context, TableRegistry tableRegistry) {
+  public BaseApplication(Context context, TableRegistry tableRegistry, DataStoreRegistry dataStoreRegistry) {
     super();
     attachBaseContext(context);
     this.tableRegistry = tableRegistry;
+    this.dataStoreRegistry = dataStoreRegistry;
   }
 
   public BaseApplication(Context context) {
-    this(context, TableRegistry.getGlobalInstance());
+    this(context, TableRegistry.getGlobalInstance(), DataStoreRegistry.getGlobalInstance());
   }
 
   public BaseApplication() {
     super();
     this.tableRegistry = TableRegistry.getGlobalInstance();
+    this.dataStoreRegistry = DataStoreRegistry.getGlobalInstance();
   }
 
   public static BaseApplication getApp(Context context) {
@@ -56,8 +61,8 @@ public abstract class BaseApplication extends Application {
 
     // Once all modules are registered then register the Tables and DataStore defined by the modules.
     initTables();
+    initDataStores();
     initEnumDataStores();
-    // TODO(abhideep) : Add something for Data Stores as well
 
     // Perform Application specific initialization.
     initApp();
@@ -88,7 +93,7 @@ public abstract class BaseApplication extends Application {
   protected abstract void initApp();
 
   /**
-   * Initialize all Tables provided by the ModuleInitialized registered with the Application.
+   * Initialize all Tables provided by the ModuleInitializer registered with the Application.
    */
   private void initTables() {
     for (ModuleInitializer module : moduleInitializerList) {
@@ -96,6 +101,20 @@ public abstract class BaseApplication extends Application {
       if (tableList != null) {
         for (Table<?> table : tableList) {
           tableRegistry.register(table);
+        }
+      }
+    }
+  }
+
+  /**
+   * Initialize all DataStore provided by the ModuleInitializer registered with the Application.
+   */
+  private void initDataStores() {
+    for (ModuleInitializer module : moduleInitializerList) {
+      List<DataStore<?>> dataStoreList = module.getDataStores(this);
+      if (dataStoreList != null) {
+        for (DataStore<?> dataStore : dataStoreList) {
+          dataStoreRegistry.register(dataStore);
         }
       }
     }
