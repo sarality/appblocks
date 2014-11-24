@@ -19,6 +19,7 @@ import com.sarality.app.datastore.Column;
 import com.sarality.app.datastore.ContentValuesPopulator;
 import com.sarality.app.datastore.CursorDataExtractor;
 import com.sarality.app.datastore.query.Query;
+import com.sarality.app.error.ValidationException;
 
 /**
  * A table that store its data in a SqlLite database.
@@ -47,6 +48,8 @@ public abstract class SqliteTable<T extends DataObject<T>> extends AbstractWrita
   // Metadata of the table, used mostly as a cache of properties of the table like whether it has a composite
   // primary key etc.
   private final TableInfo tableInfo;
+  private final DataValidator<T> validator;
+  private final DataSanitizer<T> sanitizer;
 
   // Utility class used to access the underlying database as well as manage the schema of the table.
   private final SqliteTableConnectionProvider dbProvider;
@@ -59,13 +62,21 @@ public abstract class SqliteTable<T extends DataObject<T>> extends AbstractWrita
 
   protected SqliteTable(Application application, String dbName, String tableName, int tableVersion,
       List<Column> columnList, CursorDataExtractor<T> extractor, ContentValuesPopulator<T> populator,
-      SqliteTableSchemaUpdater schemaUpdter) {
+      SqliteTableSchemaUpdater schemaUpdter, DataValidator<T> validator, DataSanitizer<T> sanitizer) {
     super(tableName, columnList, extractor, populator);
     this.dbName = dbName;
     this.tableName = tableName;
     this.tableVersion = tableVersion;
     this.tableInfo = new TableInfo(columnList);
+    this.validator = validator;
+    this.sanitizer = sanitizer;
     this.dbProvider = new SqliteTableConnectionProvider(application.getApplicationContext(), this, null, schemaUpdter);
+  }
+
+  protected SqliteTable(Application application, String dbName, String tableName, int tableVersion,
+                        List<Column> columnList, CursorDataExtractor<T> extractor, ContentValuesPopulator<T> populator,
+                        SqliteTableSchemaUpdater schemaUpdter) {
+    this(application, dbName, tableName,tableVersion, columnList, extractor, populator, schemaUpdter, null, null);
   }
 
   @Override
@@ -133,6 +144,20 @@ public abstract class SqliteTable<T extends DataObject<T>> extends AbstractWrita
     }
   }
 
+  protected T sanitize(T data) {
+    if (sanitizer != null && data != null) {
+      return sanitizer.sanitize(data);
+    }
+    return data;
+  }
+
+  protected boolean validate(T data) throws ValidationException {
+    if (validator != null && data != null) {
+      return validator.validate(data);
+    }
+    return true;
+  }
+
   /**
    * Create a row in the database table.
    * 
@@ -143,12 +168,23 @@ public abstract class SqliteTable<T extends DataObject<T>> extends AbstractWrita
   public Long create(T data) {
     logger.debug("Adding new row to table {} for data object {}", getTableName(), data);
     assertDatabaseOpen();
+
+    // Before we create the data, sanitize and validate that the data is valid.
+    T sanitizedData = sanitize(data);
+    try {
+      validate(sanitizedData);
+    } catch (ValidationException e) {
+      logger.error("Error Creating Row in Table {}. Invalid Data provided.", getTableName(), e);
+      throw new IllegalArgumentException(e);
+    }
+
     ContentValues contentValues = new ContentValues();
-    if (getContentValuesPopulator().populate(contentValues, data)) {
+    if (getContentValuesPopulator().populate(contentValues, sanitizedData)) {
       logger.debug("Adding new row to table {} with Content Values {}", getTableName(), contentValues);
 
+      // TODO(abhideep): Remove this whole Listener model.
       if (listenerRegistry != null)
-        listenerRegistry.listener(data, this);
+        listenerRegistry.listener(sanitizedData, this);
 
       // TODO(abhideep): Call a method that converts a rowd Id to a Long
       return database.insert(getName(), null, contentValues);
@@ -212,8 +248,18 @@ public abstract class SqliteTable<T extends DataObject<T>> extends AbstractWrita
   @Override
   public void update(T data, Query query) {
     assertDatabaseOpen();
+
+    // Before we update the data, sanitize and validate that the data is valid.
+    T sanitizedData = sanitize(data);
+    try {
+      validate(sanitizedData);
+    } catch (ValidationException e) {
+      logger.error("Error Updating Table {}. Invalid Data provided.", getTableName(), e);
+      throw new IllegalArgumentException(e);
+    }
+
     ContentValues contentValues = new ContentValues();
-    getContentValuesPopulator().populate(contentValues, data);
+    getContentValuesPopulator().populate(contentValues, sanitizedData);
     int num = database.update(getName(), contentValues, query.getWhereClause(), query.getWhereClauseValues());
     logger.debug("Updated {} number of cols", num);
   }
