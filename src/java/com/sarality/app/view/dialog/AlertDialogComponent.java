@@ -86,7 +86,13 @@ public class AlertDialogComponent<T> {
    */
   public void init(List<T> viewOptions) {
     this.viewOptions = viewOptions;
-    setDialog(setupListView());
+    setDialog(setupListView(getDialogView()));
+  }
+
+  protected View getDialogView() {
+    LayoutInflater factory = LayoutInflater.from(context);
+    final View dialogView = factory.inflate(dialogLayout, null);
+    return dialogView;
   }
 
   /**
@@ -96,9 +102,7 @@ public class AlertDialogComponent<T> {
    * @param refreshListAction
    * @return
    */
-  private View setupListView() {
-    LayoutInflater factory = LayoutInflater.from(context);
-    final View dialogView = factory.inflate(dialogLayout, null);
+  private View setupListView(View dialogView) {
     ListView listView = (ListView) dialogView.findViewById(listViewId);
     ComponentActionManager componentActionManager = new ComponentActionManager(rowActionList);
 
@@ -116,8 +120,6 @@ public class AlertDialogComponent<T> {
     AlertDialog.Builder builder = new AlertDialog.Builder(context);
     builder.setView(dialogView);
     builder.setCancelable(true);
-    // TODO add cancel/ok
-    builder.setNegativeButton("CANCEL", null);
     builder.setTitle(title);
     dialog = builder.create();
     dialog.show();
