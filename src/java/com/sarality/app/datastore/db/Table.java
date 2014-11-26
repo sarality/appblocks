@@ -12,7 +12,7 @@ import com.sarality.app.datastore.WritableDataStore;
  * 
  * @param <T> Data associated with each row of the table
  */
-public interface Table<T extends DataObject<T>> extends WritableDataStore<T, Long> {
+public interface Table<T> extends WritableDataStore<T, Long> {
 
   /**
    * @return String name for the database.

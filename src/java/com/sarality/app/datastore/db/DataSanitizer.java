@@ -8,7 +8,7 @@ import com.sarality.app.error.ValidationException;
  *
  * @author abhideep@ (Abhideep Singh)
  */
-public interface DataSanitizer<T extends DataObject<T>> {
+public interface DataSanitizer<T> {
 
   /**
    * Sanitize the given data object.
