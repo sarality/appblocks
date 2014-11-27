@@ -61,7 +61,7 @@ public class QueryBuilder {
           + "start of the filter defintion");
     }
     assertValidFilter(column, operator, null);
-    filterList.add(new QueryFilter(column, operator, null));
+    filterList.add(new QueryFilter(column, operator));
     return this;
   }
 
@@ -95,7 +95,7 @@ public class QueryBuilder {
   public QueryBuilder and(Column column, Operator operator) {
     assertValidFilter(column, operator, null);
     assetCanAddFilter(FilterType.AND);
-    filterList.add(new QueryFilter(column, operator, null));
+    filterList.add(new QueryFilter(column, operator));
     return this;
   }
 
@@ -128,7 +128,7 @@ public class QueryBuilder {
   public QueryBuilder or(Column column, Operator operator) {
     assertValidFilter(column, operator, null);
     assetCanAddFilter(FilterType.OR);
-    filterList.add(new QueryFilter(column, operator, null));
+    filterList.add(new QueryFilter(column, operator));
     return this;
   }
 
