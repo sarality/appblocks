@@ -30,8 +30,7 @@ import com.sarality.app.error.ValidationException;
  * @author abhideep@ (Abhideep Singh)
  * @param <T> Data associated with each row of the table.
  */
-public abstract class SqliteTable<T extends DataObject<T>> extends AbstractWritableDataStore<T, Long> implements
-    Table<T> {
+public abstract class SqliteTable<T> extends AbstractWritableDataStore<T, Long> implements Table<T> {
 
   private static final Logger logger = LoggerFactory.getLogger(SqliteTable.class);
 

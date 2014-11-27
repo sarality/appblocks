@@ -8,7 +8,7 @@ import com.sarality.app.error.ValidationException;
  *
  * @author abhideep@ (Abhideep Singh)
  */
-public interface DataValidator<T extends DataObject<T>> {
+public interface DataValidator<T> {
 
   boolean validate(T data) throws ValidationException;
 }

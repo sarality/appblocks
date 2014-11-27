@@ -7,16 +7,13 @@ import com.sarality.app.data.DataObject;
  * 
  * @author sunayna@ (Sunayna Uberoy)
  * @param <T>
- * @param <K>
  */
-public interface TableListener<T extends DataObject<T>> {
+public interface TableListener<T> {
 
   /**
    * Update the schema for the given table in the given database
    * 
-   * @param <T>
-   * @param db The database to be updated
-   * @param table The table that needs to be updated with its current schema
+   * @param data The data
    */
   public void OnEntryUpdated(T data);
 

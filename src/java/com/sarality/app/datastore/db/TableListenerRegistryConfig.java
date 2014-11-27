@@ -6,7 +6,7 @@ import com.sarality.app.base.registry.MultiKeyRegistry;
 import com.sarality.app.base.registry.Registry.Entry;
 import com.sarality.app.data.DataObject;
 
-public class TableListenerRegistryConfig<T extends DataObject<T>> extends
+public class TableListenerRegistryConfig<T> extends
     MultiKeyRegistry.EntryProvider<String, TableListener<T>> {
 
   public void addListener(TableListener<T> listener, String dataSourceTableName) {
