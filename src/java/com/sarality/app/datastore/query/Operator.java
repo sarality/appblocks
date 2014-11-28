@@ -12,7 +12,8 @@ public enum Operator {
   GREATER_THAN(">"),
   IS_NULL("IS NULL"),
   IS_NOT_NULL("IS NOT NULL"),
-  LIKE("LIKE");
+  LIKE("LIKE"),
+  IN("IN");
 
   private final String sqlString;
 

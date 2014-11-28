@@ -1,17 +1,17 @@
 package com.sarality.app.datastore.query;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.util.Pair;
 
 import com.sarality.app.common.collect.Lists;
 import com.sarality.app.datastore.Column;
 import com.sarality.app.datastore.DataStore;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Class used to build Query to either query or update a data store.
- * 
+ *
  * @author abhideep@ (Abhideep Singh)
  */
 public class QueryBuilder {
@@ -33,7 +33,7 @@ public class QueryBuilder {
 
   /**
    * Constructor.
-   * 
+   *
    * @param store Datastore to run this query on.
    */
   public QueryBuilder(DataStore<?> store) {
@@ -50,7 +50,7 @@ public class QueryBuilder {
 
   /**
    * Adds a where clause to the query.
-   * 
+   *
    * @param column Column to filter on
    * @param operator Operator to apply on the column.
    * @return A QueryBuilder with the given filter.
@@ -67,7 +67,7 @@ public class QueryBuilder {
 
   /**
    * Adds a where clause to the query.
-   * 
+   *
    * @param column Column to filter on
    * @param operator Operator to apply on the column.
    * @param value The value to be compared with column value.
@@ -84,26 +84,51 @@ public class QueryBuilder {
   }
 
   /**
+   * Adds a where clause to the query, only applicable for "IN" clause
+   *
+   * @param column Column to filter on
+   * @param operator Operator to apply on the column.
+   * @param valueList The list of values to be compared with column value.
+   * @return A QueryBuilder with the given filter.
+   */
+  public QueryBuilder where(Column column, Operator operator, List<FilterValue<?>> valueList) {
+    if (filterList.size() > 0) {
+      throw new IllegalStateException("Cannot call Where multiple times. It must be called only once and at "
+          + "start of the filter defintion");
+    }
+    if (operator != Operator.IN) {
+      throw new IllegalArgumentException("List<FilterValue> only applicable for Operator IN and not for " + operator +
+          " with values " + valueList);
+    }
+    if (valueList == null) {
+      throw new IllegalArgumentException("Value cannot be Null for Operator IN");
+    }
+
+    filterList.add(new QueryFilter(column, operator, valueList));
+    return this;
+  }
+
+  /**
    * Adds an AND filter to the Query.
-   * <p>
+   * <p/>
    * All previous filters must also be AND filters.
-   * 
+   *
    * @param column Column to filter on
    * @param operator Operator to apply on the column.
    * @return A QueryBuilder with the given filter.
    */
   public QueryBuilder and(Column column, Operator operator) {
     assertValidFilter(column, operator, null);
-    assetCanAddFilter(FilterType.AND);
+    assertCanAddFilter(FilterType.AND);
     filterList.add(new QueryFilter(column, operator));
     return this;
   }
 
   /**
    * Adds an AND filter to the Query.
-   * <p>
+   * <p/>
    * All previous filters must also be AND filters.
-   * 
+   *
    * @param column Column to filter on
    * @param operator Operator to apply on the column.
    * @param value The value to be compared with column value.
@@ -111,32 +136,58 @@ public class QueryBuilder {
    */
   public QueryBuilder and(Column column, Operator operator, FilterValue<?> value) {
     assertValidFilter(column, operator, value);
-    assetCanAddFilter(FilterType.AND);
+    assertCanAddFilter(FilterType.AND);
     filterList.add(new QueryFilter(column, operator, value));
     return this;
   }
 
   /**
+   * Adds an AND filter to the query.
+   * <p/>
+   * All previous filters must also be AND filters.
+   *
+   * @param column Column to filter on
+   * @param operator Operator to apply on the column.
+   * @param valueList The list of values to be compared with column value.
+   * @return A QueryBuilder with the given filter.
+   */
+  public QueryBuilder and(Column column, Operator operator, List<FilterValue<?>> valueList) {
+    if (filterList.size() > 0) {
+      throw new IllegalStateException("Cannot call Where multiple times. It must be called only once and at "
+          + "start of the filter defintion");
+    }
+    if (operator != Operator.IN) {
+      throw new IllegalArgumentException("List<FilterValue> only applicable for Operator IN");
+    }
+    if (valueList == null) {
+      throw new IllegalArgumentException("Value cannot be Null for Operator IN");
+    }
+    assertCanAddFilter(FilterType.AND);
+    filterList.add(new QueryFilter(column, operator, valueList));
+    return this;
+  }
+
+  /**
    * Adds an OR filter to the Query.
-   * <p>
+   * <p/>
    * All previous filters must also be OR filters.
-   * 
+   *
    * @param column Column to filter on
    * @param operator Operator to apply on the column.
    * @return A QueryBuilder with the given filter.
    */
   public QueryBuilder or(Column column, Operator operator) {
     assertValidFilter(column, operator, null);
-    assetCanAddFilter(FilterType.OR);
+    assertCanAddFilter(FilterType.OR);
     filterList.add(new QueryFilter(column, operator));
     return this;
   }
 
   /**
    * Adds an OR filter to the Query.
-   * <p>
+   * <p/>
    * All previous filters must also be OR filters.
-   * 
+   *
    * @param column Column to filter on
    * @param operator Operator to apply on the column.
    * @param value The value to be compared with column value.
@@ -144,14 +195,40 @@ public class QueryBuilder {
    */
   public QueryBuilder or(Column column, Operator operator, FilterValue<?> value) {
     assertValidFilter(column, operator, value);
-    assetCanAddFilter(FilterType.OR);
+    assertCanAddFilter(FilterType.OR);
     filterList.add(new QueryFilter(column, operator, value));
     return this;
   }
 
   /**
+   * Adds an OR filter to the query.
+   * <p/>
+   * All previous filters must also be OR filters.
+   *
+   * @param column Column to filter on
+   * @param operator Operator to apply on the column.
+   * @param valueList The list of values to be compared with column value.
+   * @return A QueryBuilder with the given filter.
+   */
+  public QueryBuilder or(Column column, Operator operator, List<FilterValue<?>> valueList) {
+    if (filterList.size() > 0) {
+      throw new IllegalStateException("Cannot call Where multiple times. It must be called only once and at "
+          + "start of the filter defintion");
+    }
+    if (operator != Operator.IN) {
+      throw new IllegalArgumentException("List<FilterValue> only applicable for Operator IN");
+    }
+    if (valueList == null) {
+      throw new IllegalArgumentException("Value cannot be Null for Operator IN");
+    }
+    assertCanAddFilter(FilterType.OR);
+    filterList.add(new QueryFilter(column, operator, valueList));
+    return this;
+  }
+
+  /**
    * Builds the query to allow rows to be returned in a order defined by a specific column
-   * 
+   *
    * @param column Column to define the filter on.
    * @param ascendingOrder Indicates whether data needs to sorted on ascending order of column value.
    * @return The current QueryBuilder
@@ -176,13 +253,17 @@ public class QueryBuilder {
 
       whereClauseBuilder.append(" (").append(filter.getColumn().getName()).append(" ")
           .append(filter.getOperation().getSqlString());
-      String value = filter.getValue().getStringValue(filter.getColumn());
-      if (value != null) {
-        whereClauseBuilder.append(" ? ");
-        if (filter.getOperation().equals(Operator.LIKE)) {
-          value = "%" + value + "%";
+      if (filter.getOperation() == Operator.IN) {
+        whereClauseBuilder.append(buildInQuery(filter, valueList));
+      } else {
+        String value = filter.getValue().getStringValue(filter.getColumn());
+        if (value != null) {
+          whereClauseBuilder.append(" ? ");
+          if (filter.getOperation().equals(Operator.LIKE)) {
+            value = "%" + value + "%";
+          }
+          valueList.add(value);
         }
-        valueList.add(value);
       }
       whereClauseBuilder.append(")");
       isFirst = false;
@@ -218,9 +299,9 @@ public class QueryBuilder {
 
   /**
    * Asserts whether a Filter Operation and Value pair is valid or not.
-   * <p>
+   * <p/>
    * Performs a simple validation to check if the given Operator supports passing of values or not.
-   * 
+   *
    * @param column Column for the filter.
    * @param operator Operator for the filter.
    * @param value Value for the filter.
@@ -229,12 +310,12 @@ public class QueryBuilder {
     if (value != null && (operator == Operator.IS_NULL || operator == Operator.IS_NOT_NULL)) {
       throw new IllegalArgumentException("Cannot add filter for Operator " + operator + " with a value "
           + value.getStringValue(column));
-    } else if (value == null && (operator != Operator.IS_NULL || operator != Operator.IS_NOT_NULL)) {
+    } else if (value == null && (operator != Operator.IS_NULL && operator != Operator.IS_NOT_NULL)) {
       throw new IllegalArgumentException("Cannot add filter for Operator " + operator + " without a value");
     }
   }
 
-  private void assetCanAddFilter(FilterType newFilterType) {
+  private void assertCanAddFilter(FilterType newFilterType) {
     if (filterList.size() == 0) {
       throw new IllegalStateException("A query filter must be defined by first calling Where and then adding other"
           + " filters by calling AND or OR");
@@ -249,5 +330,29 @@ public class QueryBuilder {
           + newFilterType.name() + " Condition when all previous filter conditions use an " + filterType.name()
           + " clause");
     }
+  }
+
+  /**
+   * Builds the Query String for Clause "IN"
+   *
+   * @param filter : QueryFilter carrying the list of values
+   * @param valueList : ValueList to be added to
+   * @return : WhereClause
+   */
+  private String buildInQuery(QueryFilter filter, List<String> valueList) {
+    List<FilterValue<?>> values = filter.getValues();
+    StringBuilder whereClauseBuilder = new StringBuilder(" (");
+    int count = 0;
+    for (FilterValue<?> value : values) {
+      String stringValue = value.getStringValue(filter.getColumn());
+      valueList.add(stringValue);
+      whereClauseBuilder.append("?");
+      count++;
+      if (values.size() != count) {
+        whereClauseBuilder.append(",");
+      }
+    }
+    whereClauseBuilder.append(")");
+    return whereClauseBuilder.toString();
   }
 }
