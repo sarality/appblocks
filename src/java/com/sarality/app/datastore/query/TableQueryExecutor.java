@@ -18,10 +18,10 @@ public class TableQueryExecutor {
   /**
    * Queries the DataStore given the name of the Table and name of the primary key
    *
-   * @param tableName       : Name of the Table
-   * @param primaryKey      : Primary key Column
+   * @param tableName : Name of the Table
+   * @param primaryKey : Primary key Column
    * @param primaryKeyValue : Value
-   * @param <T>             : DataType within the DataStore
+   * @param <T> : DataType within the DataStore
    * @return : Returns the data T based on the query
    */
   public static <T extends DataObject<T>> T queryByPrimaryKey(String tableName, Column primaryKey, Long primaryKeyValue) {
@@ -49,14 +49,14 @@ public class TableQueryExecutor {
   /**
    * Queries the DataStore given the name of the Table and name of the primary key
    *
-   * @param tableName         : Name of the Table
-   * @param primaryKey        : Primary key Column
+   * @param tableName : Name of the Table
+   * @param primaryKey : Primary key Column
    * @param primaryKeyValues: list of Values
-   * @param <T>               : DataType within the DataStore
+   * @param <T> : DataType within the DataStore
    * @return : Returns the list of dataType T based on the query
    */
   public static <T extends DataObject<T>> List<T> queryByPrimaryKeys(String tableName, Column primaryKey,
-                                                                     List<Long> primaryKeyValues) {
+      List<Long> primaryKeyValues) {
     TableRegistry registry = TableRegistry.getGlobalInstance();
     @SuppressWarnings("unchecked")
     Table<T> table = (Table<T>) registry.getTable(tableName);

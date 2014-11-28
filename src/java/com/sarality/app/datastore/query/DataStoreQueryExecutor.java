@@ -18,14 +18,14 @@ public class DataStoreQueryExecutor {
   /**
    * Queries the DataStore given the name of the DataStore and name of the primary key
    *
-   * @param dataStoreName   : Name of the DataStore
-   * @param primaryKey      : Primary key Column
+   * @param dataStoreName : Name of the DataStore
+   * @param primaryKey : Primary key Column
    * @param primaryKeyValue : Value
-   * @param <T>             : DataType within the DataStore
+   * @param <T> : DataType within the DataStore
    * @return : Returns the data T based on the query
    */
   public static <T extends DataObject<T>> T queryByPrimaryKey(String dataStoreName, Column primaryKey,
-                                                              Long primaryKeyValue) {
+      Long primaryKeyValue) {
     DataStoreRegistry dataStoreRegistry = DataStoreRegistry.getGlobalInstance();
     @SuppressWarnings("unchecked")
     DataStore<T> dataStore = (DataStore<T>) dataStoreRegistry.getDataStore(dataStoreName);
@@ -50,10 +50,10 @@ public class DataStoreQueryExecutor {
   /**
    * Queries the DataStore given the name of the DataStore and name of the primary key
    *
-   * @param dataStoreName    : Name of the data Store
-   * @param primaryKey       : Primary key Column
+   * @param dataStoreName : Name of the data Store
+   * @param primaryKey : Primary key Column
    * @param primaryKeyValues : list of values
-   * @param <T>              : DataType within the DataStore
+   * @param <T> : DataType within the DataStore
    * @return : Returns the list of dataType T based on the query
    */
   public static <T> List<T> queryByPrimaryKeys(String dataStoreName, Column primaryKey, List<Long> primaryKeyValues) {

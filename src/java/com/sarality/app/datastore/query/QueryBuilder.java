@@ -51,7 +51,7 @@ public class QueryBuilder {
   /**
    * Adds a where clause to the query.
    *
-   * @param column   Column to filter on
+   * @param column Column to filter on
    * @param operator Operator to apply on the column.
    * @return A QueryBuilder with the given filter.
    */
@@ -68,9 +68,9 @@ public class QueryBuilder {
   /**
    * Adds a where clause to the query.
    *
-   * @param column   Column to filter on
+   * @param column Column to filter on
    * @param operator Operator to apply on the column.
-   * @param value    The value to be compared with column value.
+   * @param value The value to be compared with column value.
    * @return A QueryBuilder with the given filter.
    */
   public QueryBuilder where(Column column, Operator operator, FilterValue<?> value) {
@@ -84,10 +84,10 @@ public class QueryBuilder {
   }
 
   /**
-   * Adds a where clause to the query.
+   * Adds a where clause to the query, only applicable for "IN" clause
    *
-   * @param column    Column to filter on
-   * @param operator  Operator to apply on the column.
+   * @param column Column to filter on
+   * @param operator Operator to apply on the column.
    * @param valueList The list of values to be compared with column value.
    * @return A QueryBuilder with the given filter.
    */
@@ -97,7 +97,8 @@ public class QueryBuilder {
           + "start of the filter defintion");
     }
     if (operator != Operator.IN) {
-      throw new IllegalArgumentException("List<FilterValue> only applicable for Operator IN");
+      throw new IllegalArgumentException("List<FilterValue> only applicable for Operator IN and not for " + operator +
+          " with values " + valueList);
     }
     if (valueList == null) {
       throw new IllegalArgumentException("Value cannot be Null for Operator IN");
@@ -112,7 +113,7 @@ public class QueryBuilder {
    * <p/>
    * All previous filters must also be AND filters.
    *
-   * @param column   Column to filter on
+   * @param column Column to filter on
    * @param operator Operator to apply on the column.
    * @return A QueryBuilder with the given filter.
    */
@@ -128,9 +129,9 @@ public class QueryBuilder {
    * <p/>
    * All previous filters must also be AND filters.
    *
-   * @param column   Column to filter on
+   * @param column Column to filter on
    * @param operator Operator to apply on the column.
-   * @param value    The value to be compared with column value.
+   * @param value The value to be compared with column value.
    * @return A QueryBuilder with the given filter.
    */
   public QueryBuilder and(Column column, Operator operator, FilterValue<?> value) {
@@ -145,8 +146,8 @@ public class QueryBuilder {
    * <p/>
    * All previous filters must also be AND filters.
    *
-   * @param column    Column to filter on
-   * @param operator  Operator to apply on the column.
+   * @param column Column to filter on
+   * @param operator Operator to apply on the column.
    * @param valueList The list of values to be compared with column value.
    * @return A QueryBuilder with the given filter.
    */
@@ -171,7 +172,7 @@ public class QueryBuilder {
    * <p/>
    * All previous filters must also be OR filters.
    *
-   * @param column   Column to filter on
+   * @param column Column to filter on
    * @param operator Operator to apply on the column.
    * @return A QueryBuilder with the given filter.
    */
@@ -187,9 +188,9 @@ public class QueryBuilder {
    * <p/>
    * All previous filters must also be OR filters.
    *
-   * @param column   Column to filter on
+   * @param column Column to filter on
    * @param operator Operator to apply on the column.
-   * @param value    The value to be compared with column value.
+   * @param value The value to be compared with column value.
    * @return A QueryBuilder with the given filter.
    */
   public QueryBuilder or(Column column, Operator operator, FilterValue<?> value) {
@@ -204,8 +205,8 @@ public class QueryBuilder {
    * <p/>
    * All previous filters must also be OR filters.
    *
-   * @param column    Column to filter on
-   * @param operator  Operator to apply on the column.
+   * @param column Column to filter on
+   * @param operator Operator to apply on the column.
    * @param valueList The list of values to be compared with column value.
    * @return A QueryBuilder with the given filter.
    */
@@ -228,7 +229,7 @@ public class QueryBuilder {
   /**
    * Builds the query to allow rows to be returned in a order defined by a specific column
    *
-   * @param column         Column to define the filter on.
+   * @param column Column to define the filter on.
    * @param ascendingOrder Indicates whether data needs to sorted on ascending order of column value.
    * @return The current QueryBuilder
    */
@@ -301,9 +302,9 @@ public class QueryBuilder {
    * <p/>
    * Performs a simple validation to check if the given Operator supports passing of values or not.
    *
-   * @param column   Column for the filter.
+   * @param column Column for the filter.
    * @param operator Operator for the filter.
-   * @param value    Value for the filter.
+   * @param value Value for the filter.
    */
   private void assertValidFilter(Column column, Operator operator, FilterValue<?> value) {
     if (value != null && (operator == Operator.IS_NULL || operator == Operator.IS_NOT_NULL)) {
@@ -334,7 +335,7 @@ public class QueryBuilder {
   /**
    * Builds the Query String for Clause "IN"
    *
-   * @param filter    : QueryFilter carrying the list of values
+   * @param filter : QueryFilter carrying the list of values
    * @param valueList : ValueList to be added to
    * @return : WhereClause
    */
