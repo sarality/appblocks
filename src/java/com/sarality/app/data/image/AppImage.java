@@ -44,4 +44,8 @@ public class AppImage {
   public final String getFilename() {
     return filename;
   }
+
+  public ImageSource getImageSource() {
+    return imageSource;
+  }
 }
