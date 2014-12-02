@@ -1,17 +1,18 @@
 package com.sarality.app.common.datetime;
 
-import hirondelle.date4j.DateTime;
-
 import java.util.Locale;
+
+import hirondelle.date4j.DateTime;
 
 /**
  * Formats DateTime into one of the time formats
- * 
+ *
  * @author sunayna (Sunayna Uberoy)
  */
 public class DateTimeFormatter {
   public enum Format {
-    TIME_ONLY("hh12:mm a");
+    TIME_ONLY("hh12:mm a"),
+    DATE_ONLY("WWW, MMM DD");
 
     private final String format;
 
