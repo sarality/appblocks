@@ -1,9 +1,9 @@
 package com.sarality.app.data;
 
+import com.sarality.app.common.collect.Maps;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import com.sarality.app.common.collect.Maps;
 
 /**
  * A Global Registry for all EnumDatas in the system.
@@ -43,7 +43,7 @@ public class EnumDataRegistry {
    * @param loader The loader to load the EnumData from
    * @param <T> The type of EnumData
    */
-  <T extends EnumData<T>> void registerLoader(Class<T> enumClass, EnumDataLoader<T> loader) {
+  public <T extends EnumData<T>> void registerLoader(Class<T> enumClass, EnumDataLoader<T> loader) {
     enumDataLoaderMap.put(enumClass, loader);
   }
 
