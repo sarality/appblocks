@@ -43,7 +43,7 @@ public class EnumDataRegistry {
    * @param loader The loader to load the EnumData from
    * @param <T> The type of EnumData
    */
-  <T extends EnumData<T>> void registerLoader(Class<T> enumClass, EnumDataLoader<T> loader) {
+  public <T extends EnumData<T>> void registerLoader(Class<T> enumClass, EnumDataLoader<T> loader) {
     enumDataLoaderMap.put(enumClass, loader);
   }
 
