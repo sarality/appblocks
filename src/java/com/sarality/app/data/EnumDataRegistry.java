@@ -16,6 +16,7 @@ public class EnumDataRegistry {
   
   // Global static map that stores a Class wise Map of Maps. The inner map has Name and DataEnum Entries.
   private final Map<Class<? extends EnumData<?>>, Map<String, EnumData<?>>> enumDataMap = Maps.empty();
+  private final Map<Class<? extends EnumData<?>>, EnumDataLoader<?>> enumDataLoaderMap = Maps.empty();
 
   /**
    * Register a EnumData instance.
@@ -24,12 +25,26 @@ public class EnumDataRegistry {
    * 
    * @param enumClass Class of DataEnum.
    * @param enumData The EnumData instance.
+   * @param <T> The type of EnumData
    */
   <T extends EnumData<T>> void register(Class<T> enumClass, T enumData) {
     if (!enumDataMap.containsKey(enumClass)) {
       enumDataMap.put(enumClass, new HashMap<String, EnumData<?>>());
     }
     enumDataMap.get(enumClass).put(enumData.getEnumName(), enumData);
+  }
+
+  /**
+   * Register the loader to load the EnumData from a Persistent Store.
+   * <p/>
+   * Used when EnumData with given name is not found.
+   *
+   * @param enumClass Class of EnumData.
+   * @param loader The loader to load the EnumData from
+   * @param <T> The type of EnumData
+   */
+  <T extends EnumData<T>> void registerLoader(Class<T> enumClass, EnumDataLoader<T> loader) {
+    enumDataLoaderMap.put(enumClass, loader);
   }
 
   /**
@@ -44,11 +59,24 @@ public class EnumDataRegistry {
     if (dataMap != null) {
       @SuppressWarnings("unchecked")
       E value = (E) dataMap.get(name);
-      return value;
+      if (value != null) {
+        return value;
+      }
+    }
+    return loadFromLoader(enumClass, name);
+  }
+
+  private <E extends EnumData<E>> E loadFromLoader(Class<E> enumClass, String name) {
+    if (enumDataLoaderMap.containsKey(enumClass)) {
+      @SuppressWarnings("unchecked")
+      EnumDataLoader<E> loader = (EnumDataLoader<E>) enumDataLoaderMap.get(enumClass);
+      if (loader != null) {
+        return loader.load(name);
+      }
     }
     return null;
   }
-  
+
   public static final EnumDataRegistry getGlobalInstance() {
     return GLOBAL_INSTANCE;
   }
