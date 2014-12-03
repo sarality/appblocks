@@ -317,7 +317,7 @@ public class QueryBuilder {
 
   private void assertCanAddFilter(FilterType newFilterType) {
     if (filterList.size() == 0) {
-      throw new IllegalStateException("A execute filter must be defined by first calling Where and then adding other"
+      throw new IllegalStateException("A query filter must be defined by first calling Where and then adding other"
           + " filters by calling AND or OR");
     }
 
