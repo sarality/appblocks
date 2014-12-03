@@ -48,6 +48,10 @@ public class QueryBuilder {
     return store;
   }
 
+  public int getNumFilters() {
+    return filterList.size();
+  }
+
   /**
    * Adds a where clause to the query.
    *
@@ -152,10 +156,6 @@ public class QueryBuilder {
    * @return A QueryBuilder with the given filter.
    */
   public QueryBuilder and(Column column, Operator operator, List<FilterValue<?>> valueList) {
-    if (filterList.size() > 0) {
-      throw new IllegalStateException("Cannot call Where multiple times. It must be called only once and at "
-          + "start of the filter defintion");
-    }
     if (operator != Operator.IN) {
       throw new IllegalArgumentException("List<FilterValue> only applicable for Operator IN");
     }
@@ -317,7 +317,7 @@ public class QueryBuilder {
 
   private void assertCanAddFilter(FilterType newFilterType) {
     if (filterList.size() == 0) {
-      throw new IllegalStateException("A query filter must be defined by first calling Where and then adding other"
+      throw new IllegalStateException("A execute filter must be defined by first calling Where and then adding other"
           + " filters by calling AND or OR");
     }
 
