@@ -12,10 +12,10 @@ public class AppImage {
   private final ImageSource imageSource;
 
   public enum ImageSource {
-    NONE,
-    APP_RESOURCE,
-    URL,
-    LOCAL_FILE,
+    NONE, // No Image specified.
+    APP_RESOURCE, // An image resource defined in the App itself
+    URL, // Url to load the image from
+    LOCAL_FILE, // Image cached on local drive, used in conjunction with URL
   }
 
   public AppImage(Integer resourceId, String url, String filename) {
