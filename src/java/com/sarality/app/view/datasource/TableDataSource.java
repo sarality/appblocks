@@ -5,8 +5,15 @@ import java.util.List;
 
 import com.sarality.app.data.DataObject;
 import com.sarality.app.datastore.db.Table;
+import com.sarality.app.datastore.db.TableRegistry;
 import com.sarality.app.datastore.query.Query;
 
+/**
+ * DataSource that uses a Table to load its data.
+ *
+ * @param <T> Data returned by the DataSource and the underlying Table.
+ * @author abhideep@ (Abhideep Singh)
+ */
 public class TableDataSource<T extends DataObject<T>> implements DataSource<T> {
   private final Table<T> table;
   private final Query query;
@@ -15,6 +22,14 @@ public class TableDataSource<T extends DataObject<T>> implements DataSource<T> {
   public TableDataSource(Table<T> table, Query query) {
     this.table = table;
     this.query = query;
+  }
+
+  public TableDataSource(String tableName, TableRegistry registry, Query query) {
+    this((Table<T>) registry.getTable(tableName), query);
+  }
+
+  public TableDataSource(String tableName, Query query) {
+    this(tableName, TableRegistry.getGlobalInstance(), query);
   }
 
   @Override
