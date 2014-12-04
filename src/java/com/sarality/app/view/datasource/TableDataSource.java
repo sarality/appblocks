@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.sarality.app.data.DataObject;
 import com.sarality.app.datastore.db.Table;
+import com.sarality.app.datastore.db.TableRegistry;
 import com.sarality.app.datastore.query.Query;
 
 public class TableDataSource<T extends DataObject<T>> implements DataSource<T> {
@@ -15,6 +16,14 @@ public class TableDataSource<T extends DataObject<T>> implements DataSource<T> {
   public TableDataSource(Table<T> table, Query query) {
     this.table = table;
     this.query = query;
+  }
+
+  public TableDataSource(String tableName, TableRegistry registry, Query query) {
+    this((Table<T>) registry.getTable(tableName), query);
+  }
+
+  public TableDataSource(String tableName, Query query) {
+    this(tableName, TableRegistry.getGlobalInstance(), query);
   }
 
   @Override

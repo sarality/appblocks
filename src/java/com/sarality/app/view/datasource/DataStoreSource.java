@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.sarality.app.data.DataObject;
 import com.sarality.app.datastore.DataStore;
+import com.sarality.app.datastore.DataStoreRegistry;
 import com.sarality.app.datastore.query.Query;
 
 public class DataStoreSource<T extends DataObject<T>> implements DataSource<T> {
@@ -17,6 +18,15 @@ public class DataStoreSource<T extends DataObject<T>> implements DataSource<T> {
     this.store = store;
     this.query = query;
   }
+
+  public DataStoreSource(String storeName, DataStoreRegistry registry, Query query) {
+    this((DataStore<T>) registry.getDataStore(storeName), query);
+  }
+
+  public DataStoreSource(String storeName, Query query) {
+    this(storeName, DataStoreRegistry.getGlobalInstance(), query);
+  }
+
 
   @Override
   public boolean isStaticDataSet() {
