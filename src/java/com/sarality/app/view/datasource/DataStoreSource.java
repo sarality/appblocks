@@ -8,6 +8,12 @@ import com.sarality.app.datastore.DataStore;
 import com.sarality.app.datastore.DataStoreRegistry;
 import com.sarality.app.datastore.query.Query;
 
+/**
+ * DataSource that uses a DataStore to load its data.
+ *
+ * @param <T> Data returned by the DataSource and the underlying DataStore
+ * @author abhideep@ (Abhideep Singh)
+ */
 public class DataStoreSource<T extends DataObject<T>> implements DataSource<T> {
 
   private final DataStore<T> store;

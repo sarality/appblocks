@@ -8,6 +8,12 @@ import com.sarality.app.datastore.db.Table;
 import com.sarality.app.datastore.db.TableRegistry;
 import com.sarality.app.datastore.query.Query;
 
+/**
+ * DataSource that uses a Table to load its data.
+ *
+ * @param <T> Data returned by the DataSource and the underlying Table.
+ * @author abhideep@ (Abhideep Singh)
+ */
 public class TableDataSource<T extends DataObject<T>> implements DataSource<T> {
   private final Table<T> table;
   private final Query query;
