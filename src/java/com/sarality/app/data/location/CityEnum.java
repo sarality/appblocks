@@ -1,8 +1,6 @@
 package com.sarality.app.data.location;
 
-import com.sarality.app.common.collect.Lists;
 import com.sarality.app.data.EnumData;
-import com.sarality.app.data.image.AppImage;
 
 /**
  * Enumeration of all Cities predefined in the system.
@@ -26,7 +24,7 @@ public enum CityEnum implements EnumData<City> {
 
   @Override
   public City getEnumData() {
-    return new City(enumName, shortName, fullName, Lists.<AppImage>of());
+    return new City(enumName, shortName, fullName);
   }
 
   @Override
