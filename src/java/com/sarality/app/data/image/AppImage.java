@@ -10,6 +10,7 @@ public class AppImage {
   private final String url;
   private final String filename;
   private final ImageSource imageSource;
+  private final String label;
 
   public enum ImageSource {
     NONE, // No Image specified.
@@ -18,7 +19,7 @@ public class AppImage {
     LOCAL_FILE, // Image cached on local drive, used in conjunction with URL
   }
 
-  public AppImage(Integer resourceId, String url, String filename) {
+  public AppImage(Integer resourceId, String url, String filename, String label) {
     this.resourceId = resourceId;
     this.url = url;
     this.filename = filename;
@@ -31,6 +32,7 @@ public class AppImage {
     } else {
       imageSource = ImageSource.NONE;
     }
+    this.label = label;
   }
 
   public final Integer getResourceId() {
@@ -47,5 +49,9 @@ public class AppImage {
 
   public ImageSource getImageSource() {
     return imageSource;
+  }
+
+  public String getLabel() {
+    return label;
   }
 }
