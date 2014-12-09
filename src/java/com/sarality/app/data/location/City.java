@@ -1,13 +1,9 @@
 package com.sarality.app.data.location;
 
-import com.sarality.app.common.collect.Lists;
 import com.sarality.app.data.BaseEnumData;
-import com.sarality.app.data.image.AppImage;
-
-import java.util.List;
 
 /**
- * Data for a City
+ * Enum Data for a City.
  *
  * @author abhideep@ (Abhideep Singh)
  */

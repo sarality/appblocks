@@ -2,8 +2,6 @@ package com.sarality.app.datastore.query.executor;
 
 import com.sarality.app.common.collect.Lists;
 import com.sarality.app.data.DataObject;
-import com.sarality.app.data.DataTransformer;
-import com.sarality.app.data.ListDataTransformer;
 import com.sarality.app.datastore.query.Query;
 
 import java.util.ArrayList;
