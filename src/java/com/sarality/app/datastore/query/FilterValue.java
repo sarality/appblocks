@@ -31,7 +31,7 @@ public abstract class FilterValue<T> {
   /**
    * @return Value associated with the Filter
    */
-  protected T getValue() {
+  public T getValue() {
     return value;
   }
 
