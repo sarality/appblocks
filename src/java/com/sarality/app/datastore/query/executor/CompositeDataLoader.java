@@ -4,7 +4,6 @@ import com.sarality.app.common.collect.Lists;
 import com.sarality.app.data.DataObject;
 import com.sarality.app.datastore.query.Query;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,11 +16,10 @@ public class CompositeDataLoader<T extends DataObject<T>, I, A>
 
   private final QueryExecutor<T> queryExecutor;
 
-  private final List<AssociatedDataQuery<List<A>, List<T>>> associatedQueryList =
-      new ArrayList<AssociatedDataQuery<List<A>, List<T>>>();
+  private final List<AssociatedDataQuery<List<A>, List<T>>> associatedQueryList = Lists.of();
 
   private final List<AssociatedDataValueSetter<T, DataObject.Builder<T>, I, A>> associatedDataValueSetterList =
-      new ArrayList<AssociatedDataValueSetter<T, DataObject.Builder<T>, I, A>>();
+      Lists.of();
 
   public CompositeDataLoader(QueryExecutor<T> queryExecutor) {
     this.queryExecutor = queryExecutor;
@@ -41,7 +39,7 @@ public class CompositeDataLoader<T extends DataObject<T>, I, A>
 
     DataObject.Builder<T> dataValueBuilder = dataValue.getBuilder();
 
-    for (int i=0; i < associatedQueryList.size(); i++) {
+    for (int i = 0; i < associatedQueryList.size(); i++) {
       AssociatedDataQuery<List<A>, List<T>> associatedDataQuery = associatedQueryList.get(i);
       AssociatedDataValueSetter<T, DataObject.Builder<T>, I, A> associatedDataValueSetter
           = associatedDataValueSetterList.get(i);
