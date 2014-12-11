@@ -3,8 +3,6 @@ package com.sarality.app.datastore;
 import com.sarality.app.data.EnumData;
 import com.sarality.app.data.EnumDataObject;
 
-import java.util.Map;
-
 /**
  * Interface for all classes that compose an EnumDataObject.
  *
@@ -15,9 +13,10 @@ public interface EnumDataObjectComposer<E extends EnumData<E>, T extends EnumDat
   /**
    * Compose an EnumDataObject given an EumData.
    *
-   * @param enumData
-   * @param componentProviderMap
+   * @param enumData EnumData for which the EnumDataObject is being loaded.
+   * @param loader Loader which is calling this Composer to compose the EnumDataObject.
+   *
    * @return EnumDataObject that was composed.
    */
-  public T compose(E enumData, Map<String, AssociatedDataProvider<E, ?>> componentProviderMap);
+  public T compose(E enumData, EnumDataObjectLoader<E, T> loader);
 }
