@@ -12,7 +12,10 @@ import hirondelle.date4j.DateTime;
 public class DateTimeFormatter {
   public enum Format {
     TIME_ONLY("hh12:mm a"), // For example 04:12 pm
-    DATE_ONLY("WWW, MMM DD"); // For example Mon, Dec 24
+    COMPLETE_DATE("WWW, MMM DD"), // For example Mon, Dec 24
+    MONTH_ONLY("MMM"), // For example Dec
+    DAY_ONLY("WWW"), // For example Mon
+    DATE_ONLY("DD"); // For example 09
 
     private final String format;
 
