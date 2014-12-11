@@ -1,5 +1,7 @@
 package com.sarality.app.data;
 
+import java.util.Arrays;
+
 /**
  * Base implementation that all EnumData implements must extend.
  * <p>
@@ -50,6 +52,12 @@ public abstract class BaseEnumData<T extends EnumData<T>> implements EnumData<T>
   @Override
   public String getEnumName() {
     return enumName;
+  }
+
+  @Override
+  public int hashCode() {
+    // TODO: Add enumClass to the hash as well after we make it a class member.
+    return Arrays.hashCode(new Object[] {enumName});
   }
 
   /**
