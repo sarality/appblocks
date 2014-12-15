@@ -7,6 +7,7 @@ import com.sarality.app.view.action.BaseViewAction;
 import com.sarality.app.view.action.TriggerType;
 import com.sarality.app.view.action.ViewActionTrigger;
 import com.sarality.app.view.action.ViewDetail;
+import com.sarality.app.view.fragment.RefreshableFragment;
 import com.sarality.app.view.nav.BundleGenerator;
 
 /**

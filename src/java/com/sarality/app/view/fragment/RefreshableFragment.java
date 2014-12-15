@@ -1,4 +1,4 @@
-package com.sarality.app.view.fragment.action;
+package com.sarality.app.view.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
