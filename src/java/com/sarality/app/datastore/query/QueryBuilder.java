@@ -256,8 +256,8 @@ public class QueryBuilder {
       if (filter.getOperation() == Operator.IN) {
         whereClauseBuilder.append(buildInQuery(filter, valueList));
       } else {
-        String value = filter.getValue().getStringValue(filter.getColumn());
-        if (value != null) {
+        if (filter.getValue() != null) {
+          String value = filter.getValue().getStringValue(filter.getColumn());
           whereClauseBuilder.append(" ? ");
           if (filter.getOperation().equals(Operator.LIKE)) {
             value = "%" + value + "%";
