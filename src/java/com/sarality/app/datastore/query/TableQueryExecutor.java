@@ -75,4 +75,27 @@ public class TableQueryExecutor {
       table.close();
     }
   }
+
+  /**
+   * Queries the DataStore given the name of the Table , returns all values in the table
+   *
+   * @param tableName : Name of the Table
+   * @param primaryKey : Primary key Column
+   * @param <T> : DataType within the DataStore
+   * @return : Returns the data T based on the query
+   */
+  public static <T extends DataObject<T>> List<T> queryPrimaryKeyNotNull(String tableName, Column primaryKey) {
+    TableRegistry registry = TableRegistry.getGlobalInstance();
+    @SuppressWarnings("unchecked")
+    Table<T> table = (Table<T>) registry.getTable(tableName);
+
+    QueryBuilder queryBuilder = new QueryBuilder(table);
+    queryBuilder.where(primaryKey, Operator.IS_NOT_NULL);
+    try {
+      table.open();
+      return table.query(queryBuilder.build());
+    } finally {
+      table.close();
+    }
+  }
 }
