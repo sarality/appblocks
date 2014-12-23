@@ -20,7 +20,7 @@ public interface DataSource<T> {
   public void loadData();
 
   /**
-   * @return List of data that needs to be displayed
+   * @return The data that needs to be displayed
    */
-  public List<T> getData();
+  public T getData();
 }

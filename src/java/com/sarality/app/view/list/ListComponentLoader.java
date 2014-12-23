@@ -10,9 +10,9 @@ import com.sarality.app.view.datasource.DataSource;
 
 public class ListComponentLoader<T> extends AsyncTaskLoader<List<T>> {
 
-  private final DataSource<T> datasource;
+  private final DataSource<List<T>> datasource;
 
-  public ListComponentLoader(Context context, DataSource<T> datasource) {
+  public ListComponentLoader(Context context, DataSource<List<T>> datasource) {
     super(context);
     this.datasource = datasource;
   }

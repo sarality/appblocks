@@ -90,7 +90,7 @@ public class ListComponent<T> {
    * 
    * @param source
    */
-  public void init(DataSource<T> source) {
+  public void init(DataSource<List<T>> source) {
     loader = new ListComponentLoader<T>(activity, source);
     render(loader.loadData());
   }
@@ -98,9 +98,9 @@ public class ListComponent<T> {
   /**
    * Initialize the ListComponent to load data Asynchronously
    * 
-   * @param source
+   * @param dataSource
    */
-  public void initAsync(DataSource<T> dataSource) {
+  public void initAsync(DataSource<List<T>> dataSource) {
     loaderCallback = new ListComponentLoaderCallback<T>(activity, dataSource, this);
     activity.getSupportLoaderManager().initLoader(0, null, loaderCallback).forceLoad();
   }
@@ -119,7 +119,7 @@ public class ListComponent<T> {
   /**
    * Renders the view
    * 
-   * @param adapter
+   * @param data
    */
   public void render(List<T> data) {
     setAdapter(createAdapter(data));
