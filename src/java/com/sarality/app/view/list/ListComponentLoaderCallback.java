@@ -17,12 +17,12 @@ import com.sarality.app.view.datasource.DataSource;
  */
 public class ListComponentLoaderCallback<T> implements LoaderManager.LoaderCallbacks<List<T>>{
 
-  private final DataSource<T> dataSource;
+  private final DataSource<List<T>> dataSource;
   private final Activity context;
   private ListComponentLoader<T> loader;
   private final ListComponent<T> component;
   
-  public ListComponentLoaderCallback(Activity context, DataSource<T> dataSource, ListComponent<T> component){
+  public ListComponentLoaderCallback(Activity context, DataSource<List<T>> dataSource, ListComponent<T> component){
     this.context = context;
     this.dataSource = dataSource;
     this.component = component;

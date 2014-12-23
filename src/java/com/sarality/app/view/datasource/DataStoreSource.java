@@ -14,7 +14,7 @@ import com.sarality.app.datastore.query.Query;
  * @param <T> Data returned by the DataSource and the underlying DataStore
  * @author abhideep@ (Abhideep Singh)
  */
-public class DataStoreSource<T extends DataObject<T>> implements DataSource<T> {
+public class DataStoreSource<T extends DataObject<T>> implements DataSource<List<T>> {
 
   private final DataStore<T> store;
   private final Query query;

@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @param <T> Type of data provided by the data set.
  */
-public class StaticDataSource<T> implements DataSource<T> {
+public class StaticDataSource<T> implements DataSource<List<T>> {
   private final List<T> dataset = new ArrayList<T>();
 
   public StaticDataSource(T... elements) {

@@ -7,13 +7,13 @@ import com.sarality.app.view.list.ListItemGroupGenerator;
 import com.sarality.app.view.list.SectionListGroup;
 import com.sarality.app.view.list.SectionListItem;
 
-public class SectionListItemDataSource<H, I> implements DataSource<SectionListItem<H, I>> {
+public class SectionListItemDataSource<H, I> implements DataSource<List<SectionListItem<H, I>>> {
 
-  private final DataSource<I> source;
+  private final DataSource<List<I>> source;
   private final ListItemGroupGenerator<H, I> groupGenerator;
   private List<SectionListItem<H, I>> sectionItemList;
 
-  public SectionListItemDataSource(DataSource<I> source, ListItemGroupGenerator<H, I> groupGenerator) {
+  public SectionListItemDataSource(DataSource<List<I>> source, ListItemGroupGenerator<H, I> groupGenerator) {
     this.source = source;
     this.groupGenerator = groupGenerator;
   }
