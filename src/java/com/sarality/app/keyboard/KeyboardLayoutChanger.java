@@ -2,6 +2,7 @@ package com.sarality.app.keyboard;
 
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
+import android.view.inputmethod.EditorInfo;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,7 +14,7 @@ import java.util.Map;
  *
  * @author abhideep@ (Abhideep Singh)
  */
-public class KeyboardChanger {
+public class KeyboardLayoutChanger {
 
   private final KeyboardView keyboardView;
   private final Map<Integer, Keyboard> keyboardMap = new HashMap<Integer, Keyboard>();
@@ -23,7 +24,7 @@ public class KeyboardChanger {
    *
    * @param keyboardView The Keyboard View that this changes the keyboard for.
    */
-  public KeyboardChanger(KeyboardView keyboardView) {
+  public KeyboardLayoutChanger(KeyboardView keyboardView) {
     this.keyboardView = keyboardView;
   }
 
