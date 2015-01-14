@@ -1,8 +1,5 @@
 package com.sarality.app.view.list;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.support.v4.app.FragmentActivity;
 import android.widget.ListView;
 
@@ -10,11 +7,14 @@ import com.sarality.app.view.action.ComponentActionManager;
 import com.sarality.app.view.action.ViewAction;
 import com.sarality.app.view.datasource.DataSource;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Component used to render a ListView and setup the associated actions for it.
- * 
- * @author abhideep@ (Abhideep Singh)
+ *
  * @param <T> Type of data that is used to render the ListView.
+ * @author abhideep@ (Abhideep Singh)
  */
 public class ListComponent<T> {
 
@@ -38,10 +38,18 @@ public class ListComponent<T> {
 
   private ListComponentLoader<T> loader;
 
+  private ListComponentSorter<T> sorter;
+
   public ListComponent(FragmentActivity activity, ListView view, ListRowRenderer<T> rowRenderer) {
+    this(activity, view, rowRenderer, null);
+  }
+
+  public ListComponent(FragmentActivity activity, ListView view, ListRowRenderer<T> rowRenderer,
+                       ListComponentSorter<T> sorter) {
     this.activity = activity;
     this.view = view;
     this.rowRenderer = rowRenderer;
+    this.sorter = sorter;
   }
 
   /**
@@ -53,7 +61,7 @@ public class ListComponent<T> {
 
   /**
    * Register an action for each row in the List.
-   * 
+   *
    * @param action Action to be setup for each row of the List.
    */
   public void registerRowAction(ViewAction action) {
@@ -62,9 +70,9 @@ public class ListComponent<T> {
 
   /**
    * Register an action for the entire list.
-   * <p>
+   * <p/>
    * ListItemListener based actions are setup here as well
-   * 
+   *
    * @param action Action to be setup for the List.
    */
   public void registerAction(ViewAction action) {
@@ -87,17 +95,21 @@ public class ListComponent<T> {
 
   /**
    * Initialize the ListComponent with the given DataSource
-   * 
+   *
    * @param source
    */
   public void init(DataSource<List<T>> source) {
     loader = new ListComponentLoader<T>(activity, source);
-    render(loader.loadData());
+    List<T> dataList = loader.loadData();
+    if (sorter != null) {
+      dataList = sorter.sort(dataList);
+    }
+    render(dataList);
   }
 
   /**
    * Initialize the ListComponent to load data Asynchronously
-   * 
+   *
    * @param dataSource
    */
   public void initAsync(DataSource<List<T>> dataSource) {
@@ -107,7 +119,7 @@ public class ListComponent<T> {
 
   /**
    * Creates the Default Adapter and sets the adapter on the view
-   * 
+   *
    * @param data : Adapter to be created for this list of data
    */
   protected ListComponentAdapter<T> createAdapter(List<T> data) {
@@ -118,7 +130,7 @@ public class ListComponent<T> {
 
   /**
    * Renders the view
-   * 
+   *
    * @param data
    */
   public void render(List<T> data) {
@@ -127,7 +139,7 @@ public class ListComponent<T> {
 
   /**
    * Sets the adapter on the view
-   * 
+   *
    * @param adapter
    */
   private void setAdapter(ListComponentAdapter<?> adapter) {
@@ -136,7 +148,7 @@ public class ListComponent<T> {
 
   /**
    * Refresh the data from the source and re-render
-   * 
+   *
    * @param
    */
   public void refresh() {
