@@ -10,7 +10,7 @@ import android.view.inputmethod.InputConnection;
 import com.sarality.app.view.EditorView;
 
 /**
- * Process the keys pressed on a Keyboard and composes the out to be shown in the editor.
+ * Process the keys pressed on a Keyboard and composes the output to be shown in the editor.
  *
  * @author abhideep@ (Abhideep Singh)
  */
@@ -106,6 +106,10 @@ public class KeyboardOutputComposer {
       }
       keyboardView.setShifted(isCapsLockEnabled || caps != 0);
     }
+  }
+
+  public void resetText() {
+    outputBuilder.setLength(0);
   }
 
   private void handleClose() {

@@ -9,11 +9,11 @@ import android.inputmethodservice.KeyboardView;
  */
 public class KeyboardActionListener implements KeyboardView.OnKeyboardActionListener {
 
-  private final KeyboardChanger keyboardChanger;
+  private final KeyboardLayoutChanger keyboardLayoutChanger;
   private final KeyboardOutputComposer outputComposer;
 
-  public KeyboardActionListener(KeyboardChanger keyboardChanger, KeyboardOutputComposer outputComposer) {
-    this.keyboardChanger = keyboardChanger;
+  public KeyboardActionListener(KeyboardLayoutChanger keyboardLayoutChanger, KeyboardOutputComposer outputComposer) {
+    this.keyboardLayoutChanger = keyboardLayoutChanger;
     this.outputComposer = outputComposer;
   }
 
@@ -27,7 +27,7 @@ public class KeyboardActionListener implements KeyboardView.OnKeyboardActionList
 
   @Override
   public void onKey(int primaryCode, int[] keyCodes) {
-    boolean keyProcessed = keyboardChanger.handleKey(primaryCode);
+    boolean keyProcessed = keyboardLayoutChanger.handleKey(primaryCode);
     if (!keyProcessed) {
       outputComposer.handleKey(primaryCode, keyCodes);
     }

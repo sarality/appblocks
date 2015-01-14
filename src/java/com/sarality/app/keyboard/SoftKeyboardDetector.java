@@ -1,28 +1,28 @@
 package com.sarality.app.keyboard;
 
-import android.app.Activity;
-import android.content.Context;
 import android.graphics.Rect;
 import android.view.View;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
-import android.view.inputmethod.InputMethodManager;
 
 /**
- * Hides the default softkeyboard for the given view in the given activity.
- * 
+ * Detects if the System keyboard is displayed and notifies the listener of the visibility state change.
+ *
  * @author abhideep@ (Abhideep Singh)
  */
-public class SystemKeyboardHider {
+public class SoftKeyboardDetector {
 
   private final View activityRootView;
-  private final Activity activity;
+  private KeyboardStateChangeListener listener = null;
 
-  public SystemKeyboardHider(Activity activity, View activityRootView) {
-    this.activity = activity;
+  public SoftKeyboardDetector(View activityRootView) {
     this.activityRootView = activityRootView;
   }
 
-  public void configure() {
+  public void setKeyboardStateChangeListener(KeyboardStateChangeListener listener) {
+    this.listener = listener;
+  }
+
+  public void detect() {
     activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
       @Override
       public void onGlobalLayout() {
@@ -34,17 +34,11 @@ public class SystemKeyboardHider {
         // and the visible portion of the view, then the keyboard is what is taking up all that space.
         int heightDiff = activityRootView.getRootView().getHeight() - (frame.bottom - frame.top);
         if (heightDiff > 50) {
-          hideSoftKeyboard();
+          if (listener != null) {
+            listener.onKeyboardVisible();
+          }
         }
       }
     });
-  }
-
-  private void hideSoftKeyboard() {
-    InputMethodManager mgr = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-    View currentView = activity.getCurrentFocus();
-    if (currentView != null) {
-      mgr.hideSoftInputFromWindow(currentView.getWindowToken(), 0);
-    }
   }
 }
