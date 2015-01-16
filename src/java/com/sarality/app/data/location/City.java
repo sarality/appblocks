@@ -11,12 +11,14 @@ public class City extends BaseEnumData<City> {
 
   private final String shortName;
   private final String fullName;
+  private final String oldName;
   private final Country country;
 
-  public City(String enumName, String shortName, String fullName, Country country) {
+  public City(String enumName, String shortName, String fullName, String oldName, Country country) {
     super(enumName);
     this.shortName = shortName;
     this.fullName = fullName;
+    this.oldName = oldName;
     this.country = country;
     register(City.class, this);
   }
@@ -27,6 +29,10 @@ public class City extends BaseEnumData<City> {
 
   public String getFullName() {
     return fullName;
+  }
+
+  public String getOldName() {
+    return oldName;
   }
 
   public Country getCountry() {
