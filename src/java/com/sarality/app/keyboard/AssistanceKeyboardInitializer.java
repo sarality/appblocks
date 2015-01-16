@@ -2,7 +2,6 @@ package com.sarality.app.keyboard;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.view.View;
@@ -22,14 +21,16 @@ public abstract class AssistanceKeyboardInitializer implements KeyboardStateChan
   private final KeyboardLayoutChanger keyboardLayoutChanger;
   private final KeyboardOutputComposer outputComposer;
   private final SoftKeyboardDetector softKeyboardDetector;
+  private final KeyboardInitializer keyboardInitializer;
 
   @SuppressLint("SetJavaScriptEnabled")
-  public AssistanceKeyboardInitializer(Activity activity, View view, KeyboardView keyboardView, AssistedWebView webView,
-      KeyboardLayoutSpec... keyboardLayoutSpecs) {
+  public AssistanceKeyboardInitializer(Activity activity, View view, KeyboardView keyboardView,
+      AssistedWebView webView) {
     this.activity = activity;
     this.softKeyboardDetector = new SoftKeyboardDetector(view);
     this.outputComposer = new KeyboardOutputComposer(webView, keyboardView);
     this.keyboardLayoutChanger = new KeyboardLayoutChanger(keyboardView);
+    this.keyboardInitializer = new KeyboardInitializer();
 
     // Configure the detector to listen to soft keyboard visibility changes
     this.softKeyboardDetector.setKeyboardStateChangeListener(this);
@@ -39,18 +40,18 @@ public abstract class AssistanceKeyboardInitializer implements KeyboardStateChan
     settings.setJavaScriptEnabled(true);
     webView.setWebViewClient(new WebViewClient());
 
-    // Register the layout on the Layout Changer
-    Context context = activity.getApplicationContext();
-    for (KeyboardLayoutSpec spec : keyboardLayoutSpecs) {
-      Keyboard keyboard = new Keyboard(context, spec.getXmlLayoutResourceId());
-      this.keyboardLayoutChanger.registerKeyboard(spec.getActivationKeyCode(), keyboard);
-    }
     keyboardView.setOnKeyboardActionListener(new KeyboardActionListener(keyboardLayoutChanger, outputComposer));
   }
 
+  protected void registerLayout(KeyboardLayoutSpec spec) {
+    Keyboard keyboard = new Keyboard(activity.getApplicationContext(), spec.getXmlLayoutResourceId());
+    this.keyboardLayoutChanger.registerKeyboard(spec.getActivationKeyCode(), keyboard);
+    this.keyboardInitializer.register(spec.getName(), keyboard, spec.getKeyValues());
+  }
 
   public void init(int initialLayoutPrimaryCode) {
     softKeyboardDetector.detect();
+    keyboardInitializer.init();
     keyboardLayoutChanger.handleKey(initialLayoutPrimaryCode);
   }
 

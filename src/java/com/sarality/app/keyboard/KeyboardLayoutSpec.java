@@ -6,12 +6,16 @@ package com.sarality.app.keyboard;
  * @author abhideep@ (Abhideep Singh)
  */
 public class KeyboardLayoutSpec {
-  private final int activationKeyCode;
+  private final String name;
   private final int xmlLayoutResourceId;
+  private final int activationKeyCode;
+  private final KeyValues<?> keyValues;
 
-  public KeyboardLayoutSpec(int activationKeyCode, int xmlLayoutResourceId) {
-    this.activationKeyCode = activationKeyCode;
+  public KeyboardLayoutSpec(String name, int xmlLayoutResourceId, int activationKeyCode, KeyValues<?> keyValues) {
+    this.name = name;
     this.xmlLayoutResourceId = xmlLayoutResourceId;
+    this.activationKeyCode = activationKeyCode;
+    this.keyValues = keyValues;
   }
 
   public int getActivationKeyCode() {
@@ -20,5 +24,13 @@ public class KeyboardLayoutSpec {
 
   public int getXmlLayoutResourceId() {
     return xmlLayoutResourceId;
+  }
+
+  public KeyValues<?> getKeyValues() {
+    return keyValues;
+  }
+
+  public String getName() {
+    return name;
   }
 }
