@@ -4,17 +4,16 @@ import android.inputmethodservice.Keyboard;
 
 import com.sarality.app.common.collect.Maps;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.Map;
 
 /**
- * Created by abhi on 14/01/15.
+ * Initializes a keyboard instance with specific values for text and labels.
+ * <p/>
+ * Used for generation of dynamic contextual keyboards.
+ *
+ * @author abhideep@ (Abhideep Singh)
  */
 public class KeyboardInitializer {
-
-  private static final Logger logger = LoggerFactory.getLogger(KeyboardInitializer.class);
 
   private Map<String, Keyboard> keyboardMap = Maps.empty();
   private Map<String, KeyValues<?>> keyValuesMap = Maps.empty();
@@ -47,11 +46,9 @@ public class KeyboardInitializer {
       return;
     }
     int primaryCode = codes[0];
-    logger.error("     Looking up value for key with code " + primaryCode + " label " + key.label);
     if (keyValues.hasValue(primaryCode)) {
       String value = keyValues.getValue(primaryCode);
       String keyValue = value == null ? "" : value;
-      logger.error("     Changing Key Label for " + primaryCode + " to " + keyValue);
       key.label = keyValue;
       key.text = keyValue;
     }
