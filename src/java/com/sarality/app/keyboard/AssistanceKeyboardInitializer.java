@@ -15,13 +15,13 @@ import com.sarality.app.view.web.AssistedWebView;
  *
  * @author abhideep@ (Abhideep Singh)
  */
-public abstract class AssistanceKeyboardInitializer implements KeyboardStateChangeListener {
+public abstract class AssistanceKeyboardInitializer implements SoftKeyboardVisibilityListener {
 
   private final Activity activity;
   private final KeyboardLayoutChanger keyboardLayoutChanger;
   private final KeyboardOutputComposer outputComposer;
   private final SoftKeyboardDetector softKeyboardDetector;
-  private final KeyboardInitializer keyboardInitializer;
+  private final KeyboardKeysInitializer keyboardKeysInitializer;
 
   @SuppressLint("SetJavaScriptEnabled")
   public AssistanceKeyboardInitializer(Activity activity, View view, KeyboardView keyboardView,
@@ -30,10 +30,10 @@ public abstract class AssistanceKeyboardInitializer implements KeyboardStateChan
     this.softKeyboardDetector = new SoftKeyboardDetector(view);
     this.outputComposer = new KeyboardOutputComposer(webView, keyboardView);
     this.keyboardLayoutChanger = new KeyboardLayoutChanger(keyboardView);
-    this.keyboardInitializer = new KeyboardInitializer();
+    this.keyboardKeysInitializer = new KeyboardKeysInitializer();
 
     // Configure the detector to listen to soft keyboard visibility changes
-    this.softKeyboardDetector.setKeyboardStateChangeListener(this);
+    this.softKeyboardDetector.setKeyboardVisibilityListener(this);
 
     // Set the Client on the WebView
     WebSettings settings = webView.getSettings();
@@ -46,12 +46,12 @@ public abstract class AssistanceKeyboardInitializer implements KeyboardStateChan
   protected void registerLayout(KeyboardLayoutSpec spec) {
     Keyboard keyboard = new Keyboard(activity.getApplicationContext(), spec.getXmlLayoutResourceId());
     this.keyboardLayoutChanger.registerKeyboard(spec.getActivationKeyCode(), keyboard);
-    this.keyboardInitializer.register(spec.getName(), keyboard, spec.getKeyValues());
+    this.keyboardKeysInitializer.register(spec.getName(), keyboard, spec.getKeyValues());
   }
 
   public void init(int initialLayoutPrimaryCode) {
     softKeyboardDetector.detect();
-    keyboardInitializer.init();
+    keyboardKeysInitializer.init();
     keyboardLayoutChanger.handleKey(initialLayoutPrimaryCode);
   }
 

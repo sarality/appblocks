@@ -13,7 +13,7 @@ import java.util.Map;
  *
  * @author abhideep@ (Abhideep Singh)
  */
-public class KeyboardInitializer {
+class KeyboardKeysInitializer {
 
   private Map<String, Keyboard> keyboardMap = Maps.empty();
   private Map<String, KeyValues<?>> keyValuesMap = Maps.empty();
@@ -23,7 +23,7 @@ public class KeyboardInitializer {
     keyValuesMap.put(keyboardName, keyValues);
   }
 
-  public void init() {
+  void init() {
     for (String keyboardName : keyboardMap.keySet()) {
       Keyboard keyboard = keyboardMap.get(keyboardName);
       KeyValues<?> keyValues = keyValuesMap.get(keyboardName);
