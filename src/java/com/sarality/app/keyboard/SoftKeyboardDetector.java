@@ -12,13 +12,13 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 public class SoftKeyboardDetector {
 
   private final View activityRootView;
-  private KeyboardStateChangeListener listener = null;
+  private SoftKeyboardVisibilityListener listener = null;
 
   public SoftKeyboardDetector(View activityRootView) {
     this.activityRootView = activityRootView;
   }
 
-  public void setKeyboardStateChangeListener(KeyboardStateChangeListener listener) {
+  public void setKeyboardVisibilityListener(SoftKeyboardVisibilityListener listener) {
     this.listener = listener;
   }
 
