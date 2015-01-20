@@ -14,19 +14,19 @@ import com.sarality.app.view.EditorView;
  *
  * @author abhideep@ (Abhideep Singh)
  */
-public class KeyboardOutputComposer {
+class KeyboardOutputComposer {
+
+  private static final long SHIFT_LONG_PRESS_TIME_MS = 800;
 
   private final EditorView editorView;
   private final KeyboardView keyboardView;
-
-  private static final long SHIFT_LONG_PRESS_TIME_MS = 800;
 
   // Current State of Composer
   private long lastShiftPressedTime = 0;
   private boolean isCapsLockEnabled = false;
   private StringBuilder outputBuilder = new StringBuilder();
 
-  public KeyboardOutputComposer(EditorView editorView, KeyboardView keyboardView) {
+  KeyboardOutputComposer(EditorView editorView, KeyboardView keyboardView) {
     this.editorView = editorView;
     this.keyboardView = keyboardView;
   }
@@ -39,20 +39,13 @@ public class KeyboardOutputComposer {
     return editorView.getEditorInfo();
   }
 
-  private void commitOutput(InputConnection inputConnection) {
-    if (outputBuilder.length() > 0) {
-      inputConnection.commitText(outputBuilder, outputBuilder.length());
-      outputBuilder.setLength(0);
-    }
-  }
-
-  public boolean handleKey(int primaryCode, int[] keyCodes) {
+  boolean handleKey(int primaryCode) {
     if (primaryCode == Keyboard.KEYCODE_DELETE) {
       handleBackspace();
     } else if (primaryCode == Keyboard.KEYCODE_SHIFT) {
       handleShift();
     } else {
-      handleCharacter(primaryCode, keyCodes);
+      handleCharacter(primaryCode);
     }
     return true;
   }
@@ -82,7 +75,7 @@ public class KeyboardOutputComposer {
     }
   }
 
-  private void handleCharacter(int primaryCode, int[] keyCodes) {
+  private void handleCharacter(int primaryCode) {
     if (keyboardView.isShifted()) {
       primaryCode = Character.toUpperCase(primaryCode);
     }
@@ -108,13 +101,12 @@ public class KeyboardOutputComposer {
     }
   }
 
-  public void resetText() {
+  void resetText() {
     outputBuilder.setLength(0);
   }
 
-  private void handleClose() {
-    commitOutput(getCurrentInputConnection());
-    // requestHideSelf(0);
-    keyboardView.closing();
+  void handleText(CharSequence text) {
+    outputBuilder.append(text);
+    getCurrentInputConnection().setComposingText(outputBuilder, 1);
   }
 }
