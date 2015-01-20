@@ -32,7 +32,7 @@ public class ContactDataBuilder implements DataObject.Builder<ContactData> {
 
   private List<String> emailIdList = new ArrayList<String>();
 
-  private List<WhatsAppNumber> whatsAppNumberList = new ArrayList<WhatsAppNumber>();
+  private List<AppContact> appContactList = new ArrayList<AppContact>();
 
   @Override
   public ContactData build() {
@@ -41,7 +41,7 @@ public class ContactDataBuilder implements DataObject.Builder<ContactData> {
       personName = nameBuilder.build();
     }
     return new ContactData(contactId, personName, hasPhoneNumber, contactNumberList, emailIdList,
-        whatsAppNumberList, photoId, logoId);
+        appContactList, photoId, logoId);
   }
 
   public final ContactDataBuilder setContactId(Long contactId) {
@@ -89,13 +89,13 @@ public class ContactDataBuilder implements DataObject.Builder<ContactData> {
     return this;
   }
 
-  public final ContactDataBuilder addWhatsAppNumber(WhatsAppNumber whatsAppNumber) {
-    this.whatsAppNumberList.add(whatsAppNumber);
+  public final ContactDataBuilder addAppContact(AppContact appContact) {
+    this.appContactList.add(appContact);
     return this;
   }
 
-  public final ContactDataBuilder setWhatsAppNumberList(List<WhatsAppNumber> whatsAppNumberList) {
-    this.whatsAppNumberList.addAll(whatsAppNumberList);
+  public final ContactDataBuilder setAppContactList(List<AppContact> appContactList) {
+    this.appContactList.addAll(appContactList);
     return this;
   }
 

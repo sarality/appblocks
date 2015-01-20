@@ -32,7 +32,6 @@ public class ContactDataStore extends AbstractContentResolverDataStore<ContactDa
   public static final String DATASTORE_NAME = "ContactDataStore";
   private static final String staticWhereClause = Column.HAS_PHONE_NUMBER + " !=0 AND (" + Column.MIMETYPE + " = ? OR "
       + Column.MIMETYPE + " = ? OR " + Column.MIMETYPE + " = ? OR " + Column.MIMETYPE + " = ? )";
-  private static final String staticWhatsAppMimeType = "vnd.android.cursor.item/vnd.com.whatsapp.profile";
   private final Context context;
 
   /**
@@ -87,20 +86,20 @@ public class ContactDataStore extends AbstractContentResolverDataStore<ContactDa
    * @return new WhereClauseValues String[]
    */
   private String[] buildWhereClauseValues(Query query) {
-    String[] whereClauseValues = new String[]{Email.CONTENT_ITEM_TYPE, Phone.CONTENT_ITEM_TYPE,
-        StructuredName.CONTENT_ITEM_TYPE, staticWhatsAppMimeType};
+    List<String> whereClauseValues = new ArrayList<String>();
+    whereClauseValues.add(Email.CONTENT_ITEM_TYPE);
+    whereClauseValues.add(Phone.CONTENT_ITEM_TYPE);
+    whereClauseValues.add(StructuredName.CONTENT_ITEM_TYPE);
 
-    String[] concatWhereClauseValue;
+    for (AppEnum app : AppEnum.values()) {
+      whereClauseValues.add(app.getMimeType());
+    }
 
     if (query != null && query.getWhereClauseValues() != null) {
-      concatWhereClauseValue = Arrays.copyOf(whereClauseValues, whereClauseValues.length
-          + query.getWhereClauseValues().length);
-      System.arraycopy(query.getWhereClauseValues(), 0, concatWhereClauseValue, whereClauseValues.length,
-          query.getWhereClauseValues().length);
-    } else {
-      concatWhereClauseValue = whereClauseValues;
+      whereClauseValues.addAll(Arrays.asList(query.getWhereClauseValues()));
     }
-    return concatWhereClauseValue;
+
+    return whereClauseValues.toArray(new String[whereClauseValues.size()]);
   }
 
   /**
@@ -157,7 +156,7 @@ public class ContactDataStore extends AbstractContentResolverDataStore<ContactDa
       builder.addEmailId(data);
     } else if (mimeType.equals(Phone.CONTENT_ITEM_TYPE)) {
       ContactLabel labelType = labelTypeProcessor.extract(cursor, Column.DATA2);
-      builder.addPhoneNumber(new ContactNumber(data, isPrimary > 0 , labelType));
+      builder.addPhoneNumber(new ContactNumber(data, isPrimary > 0, labelType));
     } else if (mimeType.equals(StructuredName.CONTENT_ITEM_TYPE)) {
       PersonNameDataBuilder nameBuilder = new PersonNameDataBuilder();
       nameBuilder.setDisplayName(data);
@@ -167,8 +166,12 @@ public class ContactDataStore extends AbstractContentResolverDataStore<ContactDa
       nameBuilder.setMiddleName(processors.forString().extract(cursor, Column.DATA5));
       nameBuilder.setSuffix(processors.forString().extract(cursor, Column.DATA6));
       builder.setName(nameBuilder);
-    } else if (mimeType.equals(staticWhatsAppMimeType)) {
-      builder.addWhatsAppNumber(new WhatsAppNumber(data, (long) processors.forInteger().extract(cursor, Column._ID)));
+    } else {
+      for (AppEnum app : AppEnum.values()) {
+        if (app.getMimeType().equals(mimeType)) {
+          builder.addAppContact(new AppContact(app, data, (long) processors.forInteger().extract(cursor, Column._ID)));
+        }
+      }
     }
     return builder;
   }

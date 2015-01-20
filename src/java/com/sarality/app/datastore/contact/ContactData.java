@@ -35,12 +35,13 @@ public class ContactData implements DataObject<ContactData> {
   private final List<String> emailIdList;
 
   //WhatsApp Number
-  private final List<WhatsAppNumber> whatsAppNumberList;
+  private final List<AppContact> appContactList;
 
   // TODO Add Label to ContactNumber
   // TODO emailAddress to also have its own class
   public ContactData(Long contactId, PersonNameData name, Boolean hasPhoneNumber,
-                     List<ContactNumber> contactNumberList, List<String> emailIdList, List<WhatsAppNumber> whatsAppNumberList, Integer photoId,
+                     List<ContactNumber> contactNumberList, List<String> emailIdList,
+                     List<AppContact> appContactList, Integer photoId,
                      Integer logoId) {
     super();
     this.contactId = contactId;
@@ -50,8 +51,8 @@ public class ContactData implements DataObject<ContactData> {
     this.contactNumberList.addAll(contactNumberList);
     this.emailIdList = new ArrayList<String>();
     this.emailIdList.addAll(emailIdList);
-    this.whatsAppNumberList = new ArrayList<WhatsAppNumber>();
-    this.whatsAppNumberList.addAll(whatsAppNumberList);
+    this.appContactList = new ArrayList<AppContact>();
+    this.appContactList.addAll(appContactList);
     this.photoId = photoId;
     this.logoId = logoId;
   }
@@ -59,7 +60,7 @@ public class ContactData implements DataObject<ContactData> {
   @Override
   public final ContactDataBuilder getBuilder() {
     return new ContactDataBuilder().setContactId(contactId).setName(name).setHasPhoneNumber(hasPhoneNumber)
-        .setPhoneNumberList(contactNumberList).setPhotoId(photoId).setLogo(logoId).setWhatsAppNumberList(whatsAppNumberList);
+        .setPhoneNumberList(contactNumberList).setPhotoId(photoId).setLogo(logoId).setAppContactList(appContactList);
   }
 
   @Override
@@ -100,7 +101,7 @@ public class ContactData implements DataObject<ContactData> {
     return emailIdList;
   }
 
-  public final List<WhatsAppNumber> getWhatsAppNumberList() {
-    return whatsAppNumberList;
+  public final List<AppContact> getAppContactList() {
+    return appContactList;
   }
 }
