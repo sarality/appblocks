@@ -15,6 +15,7 @@ public class DateTimeFormatter {
     COMPLETE_DATE("WWW, MMM DD"), // For example Mon, Dec 24
     MONTH_ONLY("MMM"), // For example Dec
     DAY_ONLY("WWW"), // For example Mon
+    FULL_DAY_ONLY("WWWW"), // For example Monday
     DATE_ONLY("DD"); // For example 09
 
     private final String format;
