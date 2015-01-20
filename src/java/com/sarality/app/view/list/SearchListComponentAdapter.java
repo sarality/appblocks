@@ -18,16 +18,16 @@ import java.util.List;
 public class SearchListComponentAdapter<T> extends ListComponentAdapter<T> implements Filterable {
 
   private final List<T> rowValueList;
-  private final List<ListItemFilter<T>> filterItemList;
+  private final ListItemFilter<T> listItemFilter;
   private final SearchListFilter filter;
 
   public SearchListComponentAdapter(Context context, ListRowRenderer<T> rowRenderer, List<T> rowValueList,
-                                    ComponentActionManager componentManager, List<ListItemFilter<T>> filterItemList) {
+                                    ComponentActionManager componentManager, ListItemFilter<T> listItemFilter) {
 
     super(context, rowRenderer, rowValueList, componentManager);
     this.rowValueList = Lists.of();
     this.rowValueList.addAll(rowValueList);
-    this.filterItemList = filterItemList;
+    this.listItemFilter = listItemFilter;
     this.filter = new SearchListFilter();
   }
 
@@ -40,13 +40,11 @@ public class SearchListComponentAdapter<T> extends ListComponentAdapter<T> imple
     @Override
     protected Filter.FilterResults performFiltering(CharSequence constraint) {
       String filterString = constraint.toString().toLowerCase();
-      final ArrayList<T> list = new ArrayList<T>(rowValueList.size());
+      final ArrayList<T> list = new ArrayList<T>();
 
       for (T item : rowValueList) {
-        for (ListItemFilter filterCriteria : filterItemList) {
-          if (filterCriteria.passes(item, filterString)) {
-            list.add(item);
-          }
+        if (listItemFilter.passes(item, filterString)) {
+          list.add(item);
         }
       }
 

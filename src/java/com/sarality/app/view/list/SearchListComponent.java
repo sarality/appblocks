@@ -17,7 +17,7 @@ public class SearchListComponent<T> extends ListComponent<T> {
 
   private final FragmentActivity activity;
   private final ListRowRenderer<T> rowRenderer;
-  private final List<ListItemFilter<T>> filterList;
+  private final ListItemFilter<T> listItemFilter;
   private SearchListComponentAdapter<T> adapter;
 
   /**
@@ -26,20 +26,20 @@ public class SearchListComponent<T> extends ListComponent<T> {
    * @param activity - FragmentActivity on which the listView is created
    * @param view - the listview to be populated and rendered
    * @param rowRenderer - custom renderer as specified by the activity
-   * @param filterList - Filters from the list items
+   * @param listItemFilter - Filter criteria
    */
   public SearchListComponent(FragmentActivity activity, ListView view, ListRowRenderer<T> rowRenderer,
-                             List<ListItemFilter<T>> filterList) {
+                             ListItemFilter<T> listItemFilter) {
     super(activity, view, rowRenderer);
     this.activity = activity;
     this.rowRenderer = rowRenderer;
-    this.filterList = filterList;
+    this.listItemFilter = listItemFilter;
   }
 
   @Override
   protected ListComponentAdapter<T> createAdapter(List<T> data) {
     ComponentActionManager componentManager = new ComponentActionManager(getRowActions());
-    adapter = new SearchListComponentAdapter<T>(activity, rowRenderer, data, componentManager, filterList);
+    adapter = new SearchListComponentAdapter<T>(activity, rowRenderer, data, componentManager, listItemFilter);
     return adapter;
   }
 
