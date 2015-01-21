@@ -1,17 +1,16 @@
 package com.sarality.app.datastore.contact;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.sarality.app.common.data.user.PersonNameData;
 import com.sarality.app.common.data.user.PersonNameDataBuilder;
 import com.sarality.app.data.DataObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Builds the Contact Data
- * 
+ *
  * @author sunayna(Sunayna Uberoy)
- * 
  */
 public class ContactDataBuilder implements DataObject.Builder<ContactData> {
 
@@ -33,13 +32,16 @@ public class ContactDataBuilder implements DataObject.Builder<ContactData> {
 
   private List<String> emailIdList = new ArrayList<String>();
 
+  private List<AppContact> appContactList = new ArrayList<AppContact>();
+
   @Override
   public ContactData build() {
     PersonNameData personName = null;
     if (nameBuilder != null) {
       personName = nameBuilder.build();
     }
-    return new ContactData(contactId, personName, hasPhoneNumber, contactNumberList, emailIdList, photoId, logoId);
+    return new ContactData(contactId, personName, hasPhoneNumber, contactNumberList, emailIdList,
+        appContactList, photoId, logoId);
   }
 
   public final ContactDataBuilder setContactId(Long contactId) {
@@ -49,11 +51,6 @@ public class ContactDataBuilder implements DataObject.Builder<ContactData> {
 
   public final ContactDataBuilder setName(PersonNameData name) {
     this.nameBuilder = name.getBuilder();
-    return this;
-  }
-
-  public final ContactDataBuilder setName(PersonNameDataBuilder nameBuilder) {
-    this.nameBuilder = nameBuilder;
     return this;
   }
 
@@ -92,8 +89,23 @@ public class ContactDataBuilder implements DataObject.Builder<ContactData> {
     return this;
   }
 
+  public final ContactDataBuilder addAppContact(AppContact appContact) {
+    this.appContactList.add(appContact);
+    return this;
+  }
+
+  public final ContactDataBuilder setAppContactList(List<AppContact> appContactList) {
+    this.appContactList.addAll(appContactList);
+    return this;
+  }
+
   public PersonNameDataBuilder getName() {
     return this.nameBuilder;
+  }
+
+  public final ContactDataBuilder setName(PersonNameDataBuilder nameBuilder) {
+    this.nameBuilder = nameBuilder;
+    return this;
   }
 
 }

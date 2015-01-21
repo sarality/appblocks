@@ -1,16 +1,15 @@
 package com.sarality.app.datastore.contact;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.sarality.app.common.data.user.PersonNameData;
 import com.sarality.app.data.DataObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Simple Data for a contact
- * 
+ *
  * @author sunayna(Sunayna Uberoy)
- * 
  */
 public class ContactData implements DataObject<ContactData> {
 
@@ -35,10 +34,15 @@ public class ContactData implements DataObject<ContactData> {
   // Email Id
   private final List<String> emailIdList;
 
+  //App Contact List
+  private final List<AppContact> appContactList;
+
   // TODO Add Label to ContactNumber
   // TODO emailAddress to also have its own class
   public ContactData(Long contactId, PersonNameData name, Boolean hasPhoneNumber,
-      List<ContactNumber> contactNumberList, List<String> emailIdList, Integer photoId, Integer logoId) {
+                     List<ContactNumber> contactNumberList, List<String> emailIdList,
+                     List<AppContact> appContactList, Integer photoId,
+                     Integer logoId) {
     super();
     this.contactId = contactId;
     this.name = name;
@@ -47,6 +51,8 @@ public class ContactData implements DataObject<ContactData> {
     this.contactNumberList.addAll(contactNumberList);
     this.emailIdList = new ArrayList<String>();
     this.emailIdList.addAll(emailIdList);
+    this.appContactList = new ArrayList<AppContact>();
+    this.appContactList.addAll(appContactList);
     this.photoId = photoId;
     this.logoId = logoId;
   }
@@ -54,7 +60,7 @@ public class ContactData implements DataObject<ContactData> {
   @Override
   public final ContactDataBuilder getBuilder() {
     return new ContactDataBuilder().setContactId(contactId).setName(name).setHasPhoneNumber(hasPhoneNumber)
-        .setPhoneNumberList(contactNumberList).setPhotoId(photoId).setLogo(logoId);
+        .setPhoneNumberList(contactNumberList).setPhotoId(photoId).setLogo(logoId).setAppContactList(appContactList);
   }
 
   @Override
@@ -87,15 +93,15 @@ public class ContactData implements DataObject<ContactData> {
     return contactNumberList;
   }
 
-  public final Integer getPhotoId() {
-    return photoId;
-  }
-
   public final Integer getLogoId() {
     return logoId;
   }
 
   public final List<String> getEmailIdList() {
     return emailIdList;
+  }
+
+  public final List<AppContact> getAppContactList() {
+    return appContactList;
   }
 }
