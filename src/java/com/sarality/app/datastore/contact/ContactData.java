@@ -34,7 +34,7 @@ public class ContactData implements DataObject<ContactData> {
   // Email Id
   private final List<String> emailIdList;
 
-  //WhatsApp Number
+  //App Contact List
   private final List<AppContact> appContactList;
 
   // TODO Add Label to ContactNumber

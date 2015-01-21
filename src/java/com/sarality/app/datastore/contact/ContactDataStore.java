@@ -167,11 +167,11 @@ public class ContactDataStore extends AbstractContentResolverDataStore<ContactDa
       nameBuilder.setSuffix(processors.forString().extract(cursor, Column.DATA6));
       builder.setName(nameBuilder);
     } else {
-      for (AppEnum app : AppEnum.values()) {
-        if (app.getMimeType().equals(mimeType)) {
-          builder.addAppContact(new AppContact(app, data, (long) processors.forInteger().extract(cursor, Column._ID)));
-        }
+      AppEnum appEnum = AppEnum.getAppEnum(mimeType);
+      if (appEnum != null) {
+        builder.addAppContact(new AppContact(appEnum, data, processors.forLong().extract(cursor, Column._ID)));
       }
+
     }
     return builder;
   }
@@ -182,18 +182,28 @@ public class ContactDataStore extends AbstractContentResolverDataStore<ContactDa
    * @author sunayna@ (Sunayna Uberoy)
    */
   public enum Column implements com.sarality.app.datastore.Column {
+    // Basic Contact Id for each contact listed in the System
     CONTACT_ID(new ColumnSpec(ColumnDataType.INTEGER, false, null, null)),
+    // Data ID associated with each data kind , Phone, email etc each would have their own Data ID
     _ID(new ColumnSpec(ColumnDataType.INTEGER, false, null, null)),
+    // Name of the person
     DISPLAY_NAME(new ColumnSpec(ColumnDataType.TEXT, false)),
+    //DATA1 is an indexed column and should be used for the data element that is expected to be most frequently used
+    // in query selections.
+    DATA1(new ColumnSpec(ColumnDataType.TEXT, false)),
+    // Data2 - Data6 auxillary data associated with each mimetype
     DATA2(new ColumnSpec(ColumnDataType.TEXT, false)),
     DATA3(new ColumnSpec(ColumnDataType.TEXT, false)),
     DATA4(new ColumnSpec(ColumnDataType.TEXT, false)),
     DATA5(new ColumnSpec(ColumnDataType.TEXT, false)),
     DATA6(new ColumnSpec(ColumnDataType.TEXT, false)),
+    // Primary entry for the contact
     IS_PRIMARY(new ColumnSpec(ColumnDataType.INTEGER, false)),
+    // MimeType of the contact
     MIMETYPE(new ColumnSpec(ColumnDataType.TEXT, false)),
-    DATA1(new ColumnSpec(ColumnDataType.TEXT, false)),
+    // Id of the contact's photo
     PHOTO_ID(new ColumnSpec(ColumnDataType.INTEGER, false)),
+    // An indicator of whether this contact has at least one phone number
     HAS_PHONE_NUMBER(new ColumnSpec(ColumnDataType.INTEGER, false));
 
     private ColumnSpec spec;
