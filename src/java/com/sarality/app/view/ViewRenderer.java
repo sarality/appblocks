@@ -1,4 +1,4 @@
-package com.sarality.app.view.list;
+package com.sarality.app.view;
 
 import android.view.View;
 
