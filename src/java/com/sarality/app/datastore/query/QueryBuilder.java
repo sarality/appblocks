@@ -5,6 +5,7 @@ import android.util.Pair;
 import com.sarality.app.common.collect.Lists;
 import com.sarality.app.datastore.Column;
 import com.sarality.app.datastore.DataStore;
+import com.sarality.app.datastore.DataStoreRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +40,16 @@ public class QueryBuilder {
   public QueryBuilder(DataStore<?> store) {
     this.store = store;
     this.columnList.addAll(store.getColumns());
+  }
+
+  /**
+   * Name based Constructor.
+   *
+   * @param dataStoreName Name of the DataStore.
+   * @param registry Registry that the Query is registered with.
+   */
+  public QueryBuilder(String dataStoreName, DataStoreRegistry registry) {
+    this(registry.getDataStore(dataStoreName));
   }
 
   /**
