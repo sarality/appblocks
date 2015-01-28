@@ -39,7 +39,6 @@ public class NonScrollingListViewInitializer<T> extends BaseViewInitializer<Line
       View rowView = inflater.inflate(rowRenderer.getRowLayout(data), getView());
       rowRenderer.render(rowView, data);
     }
-    setupActions();
   }
 
   public NonScrollingListViewInitializer<T> withAction(ViewAction action) {

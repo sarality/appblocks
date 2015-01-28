@@ -32,7 +32,7 @@ public class ViewDataLoader<T> implements LoaderManager.LoaderCallbacks<T> {
 
   @Override
   public void onLoadFinished(Loader<T> loader, T data) {
-    initializer.render(data);
+    initializer.init(data);
   }
 
   @Override
