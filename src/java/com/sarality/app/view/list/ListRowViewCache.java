@@ -50,6 +50,10 @@ public class ListRowViewCache {
    * @param viewId The id of the view to lookup.
    */
   public void cacheViewWithId(View rowView, int viewId) {
+    if(viewCache.get(viewId) != null){
+      // Already cached do nothing
+      return;
+    }
     View view = rowView.findViewById(viewId);
     if (view != null) {
       if (Log.isLoggable(TAG, Log.DEBUG)) {
@@ -58,7 +62,7 @@ public class ListRowViewCache {
       viewCache.put(viewId, view);
     }
   }
-  
+
   @Override
   public String toString() {
     return viewCache.toString();
