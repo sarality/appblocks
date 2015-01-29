@@ -5,8 +5,6 @@ import android.view.View;
 import com.sarality.app.view.action.ViewAction;
 import com.sarality.app.view.datasource.DataSource;
 
-import java.util.List;
-
 /**
  * Interface for all classes that initialize a view for the given data.
  * <p/>
@@ -29,18 +27,16 @@ public interface ViewInitializer<V extends View, T> {
   /**
    * Registers the given View Action for initialization.
    * <p/>
-   * It is the responsibility of the implementation to setup these actions in the {@code #init} method.
+   * It is the responsibility of the implementation to setup these actions in the {@link #init(Object)} method.
    *
    * @param action Action to be setup for the given view.
    */
   public void registerAction(ViewAction action);
 
   /**
-   * Returns list of actions that need to be setup on the view.
-   *
-   * @return List of actions registered with the initializer.
+   * Setup actions registered for the View.
    */
-  public List<ViewAction> getRegisteredActions();
+  public void setupActions();
 
   /**
    * Render the View for the given data.
@@ -50,7 +46,7 @@ public interface ViewInitializer<V extends View, T> {
   public void render(T data);
 
   /**
-   * Initialize the View for the given data source.
+   * Initialize the View for the given data.
    *
    * @param data Data needed to initialize the view.
    */
@@ -60,7 +56,7 @@ public interface ViewInitializer<V extends View, T> {
    * Initialize the View for the given data source.
    * <p/>
    * Ideally, the data from the data source should be loaded asynchronously and after the data is loaded a call is
-   * made to render the view with the loaded data.
+   * made to {@link #init(Object)} the view with the loaded data.
    *
    * @param dataSource DataSource to load data from.
    */
