@@ -5,7 +5,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import com.sarality.app.view.list.ViewRenderer;
+import com.sarality.app.view.ViewRenderer;
 
 /**
  * Action that would show the Alert Dialog with a message
