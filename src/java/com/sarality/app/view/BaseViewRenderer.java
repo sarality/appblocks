@@ -14,10 +14,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Base implementations for all classes that initialize Views.
- * <p/>
- * The constructor takes in a {@code FragmentActivity} so that the DataSource can be loaded asynchronously using
- * a {@code Loader}.
+ * Base implementations for all classes that renders a View.
+ *
+ * @param <V> Type of view being rendered.
+ * @param <T> Type of data needed to render the view.
  *
  * @author abhideep@ (Abhideep Singh)
  */
@@ -55,7 +55,7 @@ public abstract class BaseViewRenderer<V extends View, T> implements ViewRendere
    * Setup actions registered for the view.
    */
   public void setupActions(V view) {
-    for (ViewAction action : getRegisteredActions()) {
+    for (ViewAction action : actionList) {
       int actionViewId = action.getViewId();
       View actionView = view.findViewById(actionViewId);
       if (actionView != null) {
@@ -66,9 +66,5 @@ public abstract class BaseViewRenderer<V extends View, T> implements ViewRendere
             + action.getClass().getSimpleName());
       }
     }
-  }
-
-  protected List<ViewAction> getRegisteredActions() {
-    return actionList;
   }
 }

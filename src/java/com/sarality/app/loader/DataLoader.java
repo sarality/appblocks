@@ -1,10 +1,9 @@
-package com.sarality.app.view;
+package com.sarality.app.loader;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.view.View;
 
 import com.sarality.app.view.datasource.DataSource;
 
@@ -13,26 +12,26 @@ import com.sarality.app.view.datasource.DataSource;
  *
  * @author abhideep@ (Abhideep Singh)
  */
-public class ViewDataLoader<T> implements LoaderManager.LoaderCallbacks<T> {
+public class DataLoader<T> implements LoaderManager.LoaderCallbacks<T> {
 
   private final Context context;
   private final DataSource<T> dataSource;
-  private final ViewInitializer<? extends View, T> initializer;
+  private final DataConsumer<T> consumer;
 
-  public ViewDataLoader(Context context, DataSource<T> dataSource, ViewInitializer<? extends View, T> initializer) {
+  public DataLoader(Context context, DataSource<T> dataSource, DataConsumer<T> consumer) {
     this.context = context;
     this.dataSource = dataSource;
-    this.initializer = initializer;
+    this.consumer = consumer;
   }
 
   @Override
   public Loader<T> onCreateLoader(int id, Bundle args) {
-    return new ViewDataLoaderTask<T>(context, dataSource);
+    return new DataLoaderTask<T>(context, dataSource);
   }
 
   @Override
   public void onLoadFinished(Loader<T> loader, T data) {
-    initializer.init(data);
+    consumer.consume(data);
   }
 
   @Override

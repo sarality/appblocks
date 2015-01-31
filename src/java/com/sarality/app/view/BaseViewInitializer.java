@@ -6,6 +6,8 @@ import android.view.View;
 
 import com.sarality.app.common.collect.Lists;
 import com.sarality.app.common.collect.Maps;
+import com.sarality.app.loader.DataConsumer;
+import com.sarality.app.loader.DataLoader;
 import com.sarality.app.view.action.TriggerType;
 import com.sarality.app.view.action.ViewAction;
 import com.sarality.app.view.datasource.DataSource;
@@ -22,9 +24,12 @@ import java.util.Map;
  * The constructor takes in a {@code FragmentActivity} so that the DataSource can be loaded asynchronously using
  * a {@code Loader}.
  *
+ * @param <V> Type of view being initialized.
+ * @param <T> Type of data needed to initialize the view.
+ *
  * @author abhideep@ (Abhideep Singh)
  */
-public abstract class BaseViewInitializer<V extends View, T> implements ViewInitializer<V, T> {
+public abstract class BaseViewInitializer<V extends View, T> implements ViewInitializer<V, T>, DataConsumer<T> {
 
   private static final Logger logger = LoggerFactory.getLogger(BaseViewInitializer.class);
 
@@ -44,6 +49,11 @@ public abstract class BaseViewInitializer<V extends View, T> implements ViewInit
   }
 
   @Override
+  public void consume(T data) {
+    init(data);
+  }
+
+  @Override
   public void init(T data) {
     render(data);
     setupActions();
@@ -51,7 +61,7 @@ public abstract class BaseViewInitializer<V extends View, T> implements ViewInit
 
   @Override
   public void init(DataSource<T> dataSource) {
-    activity.getSupportLoaderManager().initLoader(0, null, new ViewDataLoader<T>(activity, dataSource, this));
+    activity.getSupportLoaderManager().initLoader(0, null, new DataLoader<T>(activity, dataSource, this));
   }
 
   @Override
