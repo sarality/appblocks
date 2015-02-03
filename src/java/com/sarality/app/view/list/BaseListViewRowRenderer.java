@@ -12,10 +12,9 @@ import com.sarality.app.view.BaseViewRenderer;
  *
  * @param <H> Type of ViewHolder
  * @param <T> Type of data for the
- *
  * @author abhideep@ (Abhideep Singh)
  */
-public abstract class BaseListViewRowRenderer<H, T> extends BaseViewRenderer<View, T> {
+public abstract class BaseListViewRowRenderer<H, T> extends BaseViewRenderer<View, T> implements ListViewRowRenderer<T> {
 
   /**
    * Create a View Holder for the given view
