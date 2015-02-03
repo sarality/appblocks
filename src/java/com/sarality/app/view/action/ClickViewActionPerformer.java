@@ -10,9 +10,9 @@ import android.view.View.OnClickListener;
  * 
  * @param <T> The type of data that is used to setup the view on which the action is being performed.
  */
-public class ClickActionPerformer extends BaseActionPerformer implements OnClickListener {
+public class ClickViewActionPerformer extends BaseViewActionPerformer implements OnClickListener {
 
-  public ClickActionPerformer(ViewAction action) {
+  public ClickViewActionPerformer(ViewAction action) {
     super(action);
   }
 

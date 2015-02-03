@@ -12,14 +12,14 @@ import org.robolectric.RobolectricTestRunner;
 import android.view.MotionEvent;
 import android.view.View;
 
-import com.sarality.app.view.action.TouchActionPerformer;
+import com.sarality.app.view.action.TouchViewActionPerformer;
 import com.sarality.app.view.action.TriggerType;
 import com.sarality.app.view.action.ViewAction;
 import com.sarality.app.view.action.ViewActionTrigger;
 import com.sarality.app.view.action.ViewDetail;
 
 /**
- * Tests for {@link TouchActionPerformer}.
+ * Tests for {@link TouchViewActionPerformer}.
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
@@ -35,7 +35,7 @@ public class TouchActionPerformerTest extends TestCase {
     when(action.getViewId()).thenReturn(1234);
     when(view.getId()).thenReturn(1234);
 
-    TouchActionPerformer clickAction = new TouchActionPerformer(action);
+    TouchViewActionPerformer clickAction = new TouchViewActionPerformer(action);
     clickAction.setupListener(view);
 
     Mockito.verify(view, Mockito.times(1)).setOnTouchListener(clickAction);
@@ -50,7 +50,7 @@ public class TouchActionPerformerTest extends TestCase {
     when(action.getViewId()).thenReturn(1234);
     when(view.getId()).thenReturn(5678);
 
-    TouchActionPerformer clickAction = new TouchActionPerformer(action);
+    TouchViewActionPerformer clickAction = new TouchViewActionPerformer(action);
     try {
       clickAction.setupListener(view);
       fail("Exception should be thrown");
@@ -64,7 +64,7 @@ public class TouchActionPerformerTest extends TestCase {
   @Test
   public void testClickActionPerformer() {
     ViewAction action = mock(ViewAction.class);
-    TouchActionPerformer clickAction = new TouchActionPerformer(action);
+    TouchViewActionPerformer clickAction = new TouchViewActionPerformer(action);
     assertNotNull(clickAction);
   }
 
@@ -79,7 +79,7 @@ public class TouchActionPerformerTest extends TestCase {
         .thenReturn(true);
     when(action.getTriggerType()).thenReturn(TriggerType.TOUCH_DOWN);
 
-    TouchActionPerformer clickAction = new TouchActionPerformer(action);
+    TouchViewActionPerformer clickAction = new TouchViewActionPerformer(action);
     assertEquals(true, clickAction.onTouch(view, event));
     Mockito.verify(action, Mockito.times(1)).performAction(Mockito.eq(view), Mockito.any(ViewActionTrigger.class),
         Mockito.any(ViewDetail.class));
@@ -96,7 +96,7 @@ public class TouchActionPerformerTest extends TestCase {
         .thenReturn(true);
     when(action.getTriggerType()).thenReturn(TriggerType.TOUCH_UP);
 
-    TouchActionPerformer clickAction = new TouchActionPerformer(action);
+    TouchViewActionPerformer clickAction = new TouchViewActionPerformer(action);
     assertEquals(true, clickAction.onTouch(view, event));
     Mockito.verify(action, Mockito.times(1)).performAction(Mockito.eq(view), Mockito.any(ViewActionTrigger.class),
         Mockito.any(ViewDetail.class));
@@ -113,7 +113,7 @@ public class TouchActionPerformerTest extends TestCase {
         .thenReturn(true);
     when(action.getTriggerType()).thenReturn(TriggerType.TOUCH_UP);
 
-    TouchActionPerformer clickAction = new TouchActionPerformer(action);
+    TouchViewActionPerformer clickAction = new TouchViewActionPerformer(action);
     assertEquals(false, clickAction.onTouch(view, event));
     Mockito.verify(action, Mockito.times(0)).performAction(Mockito.eq(view), Mockito.any(ViewActionTrigger.class),
         Mockito.any(ViewDetail.class));

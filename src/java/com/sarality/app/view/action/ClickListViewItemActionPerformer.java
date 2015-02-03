@@ -8,17 +8,16 @@ import android.widget.ListView;
  * Performs the Action when the view for an Item in a ListView is clicked.
  * 
  * @author abhideep@ (Abhideep Singh)
- * 
- * @param <T> The type of data that is used to setup the item view on which the click action is being performed.
  */
-public class ListItemClickActionPerformer extends BaseActionPerformer implements AdapterView.OnItemClickListener {
+public class ClickListViewItemActionPerformer extends BaseViewActionPerformer
+    implements AdapterView.OnItemClickListener {
   
   /**
    * Constructor.
    * 
    * @param action Action that needs to be performed on ListView item click.
    */  
-  public ListItemClickActionPerformer(ViewAction action) {
+  public ClickListViewItemActionPerformer(ViewAction action) {
     super(action);
   }
 

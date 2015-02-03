@@ -11,7 +11,7 @@ import android.view.View;
  * 
  * @param <T> The type of data that is used to setup the view on which the action is being performed.
  */
-public abstract class BaseActionPerformer {
+public abstract class BaseViewActionPerformer {
   
   private static final String TAG = "BaseActionPerformer";
 
@@ -23,7 +23,7 @@ public abstract class BaseActionPerformer {
    * 
    * @param action Action that needs to be performed.
    */
-  public BaseActionPerformer(ViewAction action) {
+  public BaseViewActionPerformer(ViewAction action) {
     this.action = action;
   }
 
