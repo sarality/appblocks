@@ -1,6 +1,7 @@
 package com.sarality.app.view.fragment;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,22 +11,24 @@ import com.sarality.app.loader.DataConsumer;
 import com.sarality.app.loader.DataLoader;
 import com.sarality.app.view.ViewRenderer;
 import com.sarality.app.view.datasource.DataSource;
-import com.sarality.app.view.dialog.BaseDialogFragment;
 
 /**
  * A Fragment that loads data from a data source and render a view.
  *
  * @author abhideep@ (Abhideep Singh)
  */
-public abstract class BaseFragment<V extends View, T> extends BaseDialogFragment implements DataConsumer<T> {
+public abstract class BaseFragment<V extends View, T> extends Fragment implements DataConsumer<T> {
 
+
+  private final FragmentActivity activity;
   private final int viewResourceId;
   private final ViewRenderer<V, T> renderer;
   private final DataSource<T> dataSource;
 
   public BaseFragment(FragmentActivity activity, int viewResourceId, ViewRenderer<V, T> renderer,
       DataSource<T> dataSource) {
-    super(activity);
+    super();
+    this.activity =activity;
     this.viewResourceId = viewResourceId;
     this.renderer = renderer;
     this.dataSource = dataSource;
@@ -35,6 +38,13 @@ public abstract class BaseFragment<V extends View, T> extends BaseDialogFragment
   @SuppressWarnings("unchecked")
   public V getView() {
     return (V) super.getView();
+  }
+
+  /**
+   * @return Fragment activity that instantiated the fragment.
+   */
+  protected FragmentActivity getFragmentActivity() {
+    return activity;
   }
 
   @Override
