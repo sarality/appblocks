@@ -1,4 +1,4 @@
-package com.sarality.app.view;
+package com.sarality.app.loader;
 
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
@@ -10,11 +10,11 @@ import com.sarality.app.view.datasource.DataSource;
  *
  * @author abhideep@ (Abhideep Singh)
  */
-public class ViewDataLoaderTask<T> extends AsyncTaskLoader<T> {
+public class DataLoaderTask<T> extends AsyncTaskLoader<T> {
 
   private final DataSource<T> dataSource;
 
-  public ViewDataLoaderTask(Context context, DataSource<T> dataSource) {
+  public DataLoaderTask(Context context, DataSource<T> dataSource) {
     super(context);
     this.dataSource = dataSource;
   }
