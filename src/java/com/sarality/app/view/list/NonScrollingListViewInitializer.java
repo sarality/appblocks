@@ -25,19 +25,30 @@ import java.util.List;
 public class NonScrollingListViewInitializer<T> extends BaseViewInitializer<LinearLayout, List<T>> {
 
   private final ListViewRowRenderer<T> rowRenderer;
+  private final ListViewRowRenderer<T> emptyViewRenderer;
 
   public NonScrollingListViewInitializer(FragmentActivity activity, LinearLayout listView,
-      ListViewRowRenderer<T> rowRenderer) {
+                                         ListViewRowRenderer<T> rowRenderer, ListViewRowRenderer<T> emptyViewRenderer) {
     super(activity, listView);
     this.rowRenderer = rowRenderer;
+    this.emptyViewRenderer = emptyViewRenderer;
   }
 
   @Override
   public void render(List<T> dataList) {
+    getView().removeAllViews();
+
+    if (dataList.size() == 0) {
+      LayoutInflater inflater = LayoutInflater.from(getContext());
+      View rowView = inflater.inflate(emptyViewRenderer.getRowLayout(null), getView());
+      emptyViewRenderer.render(rowView, null);
+    }
+
     for (T data : dataList) {
       LayoutInflater inflater = LayoutInflater.from(getContext());
-      View rowView = inflater.inflate(rowRenderer.getRowLayout(data), getView());
+      View rowView = inflater.inflate(rowRenderer.getRowLayout(data), getView(), false);
       rowRenderer.render(rowView, data);
+      getView().addView(rowView);
     }
   }
 
