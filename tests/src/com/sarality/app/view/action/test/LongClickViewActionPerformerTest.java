@@ -11,18 +11,18 @@ import org.robolectric.RobolectricTestRunner;
 
 import android.view.View;
 
-import com.sarality.app.view.action.ClickActionPerformer;
+import com.sarality.app.view.action.LongClickViewActionPerformer;
 import com.sarality.app.view.action.ViewAction;
 import com.sarality.app.view.action.ViewActionTrigger;
 import com.sarality.app.view.action.ViewDetail;
 
 /**
- * Tests for {@link ClickActionPerformer}.
+ * Tests for {@link LongClickViewActionPerformer}.
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
 @RunWith(RobolectricTestRunner.class)
-public class ClickActionPerformerTest extends TestCase {
+public class LongClickActionPerformerTest extends TestCase {
 
   @Test
   public void testSetupListener() {
@@ -33,10 +33,10 @@ public class ClickActionPerformerTest extends TestCase {
     when(action.getViewId()).thenReturn(1234);
     when(view.getId()).thenReturn(1234);
 
-    ClickActionPerformer clickAction = new ClickActionPerformer(action);
+    LongClickViewActionPerformer clickAction = new LongClickViewActionPerformer(action);
     clickAction.setupListener(view);
 
-    Mockito.verify(view, Mockito.times(1)).setOnClickListener(clickAction);
+    Mockito.verify(view, Mockito.times(1)).setOnLongClickListener(clickAction);
   }
 
   @Test
@@ -48,7 +48,7 @@ public class ClickActionPerformerTest extends TestCase {
     when(action.getViewId()).thenReturn(1234);
     when(view.getId()).thenReturn(5678);
 
-    ClickActionPerformer clickAction = new ClickActionPerformer(action);
+    LongClickViewActionPerformer clickAction = new LongClickViewActionPerformer(action);
     try {
       clickAction.setupListener(view);
       fail("Exception should be thrown");
@@ -56,13 +56,13 @@ public class ClickActionPerformerTest extends TestCase {
       assertEquals("Trying to setup listener on view with Id 5678 while the action specifies the view id 1234",
           e.getMessage());
     }
-    Mockito.verify(view, Mockito.times(0)).setOnClickListener(clickAction);
+    Mockito.verify(view, Mockito.times(0)).setOnLongClickListener(clickAction);
   }
 
   @Test
   public void testClickActionPerformer() {
     ViewAction action = mock(ViewAction.class);
-    ClickActionPerformer clickAction = new ClickActionPerformer(action);
+    LongClickViewActionPerformer clickAction = new LongClickViewActionPerformer(action);
     assertNotNull(clickAction);
   }
 
@@ -74,8 +74,8 @@ public class ClickActionPerformerTest extends TestCase {
     when(action.performAction(Mockito.eq(view), Mockito.any(ViewActionTrigger.class), Mockito.any(ViewDetail.class)))
         .thenReturn(true);
 
-    ClickActionPerformer clickAction = new ClickActionPerformer(action);
-    clickAction.onClick(view);
+    LongClickViewActionPerformer clickAction = new LongClickViewActionPerformer(action);
+    clickAction.onLongClick(view);
     Mockito.verify(action, Mockito.times(1)).performAction(Mockito.eq(view), Mockito.any(ViewActionTrigger.class),
         Mockito.any(ViewDetail.class));
   }

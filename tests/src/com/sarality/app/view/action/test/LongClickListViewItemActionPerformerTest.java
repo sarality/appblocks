@@ -12,19 +12,19 @@ import org.robolectric.RobolectricTestRunner;
 import android.view.View;
 import android.widget.ListView;
 
-import com.sarality.app.view.action.ListItemClickActionPerformer;
+import com.sarality.app.view.action.LongClickListViewItemActionPerformer;
 import com.sarality.app.view.action.ViewAction;
 import com.sarality.app.view.action.ViewActionTrigger;
 import com.sarality.app.view.action.ViewDetail;
 
 /**
- * Tests for {@link ListItemClickActionPerformer}.
+ * Tests for {@link LongClickListViewItemActionPerformer}.
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
 @RunWith(RobolectricTestRunner.class)
-public class ListItemClickActionPerformerTest extends TestCase {
-  
+public class ListItemLongClickActionPerformerTest extends TestCase {
+
   @Test
   public void testSetupListener() {
     ViewAction action = mock(ViewAction.class);
@@ -33,9 +33,10 @@ public class ListItemClickActionPerformerTest extends TestCase {
 
     // stubbing
     when(action.getViewId()).thenReturn(1234);
-    ListItemClickActionPerformer actionPerformer = new ListItemClickActionPerformer(action);
+
+    LongClickListViewItemActionPerformer actionPerformer = new LongClickListViewItemActionPerformer(action);
     actionPerformer.setupListener(listView);
-    Mockito.verify(listView).setOnItemClickListener(actionPerformer);
+    Mockito.verify(listView).setOnItemLongClickListener(actionPerformer);
   }
 
   @Test
@@ -48,18 +49,18 @@ public class ListItemClickActionPerformerTest extends TestCase {
     when(action.getViewId()).thenReturn(1234);
 
     try {
-      ListItemClickActionPerformer actionPerformer = new ListItemClickActionPerformer(action);
+      LongClickListViewItemActionPerformer actionPerformer = new LongClickListViewItemActionPerformer(action);
       actionPerformer.setupListener(listView);
     } catch (IllegalArgumentException e) {
-      assertEquals("Trying to setup listener on view with Id 4567 while the action specifies " +
-      		"the view id 1234", e.getMessage());
+      assertEquals("Trying to setup listener on view with Id 4567 while the action specifies " + "the view id 1234",
+          e.getMessage());
     }
   }
 
   @Test
   public void testListItemClickActionPerformer() {
     ViewAction action = mock(ViewAction.class);
-    ListItemClickActionPerformer actionPerformer = new ListItemClickActionPerformer(action);
+    LongClickListViewItemActionPerformer actionPerformer = new LongClickListViewItemActionPerformer(action);
     assertNotNull(actionPerformer);
   }
 
@@ -72,8 +73,8 @@ public class ListItemClickActionPerformerTest extends TestCase {
     when(action.performAction(Mockito.eq(view), Mockito.any(ViewActionTrigger.class), Mockito.any(ViewDetail.class)))
         .thenReturn(true);
 
-    ListItemClickActionPerformer clickAction = new ListItemClickActionPerformer(action);
-    clickAction.onItemClick(listView, view, 1, 0);
+    LongClickListViewItemActionPerformer clickAction = new LongClickListViewItemActionPerformer(action);
+    clickAction.onItemLongClick(listView, view, 1, 0);
 
     Mockito.verify(action, Mockito.times(1)).performAction(Mockito.eq(view), Mockito.any(ViewActionTrigger.class),
         Mockito.any(ViewDetail.class));

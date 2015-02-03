@@ -13,11 +13,11 @@ import android.content.res.Resources;
 import android.test.mock.MockContext;
 import android.view.View;
 
-import com.sarality.app.view.action.BaseActionPerformer;
+import com.sarality.app.view.action.BaseViewActionPerformer;
 import com.sarality.app.view.action.ViewAction;
 
 /**
- * Tests for {@link BaseActionPerformer}.
+ * Tests for {@link BaseViewActionPerformer}.
  * 
  * @author sunayna@ (Sunayna Uberoy)
  */
@@ -27,14 +27,14 @@ public class BaseActionPerformerTest extends TestCase {
   @Test
   public void testBaseActionPerformer() {
     ViewAction action = mock(ViewAction.class);
-    BaseActionPerformer performer = new TestActionPerformer(action);
+    BaseViewActionPerformer performer = new TestActionPerformer(action);
     assertNotNull(performer);
   }
 
   @Test
   public void testIsValidListenerView() {
     ViewAction action = mock(ViewAction.class);
-    BaseActionPerformer performer = new TestActionPerformer(action);
+    BaseViewActionPerformer performer = new TestActionPerformer(action);
     View view = new View(Robolectric.application);
     view.setId(1234);
 
@@ -57,7 +57,7 @@ public class BaseActionPerformerTest extends TestCase {
   }
 }
 
-class TestActionPerformer extends BaseActionPerformer {
+class TestActionPerformer extends BaseViewActionPerformer {
 
   public TestActionPerformer(ViewAction action) {
     super(action);
