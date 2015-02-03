@@ -18,13 +18,13 @@ import com.sarality.app.view.datasource.DataSource;
  *
  * @author abhideep@ (Abhideep Singh)
  */
-public abstract class CustomDialogFragment<V extends View, T> extends BaseDialogFragment implements DataConsumer<T> {
+public abstract class CustomViewDialogFragment<V extends View, T> extends BaseDialogFragment implements DataConsumer<T> {
 
   private final int viewResourceId;
   private final ViewRenderer<V, T> renderer;
   private final DataSource<T> dataSource;
 
-  public CustomDialogFragment(FragmentActivity activity, int viewResourceId, ViewRenderer<V, T> renderer,
+  public CustomViewDialogFragment(FragmentActivity activity, int viewResourceId, ViewRenderer<V, T> renderer,
       DataSource<T> dataSource) {
     super(activity);
     this.viewResourceId = viewResourceId;
