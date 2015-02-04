@@ -7,9 +7,11 @@ import android.widget.LinearLayout;
 
 import com.sarality.app.view.BaseViewInitializer;
 import com.sarality.app.view.ViewRenderer;
+import com.sarality.app.view.action.TriggerType;
 import com.sarality.app.view.action.ViewAction;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Initializer for a View that displays all rows of a list <b>without</b> a scroll bar.
@@ -59,5 +61,10 @@ public class NonScrollingListViewInitializer<T> extends BaseViewInitializer<Line
   public NonScrollingListViewInitializer<T> withAction(ViewAction action) {
     registerAction(action);
     return this;
+  }
+
+  @Override
+  protected Set<TriggerType> getSupportedTriggerTypes() {
+    return ListViewInitializer.LIST_SUPPORTED_TRIGGER_TYPES;
   }
 }
