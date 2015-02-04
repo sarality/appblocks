@@ -12,10 +12,10 @@ import com.sarality.app.view.ViewRenderer;
  *
  * @author sunayna@ (Sunayna Uberoy)
  */
-public class ShowAlertDialogAction<T> extends BaseViewAction implements ViewAction {
+public class ShowAlertDialogAction<V extends View, T> extends BaseViewAction implements ViewAction {
   private final Context context;
   private final int layout;
-  private final ViewRenderer<T> renderer;
+  private final ViewRenderer<V, T> renderer;
 
   /**
    * Constructor.
@@ -24,7 +24,7 @@ public class ShowAlertDialogAction<T> extends BaseViewAction implements ViewActi
    * @param triggerType Type of event that triggers the action.
    */
   public ShowAlertDialogAction(int viewId, TriggerType triggerType, Context context, int layout,
-                               ViewRenderer<T> renderer) {
+                               ViewRenderer<V, T> renderer) {
     super(viewId, triggerType);
     this.context = context;
     this.layout = layout;
@@ -39,7 +39,7 @@ public class ShowAlertDialogAction<T> extends BaseViewAction implements ViewActi
     final View dialogView = factory.inflate(layout, null);
 
     T data = (T) view.getTag(view.getId());
-    renderer.render(dialogView, data);
+    //renderer.render(dialogView, data);
     alertDialogBuilder.setView(dialogView).create().show();
     return true;
   }
