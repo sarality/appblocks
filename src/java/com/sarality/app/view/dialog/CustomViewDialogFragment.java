@@ -1,7 +1,7 @@
 package com.sarality.app.view.dialog;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
@@ -16,20 +16,28 @@ import com.sarality.app.view.datasource.DataSource;
 /**
  * A DialogFragment that render a custom view inside a Dialog.
  *
+ * TODO(abhideep): Add Action support.
+ *
  * @author abhideep@ (Abhideep Singh)
  */
-public abstract class CustomViewDialogFragment<V extends View, T> extends BaseDialogFragment implements DataConsumer<T> {
+public abstract class CustomViewDialogFragment<V extends View, T> extends DialogFragment implements DataConsumer<T> {
 
+  private final FragmentActivity activity;
   private final int viewResourceId;
   private final ViewRenderer<V, T> renderer;
   private final DataSource<T> dataSource;
 
   public CustomViewDialogFragment(FragmentActivity activity, int viewResourceId, ViewRenderer<V, T> renderer,
       DataSource<T> dataSource) {
-    super(activity);
+    super();
+    this.activity = activity;
     this.viewResourceId = viewResourceId;
     this.renderer = renderer;
     this.dataSource = dataSource;
+  }
+
+  protected final FragmentActivity getFragmentActivity() {
+    return activity;
   }
 
   @Override
@@ -61,11 +69,7 @@ public abstract class CustomViewDialogFragment<V extends View, T> extends BaseDi
     }
   }
 
-  @Override
-  protected final AlertDialog.Builder configureAlertDialogBuilder(AlertDialog.Builder builder) {
-    // The Builder is not used for Custom Dialog Fragments
-    return null;
-  }
+  protected abstract void configure(Dialog dialog);
 
   @Override
   public Dialog onCreateDialog(Bundle savedInstanceState) {

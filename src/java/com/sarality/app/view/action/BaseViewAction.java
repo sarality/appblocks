@@ -96,7 +96,7 @@ public abstract class BaseViewAction implements ViewAction, Action<ViewActionCon
 
   /**
    * Sets up the Action performer for a particular kind of trigger
-   * 
+   *
    * @param view View on which the actions are set
    */
   private void setActionPerformer(View view) {
