@@ -17,6 +17,7 @@ public class Lists {
    * Create an ArrayList with the given elements.
    * 
    * @param elements Elements to include in the list.
+   * @param <T> Type of elements include in the list.
    * @return ArrayList with given elements.
    */
   public static <T> List<T> of(T... elements) {
@@ -25,5 +26,15 @@ public class Lists {
       list.add(element);
     }
     return list;
+  }
+
+  /**
+   * Create an empty ArrayList.
+   *
+   * @param <T> Type of elements include in the list.
+   * @return An empty ArrayList.
+   */
+  public static <T> List<T> emptyList() {
+    return new ArrayList<T>();
   }
 }
