@@ -7,6 +7,8 @@ import android.widget.LinearLayout;
 
 import com.sarality.app.view.BaseViewInitializer;
 import com.sarality.app.view.ViewRenderer;
+import com.sarality.app.view.action.Action;
+import com.sarality.app.view.action.TriggerType;
 import com.sarality.app.view.action.ViewAction;
 
 import java.util.List;
@@ -26,6 +28,7 @@ import java.util.List;
 public class NonScrollingListViewInitializer<T> extends BaseViewInitializer<LinearLayout, List<T>> {
 
   private final ListViewRowRenderer<T> rowRenderer;
+  private final ListActionManager actionManager = new ListActionManager();
   private View emptyView;
 
   public NonScrollingListViewInitializer(FragmentActivity activity, LinearLayout listView,
@@ -40,6 +43,12 @@ public class NonScrollingListViewInitializer<T> extends BaseViewInitializer<Line
     return this;
   }
 
+  public NonScrollingListViewInitializer<T> registerAction(TriggerType triggerType,
+      Action<ListViewActionContext> action) {
+    actionManager.register(triggerType, action);
+    return this;
+  }
+
   @Override
   public void render(List<T> dataList) {
     getView().removeAllViews();
@@ -48,11 +57,14 @@ public class NonScrollingListViewInitializer<T> extends BaseViewInitializer<Line
       getView().addView(emptyView);
     }
 
+    int position = 0;
     for (T data : dataList) {
       LayoutInflater inflater = LayoutInflater.from(getContext());
       View rowView = inflater.inflate(rowRenderer.getRowLayout(data), getView(), false);
       rowRenderer.render(rowView, data);
       getView().addView(rowView);
+      actionManager.setup(getView(), rowView, position, rowView.getId());
+      position++;
     }
   }
 

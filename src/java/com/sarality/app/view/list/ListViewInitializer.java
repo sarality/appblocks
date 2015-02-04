@@ -6,6 +6,8 @@ import android.widget.ListView;
 
 import com.sarality.app.view.BaseViewInitializer;
 import com.sarality.app.view.ViewRenderer;
+import com.sarality.app.view.action.Action;
+import com.sarality.app.view.action.TriggerType;
 
 import java.util.List;
 
@@ -17,6 +19,7 @@ import java.util.List;
 public class ListViewInitializer<T> extends BaseViewInitializer<ListView, List<T>> {
 
   private final ListViewRowRenderer<T> rowRenderer;
+  private final ListActionManager actionManager = new ListActionManager();
   private ListItemFilter<T> filter;
   private View emptyView;
 
@@ -30,11 +33,17 @@ public class ListViewInitializer<T> extends BaseViewInitializer<ListView, List<T
     return this;
   }
 
+  public ListViewInitializer<T> registerAction(TriggerType triggerType, Action<ListViewActionContext> action) {
+    actionManager.register(triggerType, action);
+    return this;
+  }
+
   @Override
   public void render(List<T> dataList) {
     getView().setEmptyView(emptyView);
     getView().setAdapter(createAdapter(dataList));
     setupActions();
+    actionManager.setup(getView());
   }
 
   public ListViewInitializer<T> withFilter(ListItemFilter<T> filter) {
