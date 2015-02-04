@@ -11,14 +11,14 @@ import android.widget.ListView;
  * 
  * @param <T> The type of data that is used to setup the item view on which the long click action is being performed.
  */
-public class ListItemLongClickActionPerformer extends BaseActionPerformer implements AdapterView.OnItemLongClickListener {
+public class LongClickListViewItemActionPerformer extends BaseViewActionPerformer implements AdapterView.OnItemLongClickListener {
 
   /**
    * Constructor.
    * 
    * @param action Action that needs to be performed on ListRow item long click.
    */  
-  public ListItemLongClickActionPerformer(ViewAction action) {
+  public LongClickListViewItemActionPerformer(ViewAction action) {
     super(action);
   }
 
