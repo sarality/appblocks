@@ -21,8 +21,13 @@ import java.util.Map;
  */
 class ListActionManager {
 
+  private final ListTagIdDefinition tagIdDefinition;
   private final Map<TriggerType, ListViewAction> actionMap = Maps.empty();
   private final List<ListViewAction> actionList = Lists.emptyList();
+
+  ListActionManager(ListTagIdDefinition tagIdDefinition) {
+    this.tagIdDefinition = tagIdDefinition;
+  }
 
   void register(TriggerType triggerType, Action<ListViewActionContext> action) {
     ListViewAction viewAction = new ListViewAction(triggerType, action);
@@ -38,7 +43,7 @@ class ListActionManager {
 
   void setup(LinearLayout listView, View rowView, int position, long rowId) {
     for (ListViewAction action : actionList) {
-      new ListViewItemActionPerformer(action.getAction(), listView)
+      new ListViewItemActionPerformer(action.getAction(), listView, tagIdDefinition)
           .setup(rowView, action.getTriggerType(), position, rowId);
     }
   }

@@ -24,9 +24,8 @@ public class ListViewInitializer<T> extends BaseViewInitializer<ListView, List<T
   static final Set<TriggerType> LIST_SUPPORTED_TRIGGER_TYPES = Sets.of(TriggerType.CLICK_LIST_ITEM,
       TriggerType.LONG_CLICK_LIST_ITEM);
 
-
   private final ListViewRowRenderer<T> rowRenderer;
-  private final ListActionManager actionManager = new ListActionManager();
+  private final ListActionManager actionManager = new ListActionManager(null);
   private ListItemFilter<T> filter;
   private EmptyListViewRenderer<?> emptyListViewRenderer;
 

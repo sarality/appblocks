@@ -29,13 +29,15 @@ import java.util.Set;
 public class NonScrollingListViewInitializer<T> extends BaseViewInitializer<LinearLayout, List<T>> {
 
   private final ListViewRowRenderer<T> rowRenderer;
-  private final ListActionManager actionManager = new ListActionManager();
+  private final ListActionManager actionManager;
   private EmptyListViewRenderer<?> emptyListViewRenderer;
 
   public NonScrollingListViewInitializer(FragmentActivity activity, LinearLayout listView,
-      ListViewRowRenderer<T> rowRenderer) {
+      ListViewRowRenderer<T> rowRenderer, ListTagIdDefinition tagIdDefinition) {
     super(activity, listView);
     this.rowRenderer = rowRenderer;
+    this.actionManager = new ListActionManager(tagIdDefinition);
+    validateTagIdDefinition(tagIdDefinition);
   }
 
   public <D> NonScrollingListViewInitializer<T> withEmptyListView(View emptyView,
@@ -77,5 +79,12 @@ public class NonScrollingListViewInitializer<T> extends BaseViewInitializer<Line
   @Override
   protected Set<TriggerType> getSupportedTriggerTypes() {
     return ListViewInitializer.LIST_SUPPORTED_TRIGGER_TYPES;
+  }
+
+  private void validateTagIdDefinition(ListTagIdDefinition tagIdDefinition) {
+    if (tagIdDefinition == null) {
+      throw new IllegalArgumentException("Must specify the Resources to be used as Ids for Tags that store the" +
+          "Row position and Row Id");
+    }
   }
 }

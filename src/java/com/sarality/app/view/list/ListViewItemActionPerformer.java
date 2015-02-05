@@ -16,11 +16,9 @@ import com.sarality.app.view.action.TriggerType;
 class ListViewItemActionPerformer implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener,
     View.OnClickListener, View.OnLongClickListener {
 
-  private final static String LIST_POSITION_TAG = "ListPosition";
-  private final static String LIST_ROW_ID_TAG = "ListRowId";
-
   private final Action<ListViewActionContext> action;
   private final LinearLayout listView;
+  private final ListTagIdDefinition tagIdDefinition;
 
   /**
    * Constructor.
@@ -30,6 +28,7 @@ class ListViewItemActionPerformer implements AdapterView.OnItemClickListener, Ad
   ListViewItemActionPerformer(Action<ListViewActionContext> action) {
     this.action = action;
     this.listView = null;
+    this.tagIdDefinition = null;
   }
 
   /**
@@ -38,9 +37,11 @@ class ListViewItemActionPerformer implements AdapterView.OnItemClickListener, Ad
    * @param action Action that needs to be performed on ListView item click.
    * @param listView LinearLayout that in used a ListView.
    */
-  ListViewItemActionPerformer(Action<ListViewActionContext> action, LinearLayout listView) {
+  ListViewItemActionPerformer(Action<ListViewActionContext> action, LinearLayout listView,
+      ListTagIdDefinition tagIdDefinition) {
     this.action = action;
     this.listView = listView;
+    this.tagIdDefinition = tagIdDefinition;
   }
 
   void setup(ListView view, TriggerType triggerType) {
@@ -54,12 +55,12 @@ class ListViewItemActionPerformer implements AdapterView.OnItemClickListener, Ad
   void setup(View view, TriggerType triggerType, int position, long rowId) {
     if (triggerType == TriggerType.CLICK_LIST_ITEM) {
       view.setOnClickListener(this);
-      view.setTag(LIST_POSITION_TAG.hashCode(), position);
-      view.setTag(LIST_ROW_ID_TAG.hashCode(), rowId);
+      view.setTag(tagIdDefinition.getRowPositionTagResource(), position);
+      view.setTag(tagIdDefinition.getRowIdTagResource(), rowId);
     } else if (triggerType == TriggerType.LONG_CLICK_LIST_ITEM) {
       view.setOnLongClickListener(this);
-      view.setTag(LIST_POSITION_TAG.hashCode(), position);
-      view.setTag(LIST_ROW_ID_TAG.hashCode(), rowId);
+      view.setTag(tagIdDefinition.getRowPositionTagResource(), position);
+      view.setTag(tagIdDefinition.getRowIdTagResource(), rowId);
     }
   }
 
@@ -76,16 +77,16 @@ class ListViewItemActionPerformer implements AdapterView.OnItemClickListener, Ad
 
   @Override
   public void onClick(View view) {
-    Integer position = (Integer) view.getTag(LIST_POSITION_TAG.hashCode());
-    Long rowId = (Long) view.getTag(LIST_ROW_ID_TAG.hashCode());
+    Integer position = (Integer) view.getTag(tagIdDefinition.getRowPositionTagResource());
+    Long rowId = (Long) view.getTag(tagIdDefinition.getRowIdTagResource());
     action.performAction(new ListViewActionContext(view, listView,
         position == null ? -1 : position, rowId == null ? -1 : rowId));
   }
 
   @Override
   public boolean onLongClick(View view) {
-    Integer position = (Integer) view.getTag(LIST_POSITION_TAG.hashCode());
-    Long rowId = (Long) view.getTag(LIST_ROW_ID_TAG.hashCode());
+    Integer position = (Integer) view.getTag(tagIdDefinition.getRowPositionTagResource());
+    Long rowId = (Long) view.getTag(tagIdDefinition.getRowIdTagResource());
     action.performAction(new ListViewActionContext(view, listView,
         position == null ? -1 : position, rowId == null ? -1 : rowId));
     return true;
