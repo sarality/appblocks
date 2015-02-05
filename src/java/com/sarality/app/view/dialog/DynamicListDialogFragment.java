@@ -46,7 +46,7 @@ public abstract class DynamicListDialogFragment<T> extends BaseDialogFragment im
   @Override
   public Dialog onCreateDialog(Bundle savedInstanceState) {
     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-    configureAlertDialogBuilder(builder);
+    configure(builder);
 
     // TODO(abhideep): Add support for ClickAction here.
     builder.setAdapter(adapter, null);
