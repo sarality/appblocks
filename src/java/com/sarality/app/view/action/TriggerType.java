@@ -17,4 +17,5 @@ public enum TriggerType {
   TOUCH, // A View is Touched. A Touch is composed to a Touch Down and a Touch Up event
   TOUCH_UP, // Event when a View is being touched
   TOUCH_DOWN, // Event when the View was being touched but is now NOT being touched.
+  ON_SUCCESS // Deprecated : Action to run when previous action runs successfully
 }
