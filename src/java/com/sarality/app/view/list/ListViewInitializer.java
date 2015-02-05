@@ -4,10 +4,13 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.ListView;
 
+import com.sarality.app.common.collect.Sets;
 import com.sarality.app.view.BaseViewInitializer;
 import com.sarality.app.view.ViewRenderer;
+import com.sarality.app.view.action.TriggerType;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Initializes a simple ListView using the given Row Renderer.
@@ -16,6 +19,10 @@ import java.util.List;
  * @author abhideep@ (Abhideep Singh)
  */
 public class ListViewInitializer<T> extends BaseViewInitializer<ListView, List<T>> {
+
+  static final Set<TriggerType> LIST_SUPPORTED_TRIGGER_TYPES = Sets.of(TriggerType.CLICK_LIST_ITEM,
+      TriggerType.LONG_CLICK_LIST_ITEM);
+
 
   private final ListViewRowRenderer<T> rowRenderer;
   private ListItemFilter<T> filter;
@@ -54,4 +61,8 @@ public class ListViewInitializer<T> extends BaseViewInitializer<ListView, List<T
     }
   }
 
+  @Override
+  protected Set<TriggerType> getSupportedTriggerTypes() {
+    return LIST_SUPPORTED_TRIGGER_TYPES;
+  }
 }
