@@ -12,13 +12,14 @@ import java.util.List;
 /**
  * Initializes a simple ListView using the given Row Renderer.
  *
+ * @param <T> Type of data needed to render a row in the ListView.
  * @author abhideep@ (Abhideep Singh)
  */
 public class ListViewInitializer<T> extends BaseViewInitializer<ListView, List<T>> {
 
   private final ListViewRowRenderer<T> rowRenderer;
   private ListItemFilter<T> filter;
-  private View emptyView;
+  private EmptyListViewRenderer<?> emptyListViewRenderer;
 
   public ListViewInitializer(FragmentActivity activity, ListView view, ListViewRowRenderer<T> rowRenderer) {
     super(activity, view);
@@ -26,13 +27,15 @@ public class ListViewInitializer<T> extends BaseViewInitializer<ListView, List<T
   }
 
   public <D> ListViewInitializer<T> withEmptyListView(View emptyView, ViewRenderer<View, D> emptyViewRenderer, D data) {
-    emptyViewRenderer.render(emptyView, data);
+    this.emptyListViewRenderer = new EmptyListViewRenderer<D>(emptyView, emptyViewRenderer, data);
     return this;
   }
 
   @Override
   public void render(List<T> dataList) {
-    getView().setEmptyView(emptyView);
+    if (emptyListViewRenderer != null) {
+      emptyListViewRenderer.render(getView());
+    }
     getView().setAdapter(createAdapter(dataList));
     setupActions();
   }
