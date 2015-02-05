@@ -1,14 +1,14 @@
 package com.sarality.app.view.list;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.support.v4.app.FragmentActivity;
 import android.widget.ListView;
 
 import com.sarality.app.view.action.ComponentActionManager;
 import com.sarality.app.view.action.ViewAction;
 import com.sarality.app.view.datasource.DataSource;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Component used to render a ListView and setup the associated actions for it.
@@ -18,6 +18,7 @@ import com.sarality.app.view.datasource.DataSource;
  */
 public class ListComponent<T> {
 
+  public static int loaderId = 0;
   // Activity where this List is rendered.
   private final FragmentActivity activity;
 
@@ -102,7 +103,7 @@ public class ListComponent<T> {
    */
   public void initAsync(DataSource<List<T>> dataSource) {
     loaderCallback = new ListComponentLoaderCallback<T>(activity, dataSource, this);
-    activity.getSupportLoaderManager().initLoader(0, null, loaderCallback).forceLoad();
+    activity.getSupportLoaderManager().initLoader(loaderId++, null, loaderCallback).forceLoad();
   }
 
   /**
