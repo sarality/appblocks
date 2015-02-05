@@ -36,7 +36,7 @@ public class NonScrollingListViewInitializer<T> extends BaseViewInitializer<Line
       ListViewRowRenderer<T> rowRenderer, ListTagIdDefinition tagIdDefinition) {
     super(activity, listView);
     this.rowRenderer = rowRenderer;
-    this.actionManager = new ListActionManager(tagIdDefinition);
+    this.actionManager = new ListActionManager(ListViewInitializer.LIST_SUPPORTED_TRIGGER_TYPES, tagIdDefinition);
     validateTagIdDefinition(tagIdDefinition);
   }
 

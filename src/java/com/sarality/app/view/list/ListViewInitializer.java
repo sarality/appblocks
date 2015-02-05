@@ -25,7 +25,7 @@ public class ListViewInitializer<T> extends BaseViewInitializer<ListView, List<T
       TriggerType.LONG_CLICK_LIST_ITEM);
 
   private final ListViewRowRenderer<T> rowRenderer;
-  private final ListActionManager actionManager = new ListActionManager(null);
+  private final ListActionManager actionManager = new ListActionManager(LIST_SUPPORTED_TRIGGER_TYPES, null);
   private ListItemFilter<T> filter;
   private EmptyListViewRenderer<?> emptyListViewRenderer;
 
