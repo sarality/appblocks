@@ -55,9 +55,9 @@ class DialogButtonAction {
       }
     } else if (triggerType == TriggerType.DIALOG_NEUTRAL) {
       if (isLabelResourceBased) {
-        builder.setNegativeButton(buttonLabelResourceId, new DialogButtonActionPerformer(action));
+        builder.setNeutralButton(buttonLabelResourceId, new DialogButtonActionPerformer(action));
       } else {
-        builder.setNegativeButton(buttonLabel, new DialogButtonActionPerformer(action));
+        builder.setNeutralButton(buttonLabel, new DialogButtonActionPerformer(action));
       }
     }
   }
