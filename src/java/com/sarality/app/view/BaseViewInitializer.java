@@ -28,7 +28,6 @@ import java.util.Set;
  *
  * @param <V> Type of view being initialized.
  * @param <T> Type of data needed to initialize the view.
- *
  * @author abhideep@ (Abhideep Singh)
  */
 public abstract class BaseViewInitializer<V extends View, T> implements ViewInitializer<V, T>, DataConsumer<T> {
@@ -38,6 +37,7 @@ public abstract class BaseViewInitializer<V extends View, T> implements ViewInit
   private static final Set<TriggerType> DEFAULT_SUPPORTED_TRIGGER_TYPES = Sets.of(TriggerType.CLICK,
       TriggerType.LONG_CLICK);
 
+  private static int loader = 0;
   private final FragmentActivity activity;
   private final V view;
   private final Map<Integer, Map<TriggerType, ViewAction>> actionMap = Maps.empty();
@@ -66,7 +66,7 @@ public abstract class BaseViewInitializer<V extends View, T> implements ViewInit
 
   @Override
   public void init(DataSource<T> dataSource) {
-    activity.getSupportLoaderManager().initLoader(0, null, new DataLoader<T>(activity, dataSource, this));
+    activity.getSupportLoaderManager().initLoader(loader++, null, new DataLoader<T>(activity, dataSource, this));
   }
 
   protected boolean assertValidAction(ViewAction action) {
