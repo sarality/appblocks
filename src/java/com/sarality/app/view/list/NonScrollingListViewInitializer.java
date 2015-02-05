@@ -12,6 +12,7 @@ import com.sarality.app.view.action.TriggerType;
 import com.sarality.app.view.action.ViewAction;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Initializer for a View that displays all rows of a list <b>without</b> a scroll bar.
@@ -29,17 +30,17 @@ public class NonScrollingListViewInitializer<T> extends BaseViewInitializer<Line
 
   private final ListViewRowRenderer<T> rowRenderer;
   private final ListActionManager actionManager = new ListActionManager();
-  private View emptyView;
+  private EmptyListViewRenderer<?> emptyListViewRenderer;
 
   public NonScrollingListViewInitializer(FragmentActivity activity, LinearLayout listView,
-                                         ListViewRowRenderer<T> rowRenderer) {
+      ListViewRowRenderer<T> rowRenderer) {
     super(activity, listView);
     this.rowRenderer = rowRenderer;
   }
 
-  public <D> NonScrollingListViewInitializer<T> withEmptyListView(View emptyView, ViewRenderer<View, D> emptyViewRenderer, D data) {
-    emptyViewRenderer.render(emptyView, data);
-    this.emptyView = emptyView;
+  public <D> NonScrollingListViewInitializer<T> withEmptyListView(View emptyView,
+      ViewRenderer<View, D> emptyViewRenderer, D data) {
+    this.emptyListViewRenderer = new EmptyListViewRenderer<D>(emptyView, emptyViewRenderer, data);
     return this;
   }
 
@@ -53,8 +54,8 @@ public class NonScrollingListViewInitializer<T> extends BaseViewInitializer<Line
   public void render(List<T> dataList) {
     getView().removeAllViews();
 
-    if (dataList.size() == 0) {
-      getView().addView(emptyView);
+    if (emptyListViewRenderer != null) {
+      emptyListViewRenderer.render(getView(), dataList.isEmpty());
     }
 
     int position = 0;
@@ -71,5 +72,10 @@ public class NonScrollingListViewInitializer<T> extends BaseViewInitializer<Line
   public NonScrollingListViewInitializer<T> withAction(ViewAction action) {
     registerAction(action);
     return this;
+  }
+
+  @Override
+  protected Set<TriggerType> getSupportedTriggerTypes() {
+    return ListViewInitializer.LIST_SUPPORTED_TRIGGER_TYPES;
   }
 }
