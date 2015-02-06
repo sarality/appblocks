@@ -7,6 +7,7 @@ import android.widget.ListView;
 import com.sarality.app.common.collect.Sets;
 import com.sarality.app.view.BaseViewInitializer;
 import com.sarality.app.view.ViewRenderer;
+import com.sarality.app.view.action.Action;
 import com.sarality.app.view.action.TriggerType;
 
 import java.util.List;
@@ -23,8 +24,8 @@ public class ListViewInitializer<T> extends BaseViewInitializer<ListView, List<T
   static final Set<TriggerType> LIST_SUPPORTED_TRIGGER_TYPES = Sets.of(TriggerType.CLICK_LIST_ITEM,
       TriggerType.LONG_CLICK_LIST_ITEM);
 
-
   private final ListViewRowRenderer<T> rowRenderer;
+  private final ListActionManager actionManager = new ListActionManager(LIST_SUPPORTED_TRIGGER_TYPES, null);
   private ListItemFilter<T> filter;
   private EmptyListViewRenderer<?> emptyListViewRenderer;
 
@@ -38,6 +39,11 @@ public class ListViewInitializer<T> extends BaseViewInitializer<ListView, List<T
     return this;
   }
 
+  public ListViewInitializer<T> registerAction(TriggerType triggerType, Action<ListViewActionContext> action) {
+    actionManager.register(triggerType, action);
+    return this;
+  }
+
   @Override
   public void render(List<T> dataList) {
     if (emptyListViewRenderer != null) {
@@ -45,6 +51,7 @@ public class ListViewInitializer<T> extends BaseViewInitializer<ListView, List<T
     }
     getView().setAdapter(createAdapter(dataList));
     setupActions();
+    actionManager.setup(getView());
   }
 
   public ListViewInitializer<T> withFilter(ListItemFilter<T> filter) {

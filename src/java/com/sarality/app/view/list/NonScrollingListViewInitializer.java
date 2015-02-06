@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 
 import com.sarality.app.view.BaseViewInitializer;
 import com.sarality.app.view.ViewRenderer;
+import com.sarality.app.view.action.Action;
 import com.sarality.app.view.action.TriggerType;
 import com.sarality.app.view.action.ViewAction;
 
@@ -28,17 +29,26 @@ import java.util.Set;
 public class NonScrollingListViewInitializer<T> extends BaseViewInitializer<LinearLayout, List<T>> {
 
   private final ListViewRowRenderer<T> rowRenderer;
+  private final ListActionManager actionManager;
   private EmptyListViewRenderer<?> emptyListViewRenderer;
 
   public NonScrollingListViewInitializer(FragmentActivity activity, LinearLayout listView,
-      ListViewRowRenderer<T> rowRenderer) {
+      ListViewRowRenderer<T> rowRenderer, ListTagIdDefinition tagIdDefinition) {
     super(activity, listView);
     this.rowRenderer = rowRenderer;
+    this.actionManager = new ListActionManager(ListViewInitializer.LIST_SUPPORTED_TRIGGER_TYPES, tagIdDefinition);
+    validateTagIdDefinition(tagIdDefinition);
   }
 
   public <D> NonScrollingListViewInitializer<T> withEmptyListView(View emptyView,
       ViewRenderer<View, D> emptyViewRenderer, D data) {
     this.emptyListViewRenderer = new EmptyListViewRenderer<D>(emptyView, emptyViewRenderer, data);
+    return this;
+  }
+
+  public NonScrollingListViewInitializer<T> registerAction(TriggerType triggerType,
+      Action<ListViewActionContext> action) {
+    actionManager.register(triggerType, action);
     return this;
   }
 
@@ -50,11 +60,14 @@ public class NonScrollingListViewInitializer<T> extends BaseViewInitializer<Line
       emptyListViewRenderer.render(getView(), dataList.isEmpty());
     }
 
+    int position = 0;
     for (T data : dataList) {
       LayoutInflater inflater = LayoutInflater.from(getContext());
       View rowView = inflater.inflate(rowRenderer.getRowLayout(data), getView(), false);
       rowRenderer.render(rowView, data);
       getView().addView(rowView);
+      actionManager.setup(getView(), rowView, position, rowView.getId());
+      position++;
     }
   }
 
@@ -66,5 +79,12 @@ public class NonScrollingListViewInitializer<T> extends BaseViewInitializer<Line
   @Override
   protected Set<TriggerType> getSupportedTriggerTypes() {
     return ListViewInitializer.LIST_SUPPORTED_TRIGGER_TYPES;
+  }
+
+  private void validateTagIdDefinition(ListTagIdDefinition tagIdDefinition) {
+    if (tagIdDefinition == null) {
+      throw new IllegalArgumentException("Must specify the Resources to be used as Ids for Tags that store the" +
+          "Row position and Row Id");
+    }
   }
 }
