@@ -21,6 +21,7 @@ import java.util.Set;
  */
 public class ListViewInitializer<T> extends BaseViewInitializer<ListView, List<T>> {
 
+  private static final int DEFAULT_LOADER_ID = 0;
   static final Set<TriggerType> LIST_SUPPORTED_TRIGGER_TYPES = Sets.of(TriggerType.CLICK_LIST_ITEM,
       TriggerType.LONG_CLICK_LIST_ITEM);
 
@@ -29,9 +30,14 @@ public class ListViewInitializer<T> extends BaseViewInitializer<ListView, List<T
   private ListItemFilter<T> filter;
   private EmptyListViewRenderer<?> emptyListViewRenderer;
 
-  public ListViewInitializer(FragmentActivity activity, ListView view, ListViewRowRenderer<T> rowRenderer) {
-    super(activity, view);
+  public ListViewInitializer(FragmentActivity activity, ListView view, ListViewRowRenderer<T> rowRenderer,
+      int loaderId) {
+    super(activity, view, loaderId);
     this.rowRenderer = rowRenderer;
+  }
+
+  public ListViewInitializer(FragmentActivity activity, ListView view, ListViewRowRenderer<T> rowRenderer) {
+    this(activity, view, rowRenderer, DEFAULT_LOADER_ID);
   }
 
   public <D> ListViewInitializer<T> withEmptyListView(View emptyView, ViewRenderer<View, D> emptyViewRenderer, D data) {
