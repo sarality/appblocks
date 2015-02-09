@@ -21,7 +21,10 @@ public class DataLoaderTask<T> extends AsyncTaskLoader<T> {
 
   @Override
   public T loadInBackground() {
-    dataSource.loadData();
-    return dataSource.getData();
+    if (dataSource != null) {
+      dataSource.loadData();
+      return dataSource.getData();
+    }
+    return null;
   }
 }

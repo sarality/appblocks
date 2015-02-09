@@ -34,18 +34,24 @@ public abstract class BaseViewInitializer<V extends View, T> implements ViewInit
 
   private static final Logger logger = LoggerFactory.getLogger(BaseViewInitializer.class);
 
+  private static final int DEFAULT_LOADER_ID = 0;
   private static final Set<TriggerType> DEFAULT_SUPPORTED_TRIGGER_TYPES = Sets.of(TriggerType.CLICK,
       TriggerType.LONG_CLICK);
 
-  private static int loader = 0;
+  private final int loaderId;
   private final FragmentActivity activity;
   private final V view;
   private final Map<Integer, Map<TriggerType, ViewAction>> actionMap = Maps.empty();
   private final List<ViewAction> actionList = Lists.of();
 
-  public BaseViewInitializer(FragmentActivity activity, V view) {
+  public BaseViewInitializer(FragmentActivity activity, V view, int loaderId) {
     this.activity = activity;
     this.view = view;
+    this.loaderId = loaderId;
+  }
+
+  public BaseViewInitializer(FragmentActivity activity, V view) {
+    this(activity = activity, view, DEFAULT_LOADER_ID);
   }
 
   @Override
@@ -66,7 +72,8 @@ public abstract class BaseViewInitializer<V extends View, T> implements ViewInit
 
   @Override
   public void init(DataSource<T> dataSource) {
-    activity.getSupportLoaderManager().initLoader(loader++, null, new DataLoader<T>(activity, dataSource, this));
+    activity.getSupportLoaderManager()
+        .initLoader(loaderId, null, new DataLoader<T>(activity, dataSource, this)).forceLoad();
   }
 
   protected boolean assertValidAction(ViewAction action) {

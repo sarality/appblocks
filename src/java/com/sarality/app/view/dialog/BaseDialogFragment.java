@@ -2,9 +2,8 @@ package com.sarality.app.view.dialog;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.DialogFragment;
 
 import com.sarality.app.common.collect.Lists;
 import com.sarality.app.common.collect.Maps;
@@ -27,22 +26,11 @@ public abstract class BaseDialogFragment extends DialogFragment {
   public static final Set<TriggerType> DIALOG_LIST_TRIGGER_TYPES = Sets.of(TriggerType.DIALOG_POSITIVE,
       TriggerType.DIALOG_NEGATIVE, TriggerType.DIALOG_NEUTRAL);
 
-  private final FragmentActivity activity;
-
   private final Map<TriggerType, DialogAction> actionMap = Maps.empty();
   private final List<DialogAction> actionList = Lists.emptyList();
 
   private final Map<TriggerType, DialogButtonAction> listActionMap = Maps.empty();
   private final List<DialogButtonAction> listActionList = Lists.emptyList();
-
-  /**
-   * Constructor.
-   *
-   * @param activity Fragment activity that instantiated the fragment.
-   */
-  public BaseDialogFragment(FragmentActivity activity) {
-    this.activity = activity;
-  }
 
   /**
    * Register an Action for the Dialog.
@@ -75,18 +63,11 @@ public abstract class BaseDialogFragment extends DialogFragment {
   public Dialog onCreateDialog(Bundle savedInstanceState) {
     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
     setupActions(builder);
-    setupListActions(builder);
+    setupButtonActions(builder);
     configure(builder);
     Dialog dialog = builder.create();
     configure(dialog);
     return dialog;
-  }
-
-  /**
-   * @return Fragment activity that instantiated the fragment.
-   */
-  protected final FragmentActivity getFragmentActivity() {
-    return activity;
   }
 
   /**
@@ -106,17 +87,18 @@ public abstract class BaseDialogFragment extends DialogFragment {
   protected abstract void configure(AlertDialog.Builder builder);
 
   /**
-   * Setup action for the Dialog
+   * Setup actions for the Dialog
    */
   private void setupActions(AlertDialog.Builder builder) {
     for (DialogAction action : actionList) {
       action.setup(builder, action.getTriggerType());
     }
   }
+
   /**
-   * Setup action for the Dialog List
+   * Setup actions for the Dialog Buttons
    */
-  private void setupListActions(AlertDialog.Builder builder) {
+  private void setupButtonActions(AlertDialog.Builder builder) {
     for (DialogButtonAction action : listActionList) {
       action.setup(builder, action.getTriggerType());
     }
