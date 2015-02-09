@@ -4,6 +4,7 @@ import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.ListView;
 
+import com.sarality.app.common.collect.Lists;
 import com.sarality.app.common.collect.Sets;
 import com.sarality.app.view.BaseViewInitializer;
 import com.sarality.app.view.ViewRenderer;
@@ -55,7 +56,17 @@ public class ListViewInitializer<T> extends BaseViewInitializer<ListView, List<T
     if (emptyListViewRenderer != null) {
       emptyListViewRenderer.render(getView());
     }
-    getView().setAdapter(createAdapter(dataList));
+
+    // Create a copy of the data so that we don't have a reference to the list in the DataSource. Using the same list
+    // becomes a problem if the DataSource is still loading the data and we are rendering the list using the adapter.
+    List<T> adapterDataList = Lists.emptyList();
+    adapterDataList.addAll(dataList);
+    ListViewAdapter<T> adapter = createAdapter(adapterDataList);
+    getView().setAdapter(adapter);
+
+    // Notify the ListView, just in case the data is different from the last time render was called.
+    adapter.notifyDataSetChanged();
+
     setupActions();
     actionManager.setup(getView());
   }

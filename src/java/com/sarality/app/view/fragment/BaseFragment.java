@@ -27,10 +27,10 @@ public abstract class BaseFragment<V extends View, T> extends Fragment implement
   }
 
   @Override
-  public void onActivityCreated(Bundle savedInstanceState) {
-    super.onActivityCreated(savedInstanceState);
+  public void onResume() {
+    super.onResume();
     dataSource = createDataSource();
-    startLoad(dataSource, getLoaderId(), this);
+    reinitialize();
   }
 
   /**
