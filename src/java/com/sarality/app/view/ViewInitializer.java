@@ -2,7 +2,6 @@ package com.sarality.app.view;
 
 import android.view.View;
 
-import com.sarality.app.view.action.ViewAction;
 import com.sarality.app.view.datasource.DataSource;
 
 /**
@@ -23,15 +22,6 @@ public interface ViewInitializer<V extends View, T> {
    * @return The View being initialized.
    */
   public V getView();
-
-  /**
-   * Registers the given View Action for initialization.
-   * <p/>
-   * It is the responsibility of the implementation to setup these actions in the {@link #init(Object)} method.
-   *
-   * @param action Action to be setup for the given view.
-   */
-  public void registerAction(ViewAction action);
 
   /**
    * Setup actions registered for the View.

@@ -1,34 +1,56 @@
 package com.sarality.app.view.dialog;
 
-import android.app.AlertDialog;
+import android.content.DialogInterface;
 
-import com.sarality.app.view.action.Action;
-import com.sarality.app.view.action.TriggerType;
+import com.sarality.app.view.action.BaseAction;
 
 /**
- * Wrapper for the Action to be triggered on the dialog.
- * <p/>
- * Makes it easier to store a mapping between the triggers and the actions.
+ * Base implementation for an Action on a Dialog.
  *
  * @author abhideep@ (Abhideep Singh)
  */
-class DialogAction {
+public abstract class DialogAction extends BaseAction<DialogAction> implements DialogInterface.OnCancelListener,
+    DialogInterface.OnClickListener {
 
-  private final Action<DialogActionContext> action;
-  private final TriggerType triggerType;
+  private DialogInterface dialog;
+  private int buttonType;
 
-  DialogAction(Action<DialogActionContext> action, TriggerType triggerType) {
-    this.action = action;
-    this.triggerType = triggerType;
+  @Override
+  public void onCancel(DialogInterface dialog) {
+    setDialog(dialog);
+    perform();
   }
 
-  void setup(AlertDialog.Builder builder, TriggerType triggerType) {
-    if (triggerType == TriggerType.DIALOG_CANCEL) {
-      builder.setOnCancelListener(new DialogActionPerformer(action));
-    }
+  @Override
+  public void onClick(DialogInterface dialog, int which) {
+    setDialog(dialog);
+    setButtonType(which);
+    perform();
   }
 
-  TriggerType getTriggerType() {
-    return triggerType;
+  @Override
+  public void setContext(DialogAction action) {
+    setDialog(action.getDialog());
+  }
+
+  @Override
+  protected DialogAction getInstance() {
+    return this;
+  }
+
+  protected DialogInterface getDialog() {
+    return dialog;
+  }
+
+  protected void setDialog(DialogInterface dialog) {
+    this.dialog = dialog;
+  }
+
+  protected int getButtonType() {
+    return buttonType;
+  }
+
+  protected void setButtonType(int which) {
+    this.buttonType = which;
   }
 }
