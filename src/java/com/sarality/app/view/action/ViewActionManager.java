@@ -120,7 +120,7 @@ public class ViewActionManager {
     @Override
     protected boolean doAction() {
       if (listener != null) {
-        listener.onClick(getView());
+        listener.onClick(getActionContext().getView());
       }
       return true;
     }
@@ -140,7 +140,7 @@ public class ViewActionManager {
     @Override
     protected boolean doAction() {
       if (listener != null) {
-        listener.onLongClick(getView());
+        listener.onLongClick(getActionContext().getView());
       }
       return true;
     }
@@ -160,7 +160,7 @@ public class ViewActionManager {
     @Override
     protected boolean doAction() {
       if (listener != null) {
-        listener.onTouch(getView(), getMotionEvent());
+        listener.onTouch(getActionContext().getView(), getActionContext().getMotionEvent());
       }
       return true;
     }

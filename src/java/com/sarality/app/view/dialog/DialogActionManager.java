@@ -160,7 +160,8 @@ public class DialogActionManager {
 
     @Override
     protected boolean doAction() {
-      listener.onClick(getDialog(), getButtonType());
+      DialogActionContext context = getActionContext();
+      listener.onClick(context.getDialog(), context.getButtonType());
       return true;
     }
   }  

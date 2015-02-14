@@ -7,6 +7,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.sarality.app.view.action.AppViewAction;
+import com.sarality.app.view.action.AppViewActionContext;
 import com.sarality.app.view.action.ViewActionManager;
 
 /**
@@ -16,8 +17,8 @@ import com.sarality.app.view.action.ViewActionManager;
  */
 public class ListViewActionManager extends ViewActionManager {
 
-  private ListViewAction onClickAction;
-  private ListViewAction onLongClickAction;
+  private ListViewAction onItemClickAction;
+  private ListViewAction onItemLongClickAction;
 
   public ListViewActionManager(Context context) {
     super(context);
@@ -40,42 +41,42 @@ public class ListViewActionManager extends ViewActionManager {
   }
 
   public void setOnItemClickAction(ListViewAction action) {
-    if (onClickAction != null) {
+    if (onItemClickAction != null) {
       throw new IllegalStateException("Trying to register multiple Actions for a Click event on ListView items. " +
           "Use action chaining instead by all calling registerSuccessAction instead");
     }
-    onClickAction = action;
+    onItemClickAction = action;
   }
 
   public void setOnItemLongClickAction(ListViewAction action) {
-    if (onLongClickAction != null) {
+    if (onItemLongClickAction != null) {
       throw new IllegalStateException("Trying to register multiple Actions for a Long Click event on ListView items. " +
           "Use action chaining instead by all calling registerSuccessAction instead");
     }
-    onLongClickAction = action;
+    onItemLongClickAction = action;
   }
 
   public void setupListView(ListView view) {
-    if (onClickAction != null) {
-      view.setOnItemClickListener(onClickAction);
+    if (onItemClickAction != null) {
+      view.setOnItemClickListener(onItemClickAction);
     }
 
-    if (onLongClickAction != null) {
-      view.setOnItemLongClickListener(onLongClickAction);
+    if (onItemLongClickAction != null) {
+      view.setOnItemLongClickListener(onItemLongClickAction);
     }
   }
 
   public void setup(LinearLayout listView, View rowView, int position, int rowId, ListTagIdDefinition tagIdDefinition) {
-    if (onClickAction != null) {
+    if (onItemClickAction != null) {
       rowView.setTag(tagIdDefinition.getRowPositionTagResource(), position);
       rowView.setTag(tagIdDefinition.getRowIdTagResource(), rowId);
-      rowView.setOnClickListener(new SimulatedListViewAction(listView, onClickAction, tagIdDefinition));
+      rowView.setOnClickListener(new SimulatedListViewAction(listView, onItemClickAction, tagIdDefinition));
     }
 
-    if (onLongClickAction != null) {
+    if (onItemLongClickAction != null) {
       rowView.setTag(tagIdDefinition.getRowPositionTagResource(), position);
       rowView.setTag(tagIdDefinition.getRowIdTagResource(), rowId);
-      rowView.setOnLongClickListener(new SimulatedListViewAction(listView, onLongClickAction, tagIdDefinition));
+      rowView.setOnLongClickListener(new SimulatedListViewAction(listView, onItemLongClickAction, tagIdDefinition));
     }
   }
 
@@ -99,7 +100,7 @@ public class ListViewActionManager extends ViewActionManager {
     public void onClick(View view) {
       Integer position = (Integer) view.getTag(tagIdDefinition.getRowPositionTagResource());
       Long rowId = (Long) view.getTag(tagIdDefinition.getRowIdTagResource());
-      setContext(view, listView, null, position, rowId);
+      setActionContext(new ListViewActionContext(view, listView, position, rowId));
       perform();
     }
 
@@ -107,7 +108,7 @@ public class ListViewActionManager extends ViewActionManager {
     public boolean onLongClick(View view) {
       Integer position = (Integer) view.getTag(tagIdDefinition.getRowPositionTagResource());
       Long rowId = (Long) view.getTag(tagIdDefinition.getRowIdTagResource());
-      setContext(view, listView, null, position, rowId);
+      setActionContext(new ListViewActionContext(view, listView, position, rowId));
       return perform();
     }
 
@@ -132,8 +133,9 @@ public class ListViewActionManager extends ViewActionManager {
     }
 
     @Override
-    protected void setContext(View view, View listView, AdapterView<?> parent, int position, long id) {
-      action.setView(view);
+    public void setActionContext(ListViewActionContext context) {
+      super.setActionContext(context);
+      action.setActionContext(new AppViewActionContext(context.getView()));
     }
 
     @Override
@@ -159,7 +161,8 @@ public class ListViewActionManager extends ViewActionManager {
     @Override
     protected boolean doAction() {
       if (listener != null) {
-        listener.onItemClick(getAdapterView(), getView(), getListPosition(), getRowId());
+        ListViewActionContext context = getActionContext();
+        listener.onItemClick(context.getAdapterView(), context.getView(), context.getPosition(), context.getRowId());
       }
       return true;
     }
@@ -179,7 +182,9 @@ public class ListViewActionManager extends ViewActionManager {
     @Override
     protected boolean doAction() {
       if (listener != null) {
-        listener.onItemLongClick(getAdapterView(), getView(), getListPosition(), getRowId());
+        ListViewActionContext context = getActionContext();
+        listener.onItemLongClick(context.getAdapterView(), context.getView(), context.getPosition(),
+            context.getRowId());
       }
       return true;
     }

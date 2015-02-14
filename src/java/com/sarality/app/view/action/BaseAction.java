@@ -9,10 +9,21 @@ import java.util.List;
  *
  * @author abhideep@ (Abhideep Singh)
  */
-public abstract class BaseAction<A extends BaseAction<A>> implements Action<A> {
+public abstract class BaseAction<C> implements Action<C> {
 
-  private final List<A> successActionList = Lists.emptyList();
-  private final List<A> failureActionList = Lists.emptyList();
+  private C context;
+  private final List<ActionPerformer<C, ?>> successActionList = Lists.emptyList();
+  private final List<ActionPerformer<C, ?>> failureActionList = Lists.emptyList();
+
+  @Override
+  public C getActionContext() {
+    return context;
+  }
+
+  @Override
+  public void setActionContext(C context) {
+    this.context = context;
+  }
 
   @Override
   public final boolean perform() {
@@ -32,24 +43,22 @@ public abstract class BaseAction<A extends BaseAction<A>> implements Action<A> {
 
 
   @Override
-  public final void registerSuccessAction(A action) {
-    successActionList.add(action);
+  public <D> void registerSuccessAction(Action<D> action, ActionContextExtractor<C, D> contextSetter) {
+    successActionList.add(new ActionPerformer<C, D>(this, action, contextSetter));
   }
+
 
   @Override
-  public final void registerFailureAction(A action) {
-    failureActionList.add(action);
+  public <D> void registerFailureAction(Action<D> action, ActionContextExtractor<C, D> contextSetter) {
+    failureActionList.add(new ActionPerformer<C, D>(this, action, contextSetter));
   }
-
-  protected abstract A getInstance();
 
   protected abstract boolean doAction();
 
   private boolean doOnSuccess() {
     boolean success;
-    for (A action : successActionList) {
-      action.setContext(getInstance());
-      success = action.perform();
+    for (ActionPerformer<C, ?> action : successActionList) {
+     success = action.perform();
       if (!success) {
         return false;
       }
@@ -59,8 +68,7 @@ public abstract class BaseAction<A extends BaseAction<A>> implements Action<A> {
 
   private boolean doOnFailure() {
     boolean success;
-    for (A action : failureActionList) {
-      action.setContext(getInstance());
+    for (ActionPerformer<C, ?> action : failureActionList) {
       success = action.perform();
       if (!success) {
         return false;

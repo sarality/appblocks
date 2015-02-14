@@ -3,6 +3,7 @@ package com.sarality.app.view.action.common;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.view.View;
 
 import com.sarality.app.view.action.AppViewAction;
 import com.sarality.app.view.nav.BundleGenerator;
@@ -39,10 +40,11 @@ public class StartActivityAction extends AppViewAction {
 
   @Override
   public boolean doAction() {
-    Context context = getView().getContext();
+    View view = getActionContext().getView();
+    Context context = view.getContext();
     Intent intent = new Intent(context, activityClass);
     if (bundleGenerator != null) {
-      intent.putExtras(bundleGenerator.generate(getView()));
+      intent.putExtras(bundleGenerator.generate(view));
     }
     context.startActivity(intent);
     return true;

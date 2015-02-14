@@ -5,7 +5,7 @@ package com.sarality.app.view.action;
  *
  * @author abhideep@ (Abhideep Singh)
  */
-public interface Action<A extends Action<A>> {
+public interface Action<C> {
 
   /**
    * Perform the action.
@@ -17,22 +17,29 @@ public interface Action<A extends Action<A>> {
   /**
    * Set the context for the execution of the current action.
    *
-   * @param action Action that was triggered that then resulted in the current action being called.
+   * @param context Context that triggered this action.
    */
-  public void setContext(A action);
+  public void setActionContext(C context);
+
+  /**
+   * Get the context for the execution of the current action.
+   *
+   * @return Context associated with the Action
+   */
+  public C getActionContext();
 
   /**
    * Register the action that needs to be executed when this action completes successfully.
    *
    * @param action Actions to be performed on success.
    */
-  public void registerSuccessAction(A action);
+  public <D> void registerSuccessAction(Action<D> action, ActionContextExtractor<C, D> contextSetter);
 
   /**
    * Register the action that needs to be executed when this action fails.
    *
    * @param action Actions to be performed on failure.
    */
-  public void registerFailureAction(A action);
+  public <D> void registerFailureAction(Action<D> action, ActionContextExtractor<C, D> contextSetter);
 
 }
