@@ -22,52 +22,25 @@ import java.util.Set;
  */
 public abstract class BaseDialogFragment extends DialogFragment {
 
-  public static final Set<TriggerType> DIALOG_TRIGGER_TYPES = Sets.of(TriggerType.DIALOG_CANCEL);
-  public static final Set<TriggerType> DIALOG_LIST_TRIGGER_TYPES = Sets.of(TriggerType.DIALOG_POSITIVE,
-      TriggerType.DIALOG_NEGATIVE, TriggerType.DIALOG_NEUTRAL);
-
-  private final Map<TriggerType, DialogAction> actionMap = Maps.empty();
-  private final List<DialogAction> actionList = Lists.emptyList();
-
-  private final Map<TriggerType, DialogButtonAction> listActionMap = Maps.empty();
-  private final List<DialogButtonAction> listActionList = Lists.emptyList();
-
-  /**
-   * Register an Action for the Dialog.
-   *
-   * @param triggerType Event that triggers this Action.
-   * @param action Action to be performed when event is triggered.
-   */
-  public void registerAction(TriggerType triggerType, Action<DialogActionContext> action) {
-    assertValidAction(triggerType, DIALOG_TRIGGER_TYPES);
-    DialogAction dialogAction = new DialogAction(action, triggerType);
-    actionMap.put(triggerType, dialogAction);
-    actionList.add(dialogAction);
-  }
-
-  public void registerAction(TriggerType triggerType, String label, Action<DialogButtonActionContext> action) {
-    assertValidAction(triggerType, DIALOG_LIST_TRIGGER_TYPES);
-    DialogButtonAction dialogAction = new DialogButtonAction(label, action, triggerType);
-    listActionMap.put(triggerType, dialogAction);
-    listActionList.add(dialogAction);
-  }
-
-  public void registerAction(TriggerType triggerType, int labelResourceId, Action<DialogButtonActionContext> action) {
-    assertValidAction(triggerType, DIALOG_LIST_TRIGGER_TYPES);
-    DialogButtonAction dialogAction = new DialogButtonAction(labelResourceId, action, triggerType);
-    listActionMap.put(triggerType, dialogAction);
-    listActionList.add(dialogAction);
-  }
+  private final DialogActionManager actionManager = new DialogActionManager();
 
   @Override
   public Dialog onCreateDialog(Bundle savedInstanceState) {
     AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-    setupActions(builder);
-    setupButtonActions(builder);
+    getActionManager().setup(builder);
     configure(builder);
     Dialog dialog = builder.create();
     configure(dialog);
     return dialog;
+  }
+
+  /**
+   * Retrieve ActionManager for the Fragment so that Actions can be registered for the dialog.
+   *
+   * @return ActionManager for the Dialog
+   */
+  public DialogActionManager getActionManager() {
+    return actionManager;
   }
 
   /**
@@ -85,32 +58,4 @@ public abstract class BaseDialogFragment extends DialogFragment {
    * @param builder The Builder for the Alert Dialog.
    */
   protected abstract void configure(AlertDialog.Builder builder);
-
-  /**
-   * Setup actions for the Dialog
-   */
-  private void setupActions(AlertDialog.Builder builder) {
-    for (DialogAction action : actionList) {
-      action.setup(builder, action.getTriggerType());
-    }
-  }
-
-  /**
-   * Setup actions for the Dialog Buttons
-   */
-  private void setupButtonActions(AlertDialog.Builder builder) {
-    for (DialogButtonAction action : listActionList) {
-      action.setup(builder, action.getTriggerType());
-    }
-  }
-
-  /**
-   * Validate the Actions being set for Dialog
-   */
-  private void assertValidAction(TriggerType triggerType, Set<TriggerType> validTriggerTypes) {
-    if (!validTriggerTypes.contains(triggerType)) {
-      throw new IllegalArgumentException("Cannot register a Dialog Action with trigger " + triggerType +
-          ". The action must of type " + validTriggerTypes);
-    }
-  }
 }

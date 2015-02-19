@@ -17,7 +17,7 @@ import com.sarality.app.common.collect.Lists;
  * 
  * @author abhideep@ (Abhideep Singh)
  */
-public abstract class BaseViewAction implements ViewAction, Action<ViewActionContext> {
+public abstract class BaseViewAction implements ViewAction {
 
   private static final Logger logger = LoggerFactory.getLogger(BaseViewAction.class);
   
@@ -125,11 +125,6 @@ public abstract class BaseViewAction implements ViewAction, Action<ViewActionCon
       runAction(failureActionList, view, trigger, viewDetail);
     }
     return false;
-  }
-
-  @Override
-  public void performAction(ViewActionContext actionContext) {
-    performAction(actionContext.getView(), actionContext.getTrigger(), actionContext.getViewDetail());
   }
 
   /**

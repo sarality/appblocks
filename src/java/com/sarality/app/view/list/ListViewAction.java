@@ -1,30 +1,44 @@
 package com.sarality.app.view.list;
 
-import com.sarality.app.view.action.Action;
-import com.sarality.app.view.action.TriggerType;
+import android.view.View;
+import android.widget.AdapterView;
+
+import com.sarality.app.view.action.BaseAction;
 
 /**
- * Wrapper for the Action to be triggered on List View.
- * <p/>
- * Makes it easier to store a mapping between the triggers and the actions.
+ * Base implementation of an Action on a ListView.
  *
  * @author abhideep@ (Abhideep Singh)
  */
-class ListViewAction {
-  private final TriggerType triggerType;
-  private final Action<ListViewActionContext> action;
+public abstract class ListViewAction extends BaseAction<ListViewActionContext>
+    implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener,
+    AdapterView.OnItemSelectedListener {
 
-  ListViewAction(TriggerType triggerType,
-      Action<ListViewActionContext> action) {
-    this.triggerType = triggerType;
-    this.action = action;
+  public static final int POSITION_UNDEFINED = -1;
+  public static final int ROW_ID_UNDEFINED = -1;
+
+  @Override
+  public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+    setActionContext(new ListViewActionContext(view, parent, position, id));
+    perform();
   }
 
-  TriggerType getTriggerType() {
-    return triggerType;
+  @Override
+  public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+    setActionContext(new ListViewActionContext(view, parent, position, id));
+    return perform();
   }
 
-  Action<ListViewActionContext> getAction() {
-    return action;
+  @Override
+  public final void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+    setActionContext(new ListViewActionContext(view, parent, position, id));
+    perform();
   }
+
+  @Override
+  public final void onNothingSelected(AdapterView<?> parent) {
+    setActionContext(new ListViewActionContext(null, parent, POSITION_UNDEFINED, ROW_ID_UNDEFINED));
+    perform();
+  }
+
 }

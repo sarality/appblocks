@@ -9,7 +9,7 @@ import java.util.List;
  *
  * @author abhideep@ (Abhideep Singh)
  */
-public interface ViewAction extends Action<ViewActionContext> {
+public interface ViewAction {
 
   /**
    * @return Id of the view that triggers the action
