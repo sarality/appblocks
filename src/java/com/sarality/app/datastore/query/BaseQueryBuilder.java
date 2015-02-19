@@ -1,5 +1,7 @@
 package com.sarality.app.datastore.query;
 
+import android.util.Pair;
+
 import com.sarality.app.datastore.Column;
 
 import java.util.ArrayList;
@@ -18,6 +20,9 @@ public abstract class BaseQueryBuilder<B extends BaseQueryBuilder<B>> {
 
   // The type of filter. Initialized to NONE since no filter condition is defined at first.
   private FilterType filterType = FilterType.NONE;
+
+  // Indicates in what order should the rows be returned
+  private final List<Pair<Column, Boolean>> orderByColumnList = new ArrayList<Pair<Column, Boolean>>();
 
   protected abstract B getInstance();
 
@@ -114,6 +119,22 @@ public abstract class BaseQueryBuilder<B extends BaseQueryBuilder<B>> {
 
     clauseList.add(new QueryClause(builder.getFilterList(), builder.getClauseList(), builder.getFilterType()));
     return getInstance();
+  }
+
+  /**
+   * Builds the query to allow rows to be returned in a order defined by a specific column
+   *
+   * @param column Column to define the filter on.
+   * @param ascendingOrder Indicates whether data needs to sorted on ascending order of column value.
+   * @return The current QueryBuilder
+   */
+  public B orderBy(Column column, boolean ascendingOrder) {
+    orderByColumnList.add(new Pair<Column, Boolean>(column, ascendingOrder));
+    return getInstance();
+  }
+
+  protected final List<Pair<Column, Boolean>> getOrderByColumns() {
+    return orderByColumnList;
   }
 
   protected final List<QueryFilter> getFilterList() {
