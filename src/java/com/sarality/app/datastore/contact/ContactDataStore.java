@@ -144,7 +144,8 @@ public class ContactDataStore extends AbstractContentResolverDataStore<ContactDa
    */
   private ContactDataBuilder extractContactData(ContactDataBuilder builder, long contactId, Cursor cursor) {
     final ColumnProcessors processors = new ColumnProcessors();
-    final ColumnProcessor<ContactLabel> labelTypeProcessor = processors.forMappedEnum(ContactLabel.class, ContactLabel.values());
+    final ColumnProcessor<ContactLabel> labelTypeProcessor = processors.forMappedEnum(
+        ContactLabel.class, ContactLabel.values());
 
     builder.setContactId(contactId);
 

@@ -133,5 +133,10 @@ public class SmsMessage implements DataObject<SmsMessage> {
     public Integer getMappedValue() {
       return mappedValue;
     }
+
+    @Override
+    public String getMappedValueString() {
+      return String.valueOf(mappedValue);
+    }
   }
 }
