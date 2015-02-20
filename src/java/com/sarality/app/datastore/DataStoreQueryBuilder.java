@@ -20,12 +20,12 @@ public class DataStoreQueryBuilder<T> extends BaseQueryBuilder<DataStoreQueryBui
   }
 
   @SuppressWarnings("unchecked")
-  public DataStoreQueryBuilder(String tableName, TableRegistry registry) {
-    this((Table<T>) registry.getTable(tableName));
+  public DataStoreQueryBuilder(String dataStoreName, DataStoreRegistry registry) {
+    this((DataStore<T>) registry.getDataStore(dataStoreName));
   }
 
-  public DataStoreQueryBuilder(String tableName) {
-    this(tableName, TableRegistry.getGlobalInstance());
+  public DataStoreQueryBuilder(String dataStoreName) {
+    this(dataStoreName, DataStoreRegistry.getGlobalInstance());
   }
 
   @Override
