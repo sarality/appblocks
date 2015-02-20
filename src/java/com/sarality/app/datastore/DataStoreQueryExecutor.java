@@ -1,7 +1,5 @@
 package com.sarality.app.datastore;
 
-import com.sarality.app.datastore.db.Table;
-import com.sarality.app.datastore.db.TableRegistry;
 import com.sarality.app.datastore.query.BaseQueryBuilder;
 import com.sarality.app.datastore.query.FilterValue;
 import com.sarality.app.datastore.query.Query;
@@ -23,12 +21,12 @@ public class DataStoreQueryExecutor<T> extends BaseQueryBuilder<DataStoreQueryEx
   }
 
   @SuppressWarnings("unchecked")
-  public DataStoreQueryExecutor(String tableName, TableRegistry registry) {
-    this((Table<T>) registry.getTable(tableName));
+  public DataStoreQueryExecutor(String dataStoreName, DataStoreRegistry registry) {
+    this((DataStore<T>) registry.getDataStore(dataStoreName));
   }
 
-  public DataStoreQueryExecutor(String tableName) {
-    this(tableName, TableRegistry.getGlobalInstance());
+  public DataStoreQueryExecutor(String dataStoreName) {
+    this(dataStoreName, DataStoreRegistry.getGlobalInstance());
   }
 
   public List<T> execute() {
