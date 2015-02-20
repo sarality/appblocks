@@ -14,7 +14,13 @@ package com.sarality.app.datastore;
 public interface MappedEnum<V> {
 
   /**
-   * @return The value that the Enum Maps to
+   * @return The value that the Enum Maps to.
    */
   public V getMappedValue();
+
+  /**
+   * @return The String value that the Enum Maps to.
+   */
+  public String getMappedValueString();
+
 }

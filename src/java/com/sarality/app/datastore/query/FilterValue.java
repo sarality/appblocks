@@ -3,6 +3,7 @@ package com.sarality.app.datastore.query;
 import java.util.Date;
 
 import com.sarality.app.datastore.Column;
+import com.sarality.app.datastore.MappedEnum;
 
 /**
  * Abstract class to converts a value into a String, based on the Column Spec 
@@ -118,13 +119,23 @@ public abstract class FilterValue<T> {
   }
 
   /**
+   * Create a new FilterValue with the given Mapped Enum.
+   *
+   * @param value Value for the filter
+   * @return FilterValue with the given Mapped Enum.
+   */
+  public static <V> FilterValue<MappedEnum<V>> ofMappedEnum(MappedEnum<V> value) {
+    return new MappedEnumFilterValue<V>(value);
+  }
+
+  /**
    * Create a new FilterValue with the given Enum.
    * 
    * @param value Value for the filter
    * @return FilterValue with the given Enum.
    */  
-  public static FilterValue<Enum<?>> of(Enum<?> value) {
-    return new EnumFilterValue(value);
+  public static <V extends Enum<V>> FilterValue<Enum<V>> of(Enum<V> value) {
+    return new EnumFilterValue<V>(value);
   }  
   
   /**
