@@ -5,6 +5,6 @@ package com.sarality.app.loader;
  *
  * @author Sunayna Uberoy
  */
-public interface AsyncResponse<T> {
-  void processFinish(int requestCode, T output);
+public interface OnTaskCompleteListener<T> {
+  void processFinish(T output);
 }
