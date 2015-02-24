@@ -1,6 +1,5 @@
 package com.sarality.app.extract;
 
-import com.sarality.app.common.collect.Sets;
 import com.sarality.app.datastore.sms.SmsMessage;
 
 import java.util.Set;
@@ -14,20 +13,16 @@ import java.util.regex.Pattern;
  */
 public abstract class SmsMessageEventExtractor<E> implements MessageEventExtractor<SmsMessage, E> {
 
-  private final Set<String> senders;
+  private final Set<String> senderIds;
   private final Pattern messagePattern;
 
-  public SmsMessageEventExtractor(Set<String> senders, String messagePattern) {
-    this.senders = toUpperCase(senders);
+  public SmsMessageEventExtractor(Set<String> senderIdSet, String messagePattern) {
+    this.senderIds = senderIdSet;
     this.messagePattern = Pattern.compile(messagePattern);
   }
 
-  public SmsMessageEventExtractor(String messagePattern) {
-    this(Sets.<String>emptySet(), messagePattern);
-  }
-
-  protected Set<String> getSenders() {
-    return senders;
+  protected Set<String> getSenderIds() {
+    return senderIds;
   }
 
   protected Matcher createMatcher(SmsMessage message) {
@@ -36,16 +31,5 @@ public abstract class SmsMessageEventExtractor<E> implements MessageEventExtract
 
   protected boolean matchesPattern(Matcher matcher) {
     return matcher.lookingAt();
-  }
-
-  private static Set<String> toUpperCase(Set<String> senders) {
-    if (senders == null) {
-      return null;
-    }
-    Set<String> upperCaseSender = Sets.emptySet();
-    for (String sender : senders) {
-      upperCaseSender.add(sender.toUpperCase());
-    }
-    return upperCaseSender;
   }
 }
