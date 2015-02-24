@@ -25,20 +25,19 @@ public class NonScrollingListViewInitializer<T> extends BaseListViewInitializer<
   private final ListTagIdDefinition tagIdDefinition;
 
   public NonScrollingListViewInitializer(FragmentActivity activity, LinearLayout listView,
-      ListViewRowRenderer<T> rowRenderer, ListTagIdDefinition tagIdDefinition, int loaderId) {
+                                         ListViewRowRenderer<T> rowRenderer, ListTagIdDefinition tagIdDefinition, int loaderId) {
     super(activity, listView, rowRenderer, loaderId);
     validateTagIdDefinition(tagIdDefinition);
     this.tagIdDefinition = tagIdDefinition;
   }
 
   public NonScrollingListViewInitializer(FragmentActivity activity, LinearLayout listView,
-      ListViewRowRenderer<T> rowRenderer, ListTagIdDefinition tagIdDefinition) {
+                                         ListViewRowRenderer<T> rowRenderer, ListTagIdDefinition tagIdDefinition) {
     this(activity, listView, rowRenderer, tagIdDefinition, DEFAULT_LOADER_ID);
   }
 
   @Override
   public void render(List<T> dataList) {
-    getView().removeAllViews();
     EmptyListViewRenderer<?> emptyListViewRenderer = getEmptyListViewRenderer();
     if (emptyListViewRenderer != null) {
       emptyListViewRenderer.render(getView(), dataList.isEmpty());

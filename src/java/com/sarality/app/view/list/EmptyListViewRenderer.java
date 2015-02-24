@@ -33,10 +33,6 @@ class EmptyListViewRenderer<T> {
   void render(LinearLayout layout, boolean isListEmpty) {
     View emptyView = getViewToRender();
 
-    if (layout.findViewById(emptyView.getId()) == null) {
-      layout.addView(emptyView);
-    }
-
     // Need to set the empty view only if the view is not null.
     if (emptyView != null) {
       if (!isListEmpty) {
