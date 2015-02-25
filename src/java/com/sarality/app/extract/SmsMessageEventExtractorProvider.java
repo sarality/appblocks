@@ -23,8 +23,8 @@ public abstract class SmsMessageEventExtractorProvider {
   }
 
   public final List<SmsMessageEventExtractor<?>> provide(SmsMessage message) {
-    String sender = message.getAddress();
-    return eventExtractorMap.get(sender == null ? null : sender.toUpperCase());
+    String senderId = getSenderId(message.getAddress());
+    return eventExtractorMap.get(senderId.toUpperCase());
   }
 
   protected abstract void registerAllExtractors();
@@ -32,10 +32,10 @@ public abstract class SmsMessageEventExtractorProvider {
   /**
    * Register an extractor with the Provider.
    *
-   * @param extractor Extractpr to be used for SMS Messages
+   * @param extractor Extractor to be used for SMS Messages
    */
   protected final void register(SmsMessageEventExtractor<?> extractor) {
-    Set<String> senderSet = extractor.getSenders();
+    Set<String> senderSet = extractor.getSenderIds();
     if (senderSet != null) {
       for (String sender : senderSet) {
         if (!eventExtractorMap.containsKey(sender)) {
@@ -44,5 +44,22 @@ public abstract class SmsMessageEventExtractorProvider {
         eventExtractorMap.get(sender).add(extractor);
       }
     }
+  }
+
+  /**
+   * Retrieve the Extractor lookup key (SenderId) for the SMS messages address.
+   * <p/>
+   * The lookup is used for commercial message where the address follows a specific format e.g. AD-CLRTRIP or
+   * TM-MMTRIP, where the first two chars represent the Carrier and the City and the remaining address represents the
+   * Sender Id.
+   */
+  private String getSenderId(String address) {
+    if (address == null) {
+      return null;
+    }
+    if (address.length() < 4) {
+      return address.toUpperCase();
+    }
+    return address.substring(3).toUpperCase();
   }
 }
