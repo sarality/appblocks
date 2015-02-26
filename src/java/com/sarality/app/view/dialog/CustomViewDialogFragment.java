@@ -14,7 +14,7 @@ import com.sarality.app.view.datasource.DataSource;
 
 /**
  * A DialogFragment that render a custom view inside a Dialog.
- *
+ * <p/>
  * TODO(abhideep): Add Action support.
  *
  * @author abhideep@ (Abhideep Singh)
@@ -85,6 +85,8 @@ public abstract class CustomViewDialogFragment<V extends View, T> extends Dialog
    * @param loaderId Id to used for the loader
    */
   protected <D> void startLoad(DataSource<D> dataSource, int loaderId, DataConsumer<D> consumer) {
+    // Kill all previously loaded data by the activity
+    getActivity().getSupportLoaderManager().destroyLoader(loaderId);
     getActivity().getSupportLoaderManager()
         .initLoader(loaderId, null, new DataLoader<D>(getActivity(), dataSource, consumer)).forceLoad();
   }
