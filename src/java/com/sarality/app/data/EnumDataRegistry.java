@@ -2,8 +2,10 @@ package com.sarality.app.data;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import com.sarality.app.common.collect.Maps;
+import com.sarality.app.common.collect.Sets;
 
 /**
  * A Global Registry for all EnumDatas in the system.
@@ -52,6 +54,7 @@ public class EnumDataRegistry {
    * 
    * @param enumClass Class of EnumData to be retrieved.
    * @param name String name for the EnumData.
+   * @param <E> Type of Enum data being retrieved.
    * @return EnumData instance with given Class and name.
    */
   public <E extends EnumData<E>> E valueOf(Class<E> enumClass, String name) {
@@ -64,6 +67,26 @@ public class EnumDataRegistry {
       }
     }
     return loadFromLoader(enumClass, name);
+  }
+
+  /**
+   * Retrieve all values for a given class.
+   *
+   * @param enumClass Class of EnumData to be retrieved.
+   * @param <E> Type of Enum data being retrieved.
+   * @return List of Enums registered for the given class.
+   */
+  public <E extends EnumData<E>> Set<E> values(Class<E> enumClass) {
+    Set<E> valueSet = Sets.emptySet();
+    Map<String, EnumData<?>> dataMap = enumDataMap.get(enumClass);
+    if (dataMap != null) {
+      for (String key : dataMap.keySet()) {
+        @SuppressWarnings("unchecked")
+        E value = (E) dataMap.get(key);
+        valueSet.add(value);
+      }
+    }
+    return valueSet;
   }
 
   private <E extends EnumData<E>> E loadFromLoader(Class<E> enumClass, String name) {
