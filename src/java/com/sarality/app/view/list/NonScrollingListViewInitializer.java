@@ -38,6 +38,7 @@ public class NonScrollingListViewInitializer<T> extends BaseListViewInitializer<
 
   @Override
   public void render(List<T> dataList) {
+    getView().removeAllViews();
     EmptyListViewRenderer<?> emptyListViewRenderer = getEmptyListViewRenderer();
     if (emptyListViewRenderer != null) {
       emptyListViewRenderer.render(getView(), dataList.isEmpty());
