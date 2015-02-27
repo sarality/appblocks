@@ -3,8 +3,6 @@ package com.sarality.app.view.list;
 import android.support.v4.app.FragmentActivity;
 import android.widget.ListView;
 
-import com.sarality.app.view.action.ComponentActionManager;
-
 import java.util.List;
 
 /**
@@ -13,12 +11,12 @@ import java.util.List;
  * @param <T> List Data
  * @author sunayna@dothat.in sunayna
  */
-public class SearchListComponent<T> extends ListComponent<T> {
+public class SearchListViewInitializer<T> extends ListViewInitializer<T> {
 
   private final FragmentActivity activity;
-  private final ListRowRenderer<T> rowRenderer;
+  private final ListViewRowRenderer<T> rowRenderer;
   private final ListItemFilter<T> listItemFilter;
-  private SearchListComponentAdapter<T> adapter;
+  private SearchListViewAdapter<T> adapter;
 
   /**
    * Constructor
@@ -28,8 +26,8 @@ public class SearchListComponent<T> extends ListComponent<T> {
    * @param rowRenderer - custom renderer as specified by the activity
    * @param listItemFilter - Filter criteria
    */
-  public SearchListComponent(FragmentActivity activity, ListView view, ListRowRenderer<T> rowRenderer,
-                             ListItemFilter<T> listItemFilter) {
+  public SearchListViewInitializer(FragmentActivity activity, ListView view, ListViewRowRenderer<T> rowRenderer,
+                                   ListItemFilter<T> listItemFilter) {
     super(activity, view, rowRenderer);
     this.activity = activity;
     this.rowRenderer = rowRenderer;
@@ -37,13 +35,12 @@ public class SearchListComponent<T> extends ListComponent<T> {
   }
 
   @Override
-  protected ListComponentAdapter<T> createAdapter(List<T> data) {
-    ComponentActionManager componentManager = new ComponentActionManager(getRowActions());
-    adapter = new SearchListComponentAdapter<T>(activity, rowRenderer, data, componentManager, listItemFilter);
+  protected ListViewAdapter<T> createAdapter(List<T> data) {
+    adapter = new SearchListViewAdapter<T>(activity, rowRenderer, data, listItemFilter);
     return adapter;
   }
 
-  public SearchListComponentAdapter<T> getAdapter() {
+  public SearchListViewAdapter<T> getAdapter() {
     return adapter;
   }
 }

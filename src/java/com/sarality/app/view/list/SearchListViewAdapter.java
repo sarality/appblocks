@@ -5,7 +5,6 @@ import android.widget.Filter;
 import android.widget.Filterable;
 
 import com.sarality.app.common.collect.Lists;
-import com.sarality.app.view.action.ComponentActionManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,16 +14,16 @@ import java.util.List;
  *
  * @author sunayna@dothat.in sunayna
  */
-public class SearchListComponentAdapter<T> extends ListComponentAdapter<T> implements Filterable {
+public class SearchListViewAdapter<T> extends ListViewAdapter<T> implements Filterable {
 
   private final List<T> rowValueList;
   private final ListItemFilter<T> listItemFilter;
   private final SearchListFilter filter;
 
-  public SearchListComponentAdapter(Context context, ListRowRenderer<T> rowRenderer, List<T> rowValueList,
-                                    ComponentActionManager componentManager, ListItemFilter<T> listItemFilter) {
+  public SearchListViewAdapter(Context context, ListViewRowRenderer<T> rowRenderer, List<T> rowValueList,
+                               ListItemFilter<T> listItemFilter) {
 
-    super(context, rowRenderer, rowValueList, componentManager);
+    super(context, rowValueList, rowRenderer);
     this.rowValueList = Lists.of();
     this.rowValueList.addAll(rowValueList);
     this.listItemFilter = listItemFilter;
@@ -57,7 +56,7 @@ public class SearchListComponentAdapter<T> extends ListComponentAdapter<T> imple
     @SuppressWarnings("unchecked")
     @Override
     protected void publishResults(CharSequence constraint, FilterResults results) {
-      reinitalize((List<T>) results.values);
+      reinitialize((List<T>) results.values);
     }
   }
 }
