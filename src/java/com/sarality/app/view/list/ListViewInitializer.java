@@ -17,6 +17,7 @@ public class ListViewInitializer<T> extends BaseListViewInitializer<ListView, T>
 
   private static final int DEFAULT_LOADER_ID = 0;
   private ListItemFilter<T> filter;
+  private ListViewAdapter<T> adapter;
 
   public ListViewInitializer(FragmentActivity activity, ListView view, ListViewRowRenderer<T> rowRenderer,
       int loaderId) {
@@ -41,7 +42,7 @@ public class ListViewInitializer<T> extends BaseListViewInitializer<ListView, T>
     // becomes a problem if the DataSource is still loading the data and we are rendering the list using the adapter.
     List<T> adapterDataList = Lists.emptyList();
     adapterDataList.addAll(dataList);
-    ListViewAdapter<T> adapter = createAdapter(adapterDataList);
+    adapter = createAdapter(adapterDataList);
     getView().setAdapter(adapter);
 
     // Notify the ListView, just in case the data is different from the last time render was called.
@@ -63,5 +64,9 @@ public class ListViewInitializer<T> extends BaseListViewInitializer<ListView, T>
     } else {
       return new ListViewAdapter<T>(getContext(), dataList, getRowRenderer());
     }
+  }
+
+  public ListViewAdapter<T> getAdapter() {
+    return adapter;
   }
 }
