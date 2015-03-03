@@ -1,7 +1,7 @@
 package com.sarality.app.view.datasource;
 
 /**
- * A DataSource with static list of elements
+ * A dataSource with a data element
  *
  * @param <T> Type of data provided by the data set.
  * @author sunayna@dothat.in (Sunayna Uberoy)
