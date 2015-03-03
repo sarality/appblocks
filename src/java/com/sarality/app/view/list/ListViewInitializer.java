@@ -17,9 +17,10 @@ public class ListViewInitializer<T> extends BaseListViewInitializer<ListView, T>
 
   private static final int DEFAULT_LOADER_ID = 0;
   private ListItemFilter<T> filter;
+  private FilterQueryUpdater queryUpdater = null;
 
   public ListViewInitializer(FragmentActivity activity, ListView view, ListViewRowRenderer<T> rowRenderer,
-      int loaderId) {
+                             int loaderId) {
     super(activity, view, rowRenderer, loaderId);
   }
 
@@ -59,9 +60,17 @@ public class ListViewInitializer<T> extends BaseListViewInitializer<ListView, T>
   @SuppressWarnings("unchecked")
   protected ListViewAdapter<T> createAdapter(List<T> dataList) {
     if (filter != null) {
-      return new FilteredListViewAdapter<T>(getContext(), dataList, getRowRenderer(), filter);
+      FilteredListViewAdapter<T> filteredListViewAdapter = new FilteredListViewAdapter<T>(getContext(), dataList,
+          getRowRenderer(), filter);
+      queryUpdater = new FilterQueryUpdater(filteredListViewAdapter);
+      return filteredListViewAdapter;
     } else {
       return new ListViewAdapter<T>(getContext(), dataList, getRowRenderer());
     }
   }
+
+  public FilterQueryUpdater getQueryUpdater() {
+    return queryUpdater;
+  }
+
 }
