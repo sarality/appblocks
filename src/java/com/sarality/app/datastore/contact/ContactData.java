@@ -60,7 +60,8 @@ public class ContactData implements DataObject<ContactData> {
   @Override
   public final ContactDataBuilder getBuilder() {
     return new ContactDataBuilder().setContactId(contactId).setName(name).setHasPhoneNumber(hasPhoneNumber)
-        .setPhoneNumberList(contactNumberList).setPhotoId(photoId).setLogo(logoId).setAppContactList(appContactList);
+        .setPhoneNumberList(contactNumberList).setPhotoId(photoId).setLogo(logoId).setAppContactList(appContactList)
+        .setEmailList(emailIdList);
   }
 
   @Override
@@ -72,7 +73,7 @@ public class ContactData implements DataObject<ContactData> {
   public final String toString() {
     return new StringBuilder().append("Contact Id : ").append(contactId).append(",\n").append("Name : ").append(name)
         .append(",\n").append("HAS_PHONE_NUMBER : ").append(hasPhoneNumber).append(",\n").append("Contact Number : ")
-        .append(contactNumberList.toArray()).append(",\n").append("EmailId : ").append(emailIdList.toArray())
+        .append(listToString(contactNumberList)).append(",\n").append("EmailId : ").append(listToString(emailIdList))
         .append(",\n").append("PhotoID : ").append(photoId).append(",\n").append("LogoID : ").append(logoId)
         .append("\n").toString();
   }
@@ -104,4 +105,13 @@ public class ContactData implements DataObject<ContactData> {
   public final List<AppContact> getAppContactList() {
     return appContactList;
   }
+
+  private <T> String listToString(List<T> list) {
+    StringBuilder listString = new StringBuilder();
+    for (T item : list) {
+      listString.append(item + ",");
+    }
+    return listString.toString();
+  }
+
 }
