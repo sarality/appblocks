@@ -33,15 +33,18 @@ public abstract class CustomViewDialogFragment<V extends View, T> extends Dialog
   public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
     dataSource = createDataSource();
-    init();
-  }
-
-  private void init() {
     if (dataSource != null) {
       startLoad(dataSource, getLoaderId(), this);
-    } else {
-      consume(createData());
     }
+  }
+
+  /**
+   * Intitialize the view with data if there is no dataSource
+   *
+   * @param data : Data to render the dialog with
+   */
+  public void init(T data) {
+    render(data);
   }
 
   /**
@@ -68,15 +71,6 @@ public abstract class CustomViewDialogFragment<V extends View, T> extends Dialog
   protected abstract DataSource<T> createDataSource();
 
   /**
-   * If the data Source is not available, then this method should be overridden.
-   *
-   * @return Data to be used to render the view.
-   */
-  protected T createData() {
-    return null;
-  }
-
-  /**
    * Returns a unique Id to be used for the loader that loads the data from the data source.
    * <p/>
    * The fragment MUST override this method if there are more than one loader in the activity. Returns 0 by default
@@ -92,7 +86,9 @@ public abstract class CustomViewDialogFragment<V extends View, T> extends Dialog
    * Re-initializes the Fragment.
    */
   protected void reinitialize() {
-    init();
+    if (dataSource != null) {
+      startLoad(dataSource, getLoaderId(), this);
+    }
   }
 
   /**
