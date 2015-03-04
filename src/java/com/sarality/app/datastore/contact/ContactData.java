@@ -73,8 +73,9 @@ public class ContactData implements DataObject<ContactData> {
   public final String toString() {
     return new StringBuilder().append("Contact Id : ").append(contactId).append(",\n").append("Name : ").append(name)
         .append(",\n").append("HAS_PHONE_NUMBER : ").append(hasPhoneNumber).append(",\n").append("Contact Number : ")
-        .append(listToString(contactNumberList)).append(",\n").append("EmailId : ").append(listToString(emailIdList))
-        .append(",\n").append("PhotoID : ").append(photoId).append(",\n").append("LogoID : ").append(logoId)
+        .append(contactNumberList.toString()).append(",\n").append("EmailId : ")
+        .append(emailIdList.toString()).append(",\n").append("PhotoID : ").append(photoId).append("," +
+            "" + "\n").append("LogoID : ").append(logoId)
         .append("\n").toString();
   }
 
@@ -105,13 +106,4 @@ public class ContactData implements DataObject<ContactData> {
   public final List<AppContact> getAppContactList() {
     return appContactList;
   }
-
-  private <T> String listToString(List<T> list) {
-    StringBuilder listString = new StringBuilder();
-    for (T item : list) {
-      listString.append(item + ",");
-    }
-    return listString.toString();
-  }
-
 }
