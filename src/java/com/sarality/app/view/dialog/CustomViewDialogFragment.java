@@ -33,16 +33,9 @@ public abstract class CustomViewDialogFragment<V extends View, T> extends Dialog
   public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
     dataSource = createDataSource();
-    if (dataSource != null) {
-      startLoad(dataSource, getLoaderId(), this);
-    }
+    startLoad(dataSource, getLoaderId(), this);
   }
 
-  /**
-   * Intitialize the view with data if there is no dataSource
-   *
-   * @param data : Data to render the dialog with
-   */
   public void init(T data) {
     render(data);
   }
@@ -86,9 +79,7 @@ public abstract class CustomViewDialogFragment<V extends View, T> extends Dialog
    * Re-initializes the Fragment.
    */
   protected void reinitialize() {
-    if (dataSource != null) {
-      startLoad(dataSource, getLoaderId(), this);
-    }
+    startLoad(dataSource, getLoaderId(), this);
   }
 
   /**
