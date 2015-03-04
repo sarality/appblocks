@@ -33,11 +33,11 @@ public abstract class CustomViewDialogFragment<V extends View, T> extends Dialog
   public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
     dataSource = createDataSource();
-    if (dataSource == null) {
-      render(null);
-    } else {
-      startLoad(dataSource, getLoaderId(), this);
-    }
+    startLoad(dataSource, getLoaderId(), this);
+  }
+
+  public void init(T data) {
+    render(data);
   }
 
   /**
