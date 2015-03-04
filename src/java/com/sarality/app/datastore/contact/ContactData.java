@@ -60,7 +60,8 @@ public class ContactData implements DataObject<ContactData> {
   @Override
   public final ContactDataBuilder getBuilder() {
     return new ContactDataBuilder().setContactId(contactId).setName(name).setHasPhoneNumber(hasPhoneNumber)
-        .setPhoneNumberList(contactNumberList).setPhotoId(photoId).setLogo(logoId).setAppContactList(appContactList);
+        .setPhoneNumberList(contactNumberList).setPhotoId(photoId).setLogo(logoId).setAppContactList(appContactList)
+        .setEmailList(emailIdList);
   }
 
   @Override
@@ -72,8 +73,9 @@ public class ContactData implements DataObject<ContactData> {
   public final String toString() {
     return new StringBuilder().append("Contact Id : ").append(contactId).append(",\n").append("Name : ").append(name)
         .append(",\n").append("HAS_PHONE_NUMBER : ").append(hasPhoneNumber).append(",\n").append("Contact Number : ")
-        .append(contactNumberList.toArray()).append(",\n").append("EmailId : ").append(emailIdList.toArray())
-        .append(",\n").append("PhotoID : ").append(photoId).append(",\n").append("LogoID : ").append(logoId)
+        .append(contactNumberList.toString()).append(",\n").append("EmailId : ")
+        .append(emailIdList.toString()).append(",\n").append("PhotoID : ").append(photoId).append("," +
+            "" + "\n").append("LogoID : ").append(logoId)
         .append("\n").toString();
   }
 
