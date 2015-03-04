@@ -1,4 +1,4 @@
-package com.sarality.app.view;
+package com.sarality.app.view.nav;
 
 /*
  * Copyright 2014 Google Inc. All rights reserved.
