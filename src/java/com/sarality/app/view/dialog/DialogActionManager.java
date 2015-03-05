@@ -1,6 +1,7 @@
 package com.sarality.app.view.dialog;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 
 /**
@@ -13,7 +14,8 @@ public class DialogActionManager {
   private DialogButtonAction positiveButtonAction;
   private DialogButtonAction negativeButtonAction;
   private DialogButtonAction neutralButtonAction;
-  
+  private DialogButtonAction dismissButtonAction;
+
   public void setPositiveButtonAction(int labelId, DialogAction action) {
     setPositiveButtonAction(new DialogButtonAction(labelId, action));
   }
@@ -62,6 +64,22 @@ public class DialogActionManager {
     setNeutralButtonAction(new DialogButtonAction(label, new DialogOnClickListenerAction(listener)));
   }
 
+  public void setDismissButtonAction(int labelId, DialogAction action) {
+    setDismissButtonAction(new DialogButtonAction(labelId, action));
+  }
+
+  public void setDismissButtonAction(String label, DialogAction action) {
+    setDismissButtonAction(new DialogButtonAction(label, action));
+  }
+
+  public void setDismissButtonAction(int labelId, DialogInterface.OnDismissListener listener) {
+    setDismissButtonAction(new DialogButtonAction(labelId, new DialogOnDismissListenerAction(listener)));
+  }
+
+  public void setDismissButtonAction(String label, DialogInterface.OnDismissListener listener) {
+    setDismissButtonAction(new DialogButtonAction(label, new DialogOnDismissListenerAction(listener)));
+  }
+
   void setup(AlertDialog.Builder builder) {
     if (positiveButtonAction != null) {
       if (positiveButtonAction.isLabelResourceBased()) {
@@ -88,6 +106,12 @@ public class DialogActionManager {
     }
   }
 
+  public void setup(Dialog dialog) {
+    if (dismissButtonAction != null) {
+      dialog.setOnDismissListener(dismissButtonAction.getAction());
+    }
+  }
+
   private void setPositiveButtonAction(DialogButtonAction action) {
     if (this.positiveButtonAction != null) {
       throw new IllegalStateException("Trying to register multiple Actions for Positive Button on Dialog. " +
@@ -111,7 +135,15 @@ public class DialogActionManager {
     }
     this.neutralButtonAction = action;
   }
-  
+
+  private void setDismissButtonAction(DialogButtonAction action) {
+    if (this.dismissButtonAction != null) {
+      throw new IllegalStateException("Trying to register multiple Actions for Dismiss Button on Dialog. " +
+          "Use action chaining instead by all calling registerSuccessAction");
+    }
+    this.dismissButtonAction = action;
+  }
+
   private class DialogButtonAction {
 
     private final DialogAction action;
@@ -164,5 +196,21 @@ public class DialogActionManager {
       listener.onClick(context.getDialog(), context.getButtonType());
       return true;
     }
-  }  
+  }
+
+  private class DialogOnDismissListenerAction extends DialogAction {
+
+    private final DialogInterface.OnDismissListener listener;
+
+    DialogOnDismissListenerAction(DialogInterface.OnDismissListener listener) {
+      this.listener = listener;
+    }
+
+    @Override
+    protected boolean doAction() {
+      DialogActionContext context = getActionContext();
+      listener.onDismiss(context.getDialog());
+      return true;
+    }
+  }
 }

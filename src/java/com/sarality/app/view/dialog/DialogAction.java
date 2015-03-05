@@ -10,7 +10,7 @@ import com.sarality.app.view.action.BaseAction;
  * @author abhideep@ (Abhideep Singh)
  */
 public abstract class DialogAction extends BaseAction<DialogActionContext>
-    implements DialogInterface.OnCancelListener, DialogInterface.OnClickListener {
+    implements DialogInterface.OnCancelListener, DialogInterface.OnClickListener, DialogInterface.OnDismissListener {
 
   private DialogInterface dialog;
   private int buttonType;
@@ -24,6 +24,12 @@ public abstract class DialogAction extends BaseAction<DialogActionContext>
   @Override
   public void onClick(DialogInterface dialog, int which) {
     setActionContext(new DialogActionContext(dialog, which));
+    perform();
+  }
+
+  @Override
+  public void onDismiss(DialogInterface dialogInterface) {
+    setActionContext(new DialogActionContext(dialog));
     perform();
   }
 }
