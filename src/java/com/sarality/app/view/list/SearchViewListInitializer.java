@@ -21,6 +21,8 @@ public class SearchViewListInitializer<T> extends ListViewInitializer {
   private final FragmentActivity activity;
   private final int searchViewId;
 
+  //TODO combine with ListViewInitializer along with the Filter capability.
+
   public SearchViewListInitializer(FragmentActivity activity, ListView view, ListViewRowRenderer<T> rowRenderer,
                                    int searchViewId) {
     super(activity, view, rowRenderer);
