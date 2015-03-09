@@ -32,12 +32,6 @@ public abstract class CustomViewDialogFragment<V extends View, T> extends Dialog
   }
 
   @Override
-  public void onStart() {
-    super.onStart();
-    getActionManager().setup(getDialog());
-  }
-
-  @Override
   public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
     dataSource = createDataSource();
@@ -121,6 +115,7 @@ public abstract class CustomViewDialogFragment<V extends View, T> extends Dialog
    * @param data Data to render the view.
    */
   protected void render(T data) {
+    getActionManager().setup(getDialog());
     ViewRenderer<V, T> renderer = getRenderer();
     if (renderer != null) {
       renderer.render(getRendererView(), data);
