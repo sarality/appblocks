@@ -19,8 +19,8 @@ import com.sarality.app.view.datasource.DataSource;
  *
  * @author abhideep@ (Abhideep Singh)
  */
-public abstract class CustomViewDialogFragment<V extends View, T> extends DialogFragment implements
-    DataConsumer<T> {
+public abstract class CustomViewDialogFragment<V extends View, T> extends DialogFragment
+    implements DataConsumer<T> {
 
   private final DialogActionManager actionManager = new DialogActionManager();
   private DataSource<T> dataSource;
