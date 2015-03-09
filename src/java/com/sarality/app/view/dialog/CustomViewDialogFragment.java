@@ -19,8 +19,10 @@ import com.sarality.app.view.datasource.DataSource;
  *
  * @author abhideep@ (Abhideep Singh)
  */
-public abstract class CustomViewDialogFragment<V extends View, T> extends DialogFragment implements DataConsumer<T> {
+public abstract class CustomViewDialogFragment<V extends View, T> extends DialogFragment
+    implements DataConsumer<T> {
 
+  private final DialogActionManager actionManager = new DialogActionManager();
   private DataSource<T> dataSource;
 
   @Override
@@ -113,6 +115,7 @@ public abstract class CustomViewDialogFragment<V extends View, T> extends Dialog
    * @param data Data to render the view.
    */
   protected void render(T data) {
+    getActionManager().setup(getDialog());
     ViewRenderer<V, T> renderer = getRenderer();
     if (renderer != null) {
       renderer.render(getRendererView(), data);
@@ -126,5 +129,14 @@ public abstract class CustomViewDialogFragment<V extends View, T> extends Dialog
     Dialog dialog = super.onCreateDialog(savedInstanceState);
     configure(dialog);
     return dialog;
+  }
+
+  /**
+   * Retrieve ActionManager for the Fragment so that Actions can be registered for the dialog.
+   *
+   * @return ActionManager for the Dialog
+   */
+  public DialogActionManager getActionManager() {
+    return actionManager;
   }
 }

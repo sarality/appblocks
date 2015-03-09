@@ -1,6 +1,7 @@
 package com.sarality.app.view.dialog;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 
 /**
@@ -13,7 +14,8 @@ public class DialogActionManager {
   private DialogButtonAction positiveButtonAction;
   private DialogButtonAction negativeButtonAction;
   private DialogButtonAction neutralButtonAction;
-  
+  private DialogAction dismissAction;
+
   public void setPositiveButtonAction(int labelId, DialogAction action) {
     setPositiveButtonAction(new DialogButtonAction(labelId, action));
   }
@@ -86,6 +88,13 @@ public class DialogActionManager {
         builder.setNeutralButton(neutralButtonAction.getButtonLabel(), neutralButtonAction.getAction());
       }
     }
+
+  }
+
+  public void setup(Dialog dialog) {
+    if (dismissAction != null) {
+      dialog.setOnDismissListener(dismissAction);
+    }
   }
 
   private void setPositiveButtonAction(DialogButtonAction action) {
@@ -111,7 +120,15 @@ public class DialogActionManager {
     }
     this.neutralButtonAction = action;
   }
-  
+
+  public void setDismissAction(DialogAction action) {
+    if (this.dismissAction != null) {
+      throw new IllegalStateException("Trying to register multiple Actions for Dismiss on Dialog. " +
+          "Use action chaining instead by all calling registerSuccessAction");
+    }
+    this.dismissAction = action;
+  }
+
   private class DialogButtonAction {
 
     private final DialogAction action;
@@ -164,5 +181,5 @@ public class DialogActionManager {
       listener.onClick(context.getDialog(), context.getButtonType());
       return true;
     }
-  }  
+  }
 }
