@@ -2,6 +2,8 @@ package com.sarality.app.data.location;
 
 import com.sarality.app.data.BaseEnumData;
 
+import java.util.List;
+
 /**
  * Enum Data for a City.
  *
@@ -9,34 +11,32 @@ import com.sarality.app.data.BaseEnumData;
  */
 public class City extends BaseEnumData<City> {
 
-  private final String shortName;
-  private final String fullName;
-  private final String oldName;
+  private final String name;
   private final Country country;
+  private final List<String> alternateNames;
 
-  public City(String enumName, String shortName, String fullName, String oldName, Country country) {
+  public City(String enumName, String name, Country country, List<String> alternateNames) {
     super(enumName);
-    this.shortName = shortName;
-    this.fullName = fullName;
-    this.oldName = oldName;
+    this.name = name;
     this.country = country;
+    this.alternateNames = alternateNames;
     register(City.class, this);
   }
 
   public String getShortName() {
-    return shortName;
+    return name;
   }
 
   public String getFullName() {
-    return fullName;
-  }
-
-  public String getOldName() {
-    return oldName;
+    return name;
   }
 
   public Country getCountry() {
     return country;
+  }
+
+  public List<String> getAlternateNames() {
+    return alternateNames;
   }
 
   @Override
