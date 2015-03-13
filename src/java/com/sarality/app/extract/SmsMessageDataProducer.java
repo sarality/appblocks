@@ -6,6 +6,9 @@ import com.sarality.app.datastore.query.Query;
 import com.sarality.app.datastore.sms.SmsDataStore;
 import com.sarality.app.datastore.sms.SmsMessage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.List;
 
 /**
@@ -18,8 +21,11 @@ import java.util.List;
  */
 public class SmsMessageDataProducer {
 
+  private static final Logger logger = LoggerFactory.getLogger(SmsMessageDataProducer.class);
+
   private final DataStoreRegistry dataStoreRegistry;
   private final SmsMessageEventExtractorProvider provider;
+  private MessageEventProcessor processor;
 
   public SmsMessageDataProducer(SmsMessageEventExtractorProvider provider) {
     this(provider, DataStoreRegistry.getGlobalInstance());
@@ -28,6 +34,10 @@ public class SmsMessageDataProducer {
   public SmsMessageDataProducer(SmsMessageEventExtractorProvider provider, DataStoreRegistry dataStoreRegistry) {
     this.provider = provider;
     this.dataStoreRegistry = dataStoreRegistry;
+  }
+
+  public void setMessageEventProcessor(MessageEventProcessor processor) {
+    this.processor = processor;
   }
 
   public void produce(Query smsDataStoreQuery) {
@@ -41,13 +51,24 @@ public class SmsMessageDataProducer {
     }
   }
 
+  @SuppressWarnings("unchecked")
   public void produce(SmsMessage message) {
     List<SmsMessageEventExtractor<?>> extractorList = provider.provide(message);
     if (extractorList != null) {
       for (SmsMessageEventExtractor<?> extractor : extractorList) {
-        extractor.extract(message);
+        try {
+          MessageEventList<SmsMessage, ?> messageEvents = extractor.extract(message);
+          if (messageEvents != null && processor != null) {
+            try {
+              processor.processEvents(messageEvents);
+            } catch (Throwable t) {
+              logger.error("Error processing events produced by message from " + message.getAddress(), t);
+            }
+          }
+        } catch (Throwable t) {
+          logger.error("Error extracting events from message sent by " + message.getAddress(), t);
+        }
       }
     }
   }
-
 }
