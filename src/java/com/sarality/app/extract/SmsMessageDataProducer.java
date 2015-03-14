@@ -26,6 +26,7 @@ public class SmsMessageDataProducer {
   private final DataStoreRegistry dataStoreRegistry;
   private final SmsMessageEventExtractorProvider provider;
   private MessageEventProcessor processor;
+  private ProducerProgressListener progressListener;
 
   public SmsMessageDataProducer(SmsMessageEventExtractorProvider provider) {
     this(provider, DataStoreRegistry.getGlobalInstance());
@@ -40,14 +41,24 @@ public class SmsMessageDataProducer {
     this.processor = processor;
   }
 
+  public void setProgressListener(ProducerProgressListener progressListener) {
+    this.progressListener = progressListener;
+  }
+
   public void produce(Query smsDataStoreQuery) {
     @SuppressWarnings("unchecked")
     DataStore<SmsMessage> dataStore =
         (DataStore<SmsMessage>) dataStoreRegistry.getDataStore(SmsDataStore.DATASTORE_NAME);
     List<SmsMessage> messageList = dataStore.query(smsDataStoreQuery);
 
+    int maxProgress = messageList.size();
+    int ctr = 0;
     for (SmsMessage message : messageList) {
       produce(message);
+      ctr++;
+      if (progressListener != null) {
+        progressListener.onProgress(maxProgress, ctr);
+      }
     }
   }
 
