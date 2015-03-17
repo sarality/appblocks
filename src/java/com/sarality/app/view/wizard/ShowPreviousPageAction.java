@@ -6,7 +6,7 @@ import android.view.View;
 import com.dothat.app.module.setup.SetupWizardActivity;
 
 /**
- * Action to move to the next page of the wizard.
+ * Action to move to the previous page of the wizard.
  *
  * @author abhideep@ (Abhideep Singh)
  */
