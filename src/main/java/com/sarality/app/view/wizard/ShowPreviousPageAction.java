@@ -3,8 +3,6 @@ package com.sarality.app.view.wizard;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 
-import com.dothat.app.module.setup.SetupWizardActivity;
-
 /**
  * Action to move to the previous page of the wizard.
  *
