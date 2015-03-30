@@ -49,7 +49,7 @@ public class NonScrollingListViewInitializer<T> extends BaseListViewInitializer<
     int position = 0;
     for (T data : dataList) {
       LayoutInflater inflater = LayoutInflater.from(getContext());
-      View rowView = inflater.inflate(getRowRenderer().getRowLayout(data), getView(), false);
+      View rowView = inflater.inflate(getRowRenderer().getRowLayout(position, data), getView(), false);
       rowRenderer.render(rowView, data);
       getView().addView(rowView);
       actionManager.setup(getView(), rowView, position, rowView.getId(), tagIdDefinition);
