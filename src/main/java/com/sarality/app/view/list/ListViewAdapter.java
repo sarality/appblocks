@@ -42,7 +42,7 @@ public class ListViewAdapter<T> extends BaseAdapter {
     T rowValue = getItem(position);
     if (rowView == null) {
       LayoutInflater inflater = LayoutInflater.from(context);
-      rowView = inflater.inflate(rowRenderer.getRowLayout(rowValue), null);
+      rowView = inflater.inflate(rowRenderer.getRowLayout(position, rowValue), null);
       rowRenderer.setupActions(rowView);
     }
     rowRenderer.render(rowView, rowValue);
@@ -51,12 +51,12 @@ public class ListViewAdapter<T> extends BaseAdapter {
 
   @Override
   public int getViewTypeCount() {
-    return 1;
+    return rowRenderer.getViewTypeCount();
   }
 
   @Override
   public int getItemViewType(int position) {
-    return 0;
+    return rowRenderer.getViewType(position, getItem(position));
   }
 
   @Override
