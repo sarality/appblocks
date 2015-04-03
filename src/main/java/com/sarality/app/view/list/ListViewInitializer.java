@@ -1,6 +1,7 @@
 package com.sarality.app.view.list;
 
 import android.support.v4.app.FragmentActivity;
+import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.sarality.app.common.collect.Lists;
@@ -16,6 +17,7 @@ import java.util.List;
 public class ListViewInitializer<T> extends BaseListViewInitializer<ListView, T> {
 
   private static final int DEFAULT_LOADER_ID = 0;
+  private boolean isScrollable = true;
   private ListItemFilter<T> filter;
   protected ListViewAdapter<T> adapter;
 
@@ -48,6 +50,11 @@ public class ListViewInitializer<T> extends BaseListViewInitializer<ListView, T>
     // Notify the ListView, just in case the data is different from the last time render was called.
     adapter.notifyDataSetChanged();
 
+    // If the ListView is not scrollable, reset the size of the ListView
+    if (!isScrollable) {
+      setListViewHeightAsWrapContent(adapter.getTotalHeight(), adapter.getCount());
+    }
+
     setupActions();
   }
 
@@ -62,7 +69,15 @@ public class ListViewInitializer<T> extends BaseListViewInitializer<ListView, T>
     if (filter != null) {
       return new FilteredListViewAdapter<T>(getContext(), dataList, getRowRenderer(), filter);
     } else {
-      return new ListViewAdapter<T>(getContext(), dataList, getRowRenderer());
+      return new ListViewAdapter<T>(getContext(), dataList, getRowRenderer(), !isScrollable);
     }
+  }
+
+  public void setListViewHeightAsWrapContent(int totalHeight, int rowCount) {
+    ListView listView = getView();
+    ViewGroup.LayoutParams params = listView.getLayoutParams();
+    params.height = totalHeight + (listView.getDividerHeight() * (rowCount - 1));
+    listView.setLayoutParams(params);
+    listView.requestLayout();
   }
 }

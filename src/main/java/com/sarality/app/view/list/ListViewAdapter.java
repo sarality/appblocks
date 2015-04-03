@@ -18,12 +18,21 @@ public class ListViewAdapter<T> extends BaseAdapter {
   private final Context context;
   private final List<T> rowValueList;
   private final ListViewRowRenderer<T> rowRenderer;
+  private final boolean measureHeight;
 
-  public ListViewAdapter(Context context, List<T> rowValueList, ListViewRowRenderer<T> rowRenderer) {
+  private int totalHeight = 0;
+
+  public ListViewAdapter(Context context, List<T> rowValueList, ListViewRowRenderer<T> rowRenderer,
+      boolean measureHeight) {
     super();
     this.context = context;
     this.rowValueList = rowValueList;
     this.rowRenderer = rowRenderer;
+    this.measureHeight = measureHeight;
+  }
+
+  public ListViewAdapter(Context context, List<T> rowValueList, ListViewRowRenderer<T> rowRenderer) {
+    this(context, rowValueList, rowRenderer, false);
   }
 
   public void reinitialize(List<T> dataList) {
@@ -43,6 +52,11 @@ public class ListViewAdapter<T> extends BaseAdapter {
     if (rowView == null) {
       LayoutInflater inflater = LayoutInflater.from(context);
       rowView = inflater.inflate(rowRenderer.getRowLayout(position, rowValue), null);
+      if (measureHeight) {
+        rowView.measure(0, 0);
+        totalHeight += rowView.getMeasuredHeight();
+      }
+
       rowRenderer.setupActions(rowView);
     }
     rowRenderer.render(rowView, rowValue);
@@ -67,6 +81,10 @@ public class ListViewAdapter<T> extends BaseAdapter {
   @Override
   public T getItem(int position) {
     return rowValueList.get(position);
+  }
+
+  public int getTotalHeight() {
+    return totalHeight;
   }
 
   @Override
