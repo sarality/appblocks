@@ -1,5 +1,6 @@
 package com.sarality.app.view.action;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 
@@ -67,36 +68,53 @@ public class ViewActionManager {
     onTouchActionMap.put(viewId, action);
   }
 
+  public void setup(Activity activity) {
+    setup(null, activity);
+  }
+
   public void setup(View view) {
+    setup(view, null);
+  }
+
+  private View findViewById(View view, Activity activity, int viewId) {
+    if (activity != null) {
+      return activity.findViewById(viewId);
+    } else if (view != null) {
+      return view.findViewById(viewId);
+    }
+    return null;
+  }
+
+  private void setup(View view, Activity activity) {
     // Setup all OnClick Actions
     for (int viewId : onClickActionMap.keySet()) {
-      View actionView = view.findViewById(viewId);
+      View actionView = findViewById(view, activity, viewId);
       if (actionView == null) {
         String viewName = getContext().getResources().getResourceName(viewId);
         throw new IllegalStateException("Cannot setup an action for a Click event on View with id " +
-            viewName + ". View with given id not found in the given parent View");
+            viewName + ". View with given id not found in the given parent View or Activity");
       }
       actionView.setOnClickListener(onClickActionMap.get(viewId));
     }
 
     // Setup all OnLongClick Actions
     for (int viewId : onLongClickActionMap.keySet()) {
-      View actionView = view.findViewById(viewId);
+      View actionView = findViewById(view, activity, viewId);
       if (actionView == null) {
         String viewName = getContext().getResources().getResourceName(viewId);
         throw new IllegalStateException("Cannot setup an action for a Long Click event on View with id " +
-            viewName + ". View with given id not found in the given parent View");
+            viewName + ". View with given id not found in the given parent View or Activity");
       }
       actionView.setOnLongClickListener(onLongClickActionMap.get(viewId));
     }
 
     // Setup all OnTouch Actions
     for (int viewId : onTouchActionMap.keySet()) {
-      View actionView = view.findViewById(viewId);
+      View actionView = findViewById(view, activity, viewId);
       if (actionView == null) {
         String viewName = getContext().getResources().getResourceName(viewId);
         throw new IllegalStateException("Cannot setup an action for a Touch event on View with id " +
-            viewName + ". View with given id not found in the given parent View");
+            viewName + ". View with given id not found in the given parent View or Activity");
       }
       actionView.setOnTouchListener(onTouchActionMap.get(viewId));
     }
