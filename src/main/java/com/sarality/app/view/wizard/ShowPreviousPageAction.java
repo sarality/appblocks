@@ -20,7 +20,7 @@ public class ShowPreviousPageAction implements View.OnClickListener {
     ViewPager pager = activity.getViewPager();
     int currentItem = pager.getCurrentItem();
     if (currentItem == 0) {
-      activity.onBackPressed();
+      activity.callPreviousActivity();
     } else {
       pager.setCurrentItem(currentItem - 1);
     }
