@@ -5,6 +5,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 
+import com.sarality.app.view.action.ViewActionManager;
+
 import java.util.List;
 
 /**
@@ -24,11 +26,14 @@ public abstract class FragmentWizardActivity extends FragmentActivity {
    */
   private WizardPagerAdapter pagerAdapter;
 
+  private ViewActionManager actionManager;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(getContentViewId());
 
+    actionManager = new ViewActionManager(this);
     // Instantiate a ViewPager and a PagerAdapter.
     pager = (ViewPager) findViewById(getViewPagerId());
     pagerAdapter = new WizardPagerAdapter(getSupportFragmentManager())
@@ -41,9 +46,17 @@ public abstract class FragmentWizardActivity extends FragmentActivity {
     }
   }
 
+  protected ViewActionManager getActionManager() {
+    return actionManager;
+  }
+
   @Override
   public void onBackPressed() {
     new ShowPreviousPageAction(this).onClick(null);
+  }
+
+  protected void callPreviousActivity() {
+    super.onBackPressed();
   }
 
   ViewPager getViewPager() {
